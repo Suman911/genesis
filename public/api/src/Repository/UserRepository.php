@@ -1,32 +1,47 @@
 <?php
 
-namespace Repository;
+namespace Api\Repository;
 
-class UserRepository {
-    // This class will handle data access for users
+use Auth\DbConn\Conn;
+use PDO;
 
-    public function getAllUsers() {
-        // Logic to retrieve all users from the data source
-        return []; // Placeholder for user data
+class UserRepository
+{
+    private $pdo;
+
+    public function __construct()
+    {
+        $this->pdo = Conn::setConnection();
     }
 
-    public function getUserById($id) {
-        // Logic to retrieve a user by ID from the data source
-        return null; // Placeholder for user data
+    public function getAllUsers()
+    {
+        $stmt = $this->pdo->query("SELECT * FROM userinfo");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function createUser($data) {
-        // Logic to create a new user in the data source
-        return true; // Placeholder for success
+    public function getUserById($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateUser($id, $data) {
-        // Logic to update a user in the data source
-        return true; // Placeholder for success
+    public function createUser($data)
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO users (name, email) VALUES (:name, :email)");
+        return $stmt->execute(['name' => $data['name'], 'email' => $data['email']]);
     }
 
-    public function deleteUser($id) {
-        // Logic to delete a user from the data source
-        return true; // Placeholder for success
+    public function updateUser($id, $data)
+    {
+        $stmt = $this->pdo->prepare("UPDATE users SET name = :name, email = :email WHERE id = :id");
+        return $stmt->execute(['id' => $id, 'name' => $data['name'], 'email' => $data['email']]);
+    }
+
+    public function deleteUser($id)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM users WHERE id = :id");
+        return $stmt->execute(['id' => $id]);
     }
 }

@@ -20,21 +20,16 @@ class Response
         return $this;
     }
 
-    public function json(array $data): void
+    public function send(array $data): void
     {
         $this->addHeader('Content-Type', 'application/json');
-        $this->send(json_encode($data));
-    }
-
-    public function send(string $body = ''): void
-    {
         http_response_code($this->statusCode);
 
         foreach ($this->headers as $key => $value) {
             header("$key: $value");
         }
 
-        echo $body;
+        echo json_encode($data);
         exit;
     }
 }

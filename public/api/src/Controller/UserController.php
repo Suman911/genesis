@@ -2,46 +2,95 @@
 
 namespace Api\Controller;
 
-use Repository\UserRepository;
+use Api\Http\Request;
+use Api\Http\Response;
+use Api\Repository\UserRepository;
 
-class UserController {
+class UserController
+{
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository) {
-        $this->userRepository = $userRepository;
+    public function __construct()
+    {
+        $this->userRepository = new UserRepository();
     }
 
-    public function index() {
+    public function index(Request $request, Response $response)
+    {
         $users = $this->userRepository->getAllUsers();
-        echo json_encode(['users' => $users]);
+        $response->send(['users' => $users]);
     }
 
-    public function show($id) {
+    public function show(Request $request, Response $response)
+    {
+        $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
+
+        if (!$id) {
+            $response->setStatusCode(400)->send(['message' => 'Missing ID parameter']);
+            return;
+        }
+
         $user = $this->userRepository->getUserById($id);
+
         if ($user) {
-            echo json_encode(['user' => $user]);
+            $response->send(['user' => $user]);
         } else {
-            http_response_code(404);
-            echo json_encode(['message' => 'User not found']);
+            $response->setStatusCode(404)->send(['message' => 'User not found']);
         }
     }
 
-    public function store() {
-        // Assume $data is retrieved from the request
-        $data = []; // Placeholder for user data
-        $this->userRepository->createUser($data);
-        echo json_encode(['message' => 'User created']);
+    public function store(Request $request, Response $response)
+    {
+        $data = $request->getBody(); // Get JSON data from the request body
+
+        if ($this->validateUserData($data)) {
+            $this->userRepository->createUser($data);
+            $response->setStatusCode(201)->send(['message' => 'User created']);
+        } else {
+            $response->setStatusCode(400)->send(['message' => 'Invalid user data']);
+        }
     }
 
-    public function update($id) {
-        // Assume $data is retrieved from the request
-        $data = []; // Placeholder for user data
-        $this->userRepository->updateUser($id, $data);
-        echo json_encode(['message' => "User with ID $id updated"]);
+    public function update(Request $request, Response $response)
+    {
+        $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
+        $data = $request->getBody(); // Get JSON data from the request body
+
+        if (!$id) {
+            $response->setStatusCode(400)->send(['message' => 'Missing ID parameter']);
+            return;
+        }
+
+        if ($this->validateUserData($data)) {
+            $this->userRepository->updateUser($id, $data);
+            $response->send(['message' => "User with ID $id updated"]);
+        } else {
+            $response->setStatusCode(400)->send(['message' => 'Invalid user data']);
+        }
     }
 
-    public function destroy($id) {
+    public function destroy(Request $request, Response $response)
+    {
+        $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
+
+        if (!$id) {
+            $response->setStatusCode(400)->send(['message' => 'Missing ID parameter']);
+            return;
+        }
+
         $this->userRepository->deleteUser($id);
-        echo json_encode(['message' => "User with ID $id deleted"]);
+        $response->send(['message' => "User with ID $id deleted"]);
+    }
+
+    private function validateUserData(array $data): bool
+    {
+        // Example: Basic validation logic
+        return isset($data['name']) && isset($data['email']);
+    }
+
+    public function params(Request $request, Response $response)
+    {        
+        $params = $request->getParams();
+        $response->send(['params' => $params]);
     }
 }
