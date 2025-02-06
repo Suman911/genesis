@@ -7,9 +7,6 @@ export default function About() {
             <Link href="/">
                 index
             </Link>
-            <Link href="/about/about_detail">
-                about_detail
-            </Link>
         </div>
     );
 }

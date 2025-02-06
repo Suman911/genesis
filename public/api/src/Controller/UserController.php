@@ -89,8 +89,13 @@ class UserController
     }
 
     public function params(Request $request, Response $response)
-    {        
+    {
         $params = $request->getParams();
         $response->send(['params' => $params]);
+    }
+
+    public function test(Request $request, Response $response)
+    {
+        return $response->send(['message' => 'Test route is working!']);
     }
 }

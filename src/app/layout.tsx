@@ -1,3 +1,5 @@
+import '../styles/index.tsx';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -5,7 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="">
         {children}
       </body>
     </html>

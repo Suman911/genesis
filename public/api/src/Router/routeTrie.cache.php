@@ -1,18 +1,6 @@
 <?php return array (
   'GET' => 
   array (
-    '' => 
-    array (
-      '_handler' => 
-      array (
-        'handler' => 
-        Closure::__set_state(array(
-        )),
-        'middlewares' => 
-        array (
-        ),
-      ),
-    ),
     'users' => 
     array (
       '{param}' => 
