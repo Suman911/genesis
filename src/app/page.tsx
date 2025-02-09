@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import Link from "next/link";
 import dynamic from 'next/dynamic';
 import Spinner from '@/components/spinner';
+import Curosel from '@/components/curosel';
 
 // Lazy load TestApi with loading state
 const TestApi = dynamic(() => import('@/components/api'), {
@@ -13,6 +14,8 @@ const TestApi = dynamic(() => import('@/components/api'), {
 export default function Home() {
   return (
     <div>
+      
+      <Curosel />
       <h1>index page</h1>
       <Link href="/about">about</Link>
       
