@@ -1,7 +1,7 @@
 import '../styles/index.tsx';
-import Navbar from '../components/navbar';
+import Navbar from '@/components/navbar';
 import {Poppins} from 'next/font/google'
-import Footer from '../components/footer';
+import Footer from '@/components/footer';
 
 const poppins=Poppins({
   subsets:['latin'],

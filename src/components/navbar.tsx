@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
-interface Navs {
-    path: string;
-    name: string
-}
+import { navs } from "@/lib/navs";
+import { usePathname } from "next/navigation";
+
+import clsx from "clsx";
+
 export default function Navbar() {
-    const navs: Navs[] = [{ path: '/.', name: 'Home' }, { path: '/story', name: 'Our Story' }, { path: '/academic', name: 'Academic' }, { path: '/training', name: 'Industry Training' }, { path: '/profession', name: 'Professional Grooming' }, { path: '/gallery', name: 'Gallery' }, { path: '/contact', name: 'Contact' }]
-    let [dropmenu, setDropmenu] = useState(false);
+    const pathname = usePathname();
+    const [dropmenu, setDropmenu] = useState(false);
     return (
-        <div className="p-2 bg-slate-900 text-white border sticky top-0 shadow-lg ">
+        <div className="p-2 bg-slate-900 text-white sticky top-0 shadow-lg z-50">
             <div className="flex justify-between">
                 <div className="logo h-auto w-24 bg-red-600 m-2 text-center p-1">Logo
                 </div>
@@ -19,8 +20,10 @@ export default function Navbar() {
                         {
                             navs.map(
                                 (nav) => (
-                                    <li className="m-2 p-3 cursor-pointer hover:bg-slate-700 rounded-lg text-lg">
-                                        <Link href={nav.path}>
+                                    <li key={nav.name} className={clsx("m-2 p-3 cursor-pointer hover:bg-slate-700 rounded-lg text-lg", {
+                                        "bg-slate-800 text-orange-400": pathname == nav.path
+                                    })}>
+                                        <Link href={nav.path} className="w-full h-full block">
                                             {nav.name}
                                         </Link>
                                     </li>
@@ -37,22 +40,28 @@ export default function Navbar() {
                         () => {
                             setDropmenu(!dropmenu);
                         }
-                    }>
-                        <span className="m- auto text-4xl material-symbols-outlined " >
+                    } className="focus:outline-none">
+                        <span className="m-auto text-4xl material-symbols-outlined " >
                             {dropmenu ? 'close' : 'menu'}
                         </span>
                     </button>
                 </div>
 
             </div>
-            {dropmenu ? (<div className="navigation block lg:hidden ">
+            <div className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out  ${dropmenu ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
                 <ul className="flex 
                 flex-col px-3">
                     {
                         navs.map(
                             (nav) => (
-                                <li className="m-2 p-3 cursor-pointer hover:bg-slate-700 rounded-lg text-lg">
-                                    <Link href={nav.path} >
+                                <li key={nav.name} className={clsx("m-2 p-3 cursor-pointer hover:bg-slate-700 rounded-lg text-lg",
+                                    {
+                                        "bg-slate-700 text-orange-400": pathname == nav.path
+                                    }
+                                )}>
+                                    <Link href={nav.path} className="w-full h-full block" onClick={() => {
+                                        setDropmenu(!dropmenu);
+                                    }}>
                                         {nav.name}
                                     </Link>
                                 </li>
@@ -61,7 +70,7 @@ export default function Navbar() {
                     }
                     <li><button className="bg-blue-600  p-2 rounded-lg hover:bg-blue-700 shadow-blue-600/50 shadow-lg text-lg">Notice Board</button></li>
                 </ul>
-            </div>) : null}
+            </div>
         </div>
     );
 }
