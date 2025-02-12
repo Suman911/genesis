@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 export default function TestApi() {
     const [data, setData] = useState(null);
     const apiUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/params/thisparam/is/c/12`;
-    console.log(apiUrl);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,7 +21,7 @@ export default function TestApi() {
         };
 
         fetchData();
-    },[]);
+    },[apiUrl]);
 
     return (
         <div>
