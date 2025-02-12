@@ -38,3 +38,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+#optimized images
+/public/assets/images/opt
+/public/assets/images/image-metadata.json

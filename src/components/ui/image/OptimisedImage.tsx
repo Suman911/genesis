@@ -6,19 +6,19 @@ interface OptimisedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> 
 export default function OptimisedImage({ src, imageSizes = [480, 800, 1200], ...props }: OptimisedImageProps) {
     const basePath = "/assets/images";
 
-    const srcSet: string = imageSizes
-        .map((size) => `${basePath}/uploaded/${src.replace(/\.\w+$/, `-${size}.webp`)} ${size}w`)
-        .join(", ");
-
     return (
-        <img
-            src={`${basePath}/${src}`}
-            srcSet={srcSet}
-            sizes="(max-width: 600px) 480px, (max-width: 1024px) 800px, 1200px"
-            alt=""
-            loading="lazy"
-            {...props}
-        />
+        <picture>
+            {imageSizes.map((size, index) => (
+                <source
+                    key={size}
+                    srcSet={`${basePath}/uploaded/${src.replace(/\.\w+$/, `-${size}.webp`)}`}
+                    media={index === 0 ? `(max-width: 600px)` : index === 1 ? `(max-width: 1024px)` : `(min-width: 1025px)`}
+                    type="image/webp"
+                />
+            ))}
+
+            {/* Fallback to original image */}
+            <img src={`${basePath}/uploaded/${src}`} loading="lazy" {...props} />
+        </picture>
     );
 }
-
