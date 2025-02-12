@@ -14,7 +14,6 @@ const TestApi = dynamic(() => import('@/components/api'), {
 export default function Home() {
   return (
     <div>
-      
       <Curosel />
       <h1>index page</h1>
       <Link href="/about">about</Link>
