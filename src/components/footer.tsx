@@ -1,8 +1,13 @@
 "use client"
 
 import Link from "next/link";
-// import Image from "next/image";
+import Image from "next/image";
+import { navs, supports } from "@/lib/navs";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
+
 export default function Footer() {
+    const pathname=usePathname();
     return (
         <footer className="bg-gray-800 text-white p-8">
             {/* <!-- Main Footer Content --> */}
@@ -43,12 +48,13 @@ export default function Footer() {
                     <div>
                         <h3 className="text-xl font-semibold mb-4">Company</h3>
                         <ul className="space-y-2 list-[circle]">
-                            <li><Link href="/story/" className="hover:text-gray-300">Our Story</Link></li>
-                            <li><Link href="/academics/" className="hover:text-gray-300">Academics</Link></li>
-                            <li><Link href="/training/" className="hover:text-gray-300">Industry Training</Link></li>
-                            <li><Link href="/profession/" className="hover:text-gray-300">Professional Grooming</Link></li>
-                            <li><Link href="/gallery/" className="hover:text-gray-300">Gallery</Link></li>
-                            <li><Link href="/contact/" className="hover:text-gray-300">Contact Us</Link></li>
+                            {
+                                navs.map(nav => (
+                                    <li key={nav.name}><Link href={nav.path} className={clsx("hover:text-gray-300",{
+                                        "text-orange-500" : pathname == nav.path
+                                    })}>{nav.name}</Link></li>
+                                ))
+                            }
                         </ul>
                     </div>
 
@@ -56,30 +62,31 @@ export default function Footer() {
                     <div>
                         <h3 className="text-xl font-semibold mb-4">Support</h3>
                         <ul className="space-y-2">
-                            <li><Link href="#" className="hover:text-gray-300">Blog</Link></li>
-                            <li><Link href="#" className="hover:text-gray-300">Notice Board</Link></li>
-                            <li><Link href="#" className="hover:text-gray-300">Workshop</Link></li>
-                            <li><Link href="#" className="hover:text-gray-300">Terms</Link></li>
-                            <li><Link href="#" className="hover:text-gray-300">Privacy</Link></li>
-                            <li><Link href="#" className="hover:text-gray-300">Cookie policy</Link></li>
+                            {
+                                supports.map(support => (
+                                    <li key={support.name}><Link href={support.path} className="hover:text-gray-300">{support.name}</Link></li>
+                                ))
+                            }
                         </ul>
                     </div>
 
-                    {/* <!-- Online Payment Section --> */}
-                    <div>
-                        <h3 className="text-xl font-semibold mb-4">Online Payment Option</h3>
-                        <div className="space-y-4">
-                            <div className="flex gap-2">
-                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Google_Play_Store_badge_EN.svg/2560px-Google_Play_Store_badge_EN.svg.png" alt="Google Play" className="h-10" />
-                                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" className="h-10" />
-                            </div>
-                            <div className="mt-4">
-                                <img src="https://www.phonepe.com/webstatic/8420/static/phonepe-pg-default-og-bf9e20a4bc20cca4a0536fbe4792c3ad.png" alt="PhonePe" className="size-1/2 p-2 m-auto rounded-3xl transition-transform duration-200 ease-in-out hover:scale-125 origin-center will-change-transform" />
+                        {/* <!-- Online Payment Section --> */}
+                        <div>
+                            <h3 className="text-xl font-semibold mb-4">Online Payment Option</h3>
+                            <div className="space-y-4">
+                                <div className="flex gap-2">
+                                    {/* <Image src='/Google_Play_Store_badge_EN.svg.webp' width={2560} height={759}  alt="Google Play" className="h-10" /> */}
+                                    <Image src='/download-on-the-app-store.svg' width={120} height={40} alt="App Store" className="h-10"  />
+                                </div>
+                                <div className="mt-4">
+                                    {/* <Image src='/phonepe-pg-default-og-bf9e20a4bc20cca4a0536fbe4792c3ad.png' 
+                            width={1682} height={1072}
+                            alt="Phone Pay" className="size-1/2 p-2 m-auto rounded-3xl transition-transform duration-200 ease-in-out hover:scale-125 origin-center will-change-transform" /> */}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
             {/* <!-- Copyright Section --> */}
             <div className="mt-8 pt-8 border-t border-gray-600 text-center text-sm">

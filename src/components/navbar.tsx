@@ -2,33 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { navs } from "@/lib/navs";
+import { usePathname } from "next/navigation";
 
-interface Navs {
-    path: string;
-    name: string;
-}
+import clsx from "clsx";
 
 export default function Navbar() {
+    const pathname = usePathname();
     const [dropmenu, setDropmenu] = useState(false);
-    // const [mounted, setMounted] = useState(false);
-
-    // useEffect(() => {
-    //     setMounted(true);
-    // }, []);
-
-    // if (!mounted) return null; // Prevents hydration mismatch
-
-    const navs: Navs[] = [
-        { path: "/", name: "Home" },
-        { path: "/story", name: "Our Story" },
-        { path: "/academic", name: "Academic" },
-        { path: "/training", name: "Industry Training" },
-        { path: "/profession", name: "Professional Grooming" },
-        { path: "/gallery", name: "Gallery" },
-        { path: "/contact", name: "Contact" },
-    ];
-
-
     return (
         <div className="p-2 bg-primary text-white sticky top-0 shadow-lg">
             <div className="flex justify-between">
@@ -39,11 +20,19 @@ export default function Navbar() {
                 {/* Navigation (Desktop) */}
                 <div className="navigation hidden lg:block">
                     <ul className="flex space-x-4 h-full m-auto">
-                        {navs.map((nav, index) => (
-                            <li key={index} className="p-3 cursor-pointer hover:bg-slate-700 rounded-lg text-lg">
-                                <Link href={nav.path}>{nav.name}</Link>
-                            </li>
-                        ))}
+                        {
+                            navs.map(
+                                (nav) => (
+                                    <li key={nav.name} className={clsx("m-2 p-3 cursor-pointer hover:bg-slate-700 rounded-lg text-lg", {
+                                        "bg-slate-800 text-orange-400": pathname == nav.path
+                                    })}>
+                                        <Link href={nav.path} className="w-full h-full block">
+                                            {nav.name}
+                                        </Link>
+                                    </li>
+                                )
+                            )
+                        }
                     </ul>
                 </div>
 
@@ -56,31 +45,40 @@ export default function Navbar() {
 
                 {/* Mobile Hamburger Menu */}
                 <div className="hamburger block lg:hidden">
-                    <button onClick={() => setDropmenu(!dropmenu)}>
-                        <span className="m-auto text-4xl material-symbols-outlined">
-                            {dropmenu ? "close" : "menu"}
+                    <button onClick={
+                        () => {
+                            setDropmenu(!dropmenu);
+                        }
+                    } className="focus:outline-none">
+                        <span className="m-auto text-4xl material-symbols-outlined " >
+                            {dropmenu ? 'close' : 'menu'}
                         </span>
                     </button>
                 </div>
             </div>
-
-            {/* Mobile Menu */}
-            {dropmenu && (
-                <div className="navigation block lg:hidden">
-                    <ul className="flex flex-col px-3">
-                        {navs.map((nav) => (
-                            <li key={nav.name} className="m-2 p-3 cursor-pointer hover:bg-slate-700 rounded-lg text-lg">
-                                <Link href={nav.path}>{nav.name}</Link>
-                            </li>
-                        ))}
-                        <li>
-                            <button className="bg-blue-600 p-2 rounded-lg hover:bg-blue-700 shadow-blue-600/50 shadow-lg text-lg">
-                                Notice Board
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            )}
+            <div className={`lg:hidden overflow-hidden transition-all duration-500 ease-in-out  ${dropmenu ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
+                <ul className="flex 
+                flex-col px-3">
+                    {
+                        navs.map(
+                            (nav) => (
+                                <li key={nav.name} className={clsx("m-2 p-3 cursor-pointer hover:bg-slate-700 rounded-lg text-lg",
+                                    {
+                                        "bg-slate-700 text-orange-400": pathname == nav.path
+                                    }
+                                )}>
+                                    <Link href={nav.path} className="w-full h-full block" onClick={() => {
+                                        setDropmenu(!dropmenu);
+                                    }}>
+                                        {nav.name}
+                                    </Link>
+                                </li>
+                            )
+                        )
+                    }
+                    <li><button className="bg-blue-600  p-2 rounded-lg hover:bg-blue-700 shadow-blue-600/50 shadow-lg text-lg">Notice Board</button></li>
+                </ul>
+            </div>
         </div>
     );
 }

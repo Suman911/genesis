@@ -14,7 +14,6 @@ import Curosel from '@/components/curosel';
 export default function Home() {
   return (
     <div>
-      
       <Curosel />
       
       {/* <Suspense fallback={<Spinner />}>
