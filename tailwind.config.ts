@@ -13,10 +13,12 @@ export default {
         foreground: "var(--foreground)",
         primary: "var(--primary)",
       },
-      screens:{
+      screens: {
         xs: "480px",
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 } satisfies Config;

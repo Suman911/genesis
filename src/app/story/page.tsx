@@ -1,7 +1,9 @@
 import Paragraph from "@/components/paragraph";
-
+import Hero from "@/components/hero";
 export default function Page() {
     return (
+        <>
+        <Hero/>
         <div className="grid grid-cols-1 md:grid-cols-6 p-2 m-6">
             <div className="left my-auto h-96  md:col-span-2 bg-red-400 text-center p-20 rounded-3xl">
                 Image
@@ -30,6 +32,6 @@ export default function Page() {
                 <Paragraph scope="Mission" title="Our Mission" para="In this present day and age where the importance of life sciences is understood and weighed in with every passing moment, to contribute to society in any way possible is an achievement on its own. To be able to guide and get the future soldiers of life sciences ready to make immense and massive contributions is a dream that genesis strive towards. "/>
             </div>
         </div>
-
+        </>
     );
 }
