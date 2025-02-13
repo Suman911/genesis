@@ -7,7 +7,7 @@ interface ResponsiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement>
     imageSizes?: [number, number, number];
 }
 
-export default function ResponsiveImage({ src, imageSizes = [480, 800, 1200], ...props }: ResponsiveImageProps) {
+export default function ResponsiveImage({ src, imageSizes = [480, 768, 1280], ...props }: ResponsiveImageProps) {
     const basePath = "/assets/images";
     const optimizedPath = `${basePath}/opt`;
     const metadataPath = path.join(process.cwd(), "public/assets/images/image-metadata.json");
@@ -70,10 +70,12 @@ export default function ResponsiveImage({ src, imageSizes = [480, 800, 1200], ..
                 <source
                     key={size}
                     srcSet={`${optimizedPath}/${src.replace(/\.\w+$/, `-${size}.webp`)}`}
-                    media={index === 0 ? `(max-width: 640px)` : index === 1 ? `(max-width: 1024px)` : `(max-width: 1536px)`}
+                    media={index === 0 ? `(max-width: 480px)` : index === 1 ? `(max-width: 768px)` : `(max-width: 1280px)`}
                     type="image/webp"
                 />
             ))}
+
+            {/* Fallback to original image */}
             <img src={`${basePath}/${src}`} loading="lazy" {...props} />
         </picture>
     );

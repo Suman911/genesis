@@ -1,5 +1,9 @@
-export default function Page(){
+import Hero from "@/components/hero";
+
+export default function Page() {
     return (
-        <p>Welcome to Page</p>
+        <div>
+            <Hero/>
+        </div>
     );
 }
