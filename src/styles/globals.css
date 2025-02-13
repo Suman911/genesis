@@ -1,10 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
-    --background: #14141f;
-    --foreground: #cecece;
-    --primary: #4c5a7d;
+@theme {
+    --color-background: #14141f;
+    --color-foreground: #cecece;
+    --color-primary: #4c5a7d;
+
+    --breakpoint-xs: 480px;
 }
 

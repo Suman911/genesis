@@ -8,14 +8,6 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-        primary: "var(--primary)",
-      },
-      screens: {
-        xs: "480px",
-      }
     },
   },
   plugins: [
