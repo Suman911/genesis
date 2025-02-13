@@ -11,7 +11,7 @@ export default function Navbar() {
     const pathname = usePathname();
     const [dropmenu, setDropmenu] = useState(false);
     return (
-        <div className="p-2 bg-primary text-white sticky top-0 shadow-lg">
+        <div className="p-2 z-50 w-full bg-primary text-white fixed top-0 shadow-lg">
             <div className="flex justify-between">
                 <Link href="/">
                     <img className="size-12 ml-4 my-auto" src="/assets/images/logo_main.png" alt="logo" />

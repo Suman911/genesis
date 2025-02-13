@@ -6,6 +6,7 @@ export default function page() {
         <div>
             <ResponsiveImage
             src='bread.png'
+            imageSizes={[40,80,120]}
             />
             <ResponsiveImage
             src='logo_main.png'
