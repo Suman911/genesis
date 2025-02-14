@@ -1,7 +1,8 @@
 import '../styles/index.tsx';
-import Navbar from '@/components/navbar';
 import {Poppins} from 'next/font/google'
 import Footer from '@/components/footer';
+import NavbarPc from '@/components/navbar/navbarPc';
+import NavbarMobile from '@/components/navbar/navbarMobile';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -15,7 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} mt-20`}>
-        <Navbar />
+        <NavbarPc />
+        <NavbarMobile />
         {children}
         <Footer />
       </body>
