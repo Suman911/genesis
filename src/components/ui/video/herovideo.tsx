@@ -14,7 +14,7 @@ export default function HeroVideo() {
             </video>
 
             {/* Transparent Black Overlay */}
-            <div className="absolute inset-0 bg-black/50"></div>
+            {/* <div className="absolute inset-0 bg-black/50"></div> */}
 
             {/* Centered Content */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-white">

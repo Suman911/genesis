@@ -1,8 +1,11 @@
 import '../styles/index.tsx';
-import {Poppins} from 'next/font/google'
+import Navbar from '@/components/navbar';
+import { Poppins } from 'next/font/google'
 import Footer from '@/components/footer';
 import NavbarPc from '@/components/navbar/navbarPc';
 import NavbarMobile from '@/components/navbar/navbarMobile';
+import ToTopButton from '@/components/ui/util/ToTopButton';
+import Hero from '@/components/hero';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -20,6 +23,7 @@ export default function RootLayout({
         <NavbarMobile />
         {children}
         <Footer />
+        <ToTopButton />
       </body>
     </html>
   );

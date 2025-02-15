@@ -5,6 +5,7 @@ import Image from "next/image";
 import { navs, supports } from "@/lib/navs";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { scrollToTop } from "./ui/util/useToTop";
 
 export default function Footer() {
     const pathname=usePathname();
@@ -50,7 +51,7 @@ export default function Footer() {
                         <ul className="space-y-2 list-[circle]">
                             {
                                 navs.map(nav => (
-                                    <li key={nav.name}><Link href={nav.path} className={clsx("hover:text-gray-300",{
+                                    <li key={nav.name}><Link onClick={scrollToTop} href={nav.path} className={clsx("hover:text-gray-300",{
                                         "text-orange-500" : pathname == nav.path
                                     })}>{nav.name}</Link></li>
                                 ))
