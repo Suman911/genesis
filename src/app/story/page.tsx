@@ -1,9 +1,8 @@
 import Paragraph from "@/components/paragraph";
-import Hero from "@/components/hero";
+
 export default function Page() {
     return (
         < div className="text-[1.2rem]">
-            <Hero />
             <div className="grid grid-cols-1 md:grid-cols-6 p-2 m-6">
                 <div className="left my-auto h-96  md:col-span-2 bg-red-400 text-center p-20 rounded-3xl">
                     Image
