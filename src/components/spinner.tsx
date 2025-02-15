@@ -1,5 +1,3 @@
-"use client";
-
 export default function Spinner() {
   return (
     <div className="flex justify-center items-center p-4">
