@@ -2,6 +2,8 @@ import '../styles/index.tsx';
 import Navbar from '@/components/navbar';
 import { Poppins } from 'next/font/google'
 import Footer from '@/components/footer';
+import NavbarPc from '@/components/navbar/navbarPc';
+import NavbarMobile from '@/components/navbar/navbarMobile';
 import ToTopButton from '@/components/ui/util/ToTopButton';
 import Hero from '@/components/hero';
 
@@ -16,9 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className}`}>
-        <Navbar />
-        <Hero/>
+      <body className={`${poppins.className} mt-20`}>
+        <NavbarPc />
+        <NavbarMobile />
         {children}
         <Footer />
         <ToTopButton />
