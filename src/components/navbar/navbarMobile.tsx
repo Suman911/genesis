@@ -16,13 +16,13 @@ export default function NavbarMobile({ }) {
                     <Link href="/">
                         <img className="size-12 ml-4 my-auto" src="/assets/images/logo_main.png" alt="logo" />
                     </Link>
-                    <div className="hamburger block">
+                    <div className="hamburger h-10 w-10">
                         <button onClick={
                             () => {
                                 setDropmenu(!dropmenu);
                             }
-                        } className="focus:outline-none">
-                            <span className="m-auto text-4xl material-symbols-outlined " >
+                        } className="h-full w-full focus:outline-none">
+                            <span className=" material-symbols-outlined !text-4xl" >
                                 {dropmenu ? 'close' : 'menu'}
                             </span>
                         </button>

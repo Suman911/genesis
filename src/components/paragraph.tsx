@@ -7,9 +7,9 @@ export default function Paragraph({children }:{children: React.ReactNode[]}) {
             <h1 className="font-light font-serif text-4xl p-6">
                 {title}
             </h1>
-            <p className="font-medium text-justify my-4 cols">
+            <div className="font-medium text-justify my-4 cols">
                 {para}
-            </p>
+            </div>
         </div>
     );
 }
