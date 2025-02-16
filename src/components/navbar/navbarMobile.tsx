@@ -12,7 +12,7 @@ export default function NavbarMobile({ }) {
     const [dropmenu, setDropmenu] = useState(false);
     return (
         <>
-            <div className="p-2 z-50 w-full bg-primary text-white fixed top-0 shadow-lg block lg:hidden">
+            <div className="p-4 z-50 w-full bg-primary text-white fixed top-0 shadow-lg block lg:hidden">
                 <div className="flex justify-between">
                     <Link href="/">
                         <img className="size-12 ml-4 my-auto" src="/assets/images/logo_main.png" alt="logo" />
@@ -27,9 +27,9 @@ export default function NavbarMobile({ }) {
                         </button>
                     </div>
                 </div>
-                <div className={`overflow-hidden transition-all duration-500 ease-in-out  ${dropmenu ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
-                    <ul className="flex 
-                flex-col px-3">
+                <div className={`overflow-hidden transition-all duration-300 ease-linear  ${dropmenu ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <ul className="flex p-4
+                flex-col">
                         {
                             navs.map(
                                 (nav) => (
@@ -38,10 +38,10 @@ export default function NavbarMobile({ }) {
                                             "bg-slate-700 text-orange-400": pathname == nav.path
                                         }
                                     )}>
-                                        <Link href={nav.path} className="w-full h-full block" onClick={() => {
+                                        <Link href={nav.path} className="flex w-full h-full items-center gap-4" onClick={() => {
                                             setDropmenu(!dropmenu);
                                         }}>
-                                            {nav.name}
+                                            {nav.icon}{nav.name}
                                         </Link>
                                     </li>
                                 )

@@ -12,14 +12,14 @@ import { MdAlternateEmail,MdPhoneInTalk } from "react-icons/md";
 export default function Footer() {
     const pathname=usePathname();
     return (
-        <footer className="bg-gray-800 text-white p-8">
+        <footer className="bg-gray-800 text-white p-4">
             {/* <!-- Main Footer Content --> */}
             <div className="container mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* <!-- Get In Touch Section --> */}
                     <div className="space-y-4">
                         <h3 className="text-xl font-semibold mb-4">Get In Touch</h3>
-                        <div className="space-y-2">
+                        <div className="space-y-2 px-4">
                             <p className="flex items-center gap-2">
                             <FaLocationDot/>
                                 5/A/1 Shibnarayan Road, Uttarpara, Hooghly
@@ -44,12 +44,14 @@ export default function Footer() {
                     {/* <!-- Company Section --> */}
                     <div>
                         <h3 className="text-xl font-semibold mb-4">Company</h3>
-                        <ul className="space-y-2 list-[circle]">
+                        <ul className="space-y-2 px-4">
                             {
                                 navs.map(nav => (
-                                    <li key={nav.name}><Link onClick={scrollToTop} href={nav.path} className={clsx("hover:text-gray-300",{
+                                    <li key={nav.name}>
+                                        <Link onClick={scrollToTop} href={nav.path} className={clsx("hover:text-gray-300 flex gap-2 items-center",{
                                         "text-orange-500" : pathname == nav.path
-                                    })}>{nav.name}</Link></li>
+                                    })}>{nav.icon}{nav.name}</Link>
+                                    </li>
                                 ))
                             }
                         </ul>
@@ -58,7 +60,7 @@ export default function Footer() {
                     {/* <!-- Support Section --> */}
                     <div>
                         <h3 className="text-xl font-semibold mb-4">Support</h3>
-                        <ul className="space-y-2">
+                        <ul className="space-y-2 px-4">
                             {
                                 supports.map(support => (
                                     <li key={support.name}><Link href={support.path} className="hover:text-gray-300">{support.name}</Link></li>

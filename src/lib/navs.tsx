@@ -1,12 +1,19 @@
 import { Location } from "./definitions";
-export const navs: Location[] = [
-    { path: '/', name: 'Home' },
-    { path: '/story/', name: 'Our Story' },
-    { path: '/academic/', name: 'Academic' },
-    { path: '/training/', name: 'Industry Training' },
-    { path: '/profession/', name: 'Professional Grooming' },
-    { path: '/gallery/', name: 'Gallery' },
-    { path: '/contact/', name: 'Contact' }
+import { FaHome } from "react-icons/fa";
+import { IoIosInformationCircle } from "react-icons/io";
+import { HiMiniAcademicCap } from "react-icons/hi2";
+import { LiaIndustrySolid } from "react-icons/lia";
+import { FcBusinessman } from "react-icons/fc";
+import { GrGallery } from "react-icons/gr";
+import { TiContacts } from "react-icons/ti";
+export const navs:Location[]= [
+    { path: '/', name: 'Home',icon:<FaHome/> },
+    { path: '/story/', name: 'Our Story' ,icon:<IoIosInformationCircle/>},
+    { path: '/academic/', name: 'Academic',icon: <HiMiniAcademicCap /> },
+    { path: '/training/', name: 'Industry Training' ,icon: <LiaIndustrySolid/> },
+    { path: '/profession/', name: 'Professional Grooming' ,icon:<FcBusinessman/>},
+    { path: '/gallery/', name: 'Gallery' ,icon:<GrGallery/>},
+    { path: '/contact/', name: 'Contact' ,icon: <TiContacts/>}
 ]
 
 export const supports: Location[] = [
