@@ -6,6 +6,8 @@ import { navs, supports } from "@/lib/navs";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { scrollToTop } from "./ui/util/useToTop";
+import { FaLocationDot,FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa6";
+import { MdAlternateEmail,MdPhoneInTalk } from "react-icons/md";
 
 export default function Footer() {
     const pathname=usePathname();
@@ -19,28 +21,22 @@ export default function Footer() {
                         <h3 className="text-xl font-semibold mb-4">Get In Touch</h3>
                         <div className="space-y-2">
                             <p className="flex items-center gap-2">
-                                <span className="material-symbols-outlined">
-                                    home_pin
-                                </span>
+                            <FaLocationDot/>
                                 5/A/1 Shibnarayan Road, Uttarpara, Hooghly
                             </p>
                             <p className="flex items-center gap-2">
-                                <span className="material-symbols-outlined">
-                                    mail
-                                </span>
+                            <MdAlternateEmail/>
                                 info@genesislifesciences.org.in
                             </p>
                             <p className="flex items-center gap-2">
-                                <span className="material-symbols-outlined">
-                                    phone
-                                </span>
+                            <MdPhoneInTalk/>
                                 8697458798
                             </p>
                             <div className="flex gap-4 mt-4">
-                                <Link href="#" className="hover:text-gray-300"><i className="fab fa-facebook"></i></Link>
-                                <Link href="#" className="hover:text-gray-300"><i className="fab fa-twitter"></i></Link>
-                                <Link href="#" className="hover:text-gray-300"><i className="fab fa-instagram"></i></Link>
-                                <Link href="#" className="hover:text-gray-300"><i className="fab fa-linkedin-in"></i></Link>
+                                <Link href="#" className="hover:text-gray-300"><FaFacebook/></Link>
+                                <Link href="#" className="hover:text-gray-300"><FaTwitter/></Link>
+                                <Link href="#" className="hover:text-gray-300"><FaInstagram/></Link>
+                                <Link href="#" className="hover:text-gray-300"><FaLinkedin/></Link>
                             </div>
                         </div>
                     </div>

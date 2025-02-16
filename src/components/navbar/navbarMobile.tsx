@@ -5,7 +5,8 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-
+import { FiAlignJustify } from "react-icons/fi";
+import { TfiClose } from "react-icons/tfi";
 export default function NavbarMobile({ }) {
     const pathname = usePathname();
     const [dropmenu, setDropmenu] = useState(false);
@@ -21,10 +22,8 @@ export default function NavbarMobile({ }) {
                             () => {
                                 setDropmenu(!dropmenu);
                             }
-                        } className="h-full w-full focus:outline-none">
-                            <span className=" material-symbols-outlined !text-4xl" >
-                                {dropmenu ? 'close' : 'menu'}
-                            </span>
+                        } className="h-full w-full focus:outline-none text-3xl">
+                            {dropmenu ? <TfiClose/> : <FiAlignJustify />}
                         </button>
                     </div>
                 </div>
