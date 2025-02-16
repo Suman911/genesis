@@ -20,28 +20,29 @@ export default function Hero() {
 
     if (!headlines[path]) return null;
 
-    return (
-        <div className="relative w-full md:h-[500px] h-[350px] flex items-center justify-center text-white text-5xl lg:text-8xl font-bold overflow-hidden">
-            {isHome ? (
-                <div className="absolute inset-0 -top-40">
+    if (isHome)
+        return (
+            <div className="md:h-[680px] h-[500px] relative w-full flex items-center justify-center overflow-hidden">
+                <div className="absolute inset-0 -top-15">
                     <HeroVideo />
                 </div>
-            ) : (
-                <div className="absolute inset-0 w-full h-full overflow-hidden">
-                    <img
-                        src="/assets/images/hero.png"
-                        className="w-full h-full object-cover md:fixed relative -z-10"
-                        alt="Hero Background"
-                    />
-                    <OptimisedImage
-                        src="hero.png"
-                        alt="image"
-                        className=""
-                        sizes="md:1200"
-                    />
+                <div className="absolute inset-0 -top-1/3 text-white text-5xl md:text-8xl font-bold flex items-center text-center justify-center backdrop-brightness-90">
+                    {headlines[path]}
                 </div>
-            )}
-            <div className="absolute inset-0 flex items-center text-center justify-center backdrop-brightness-90">
+            </div>
+        );
+
+    return (
+        <div className="md:h-[500px] h-[350px] relative w-full flex items-center justify-center overflow-hidden">
+            <div className="absolute inset-0 w-full h-full">
+                <OptimisedImage
+                    src="hero.png"
+                    sizes="md:1200"
+                    className="w-full h-full object-cover md:fixed relative -z-10"
+                    alt="Hero Background"
+                />
+            </div>
+            <div className="absolute inset-0 text-white text-5xl md:text-8xl font-bold flex items-center text-center justify-center  backdrop-brightness-90">
                 {headlines[path]}
             </div>
         </div>
