@@ -1,9 +1,5 @@
-interface paragraph {
-    scope: string,
-    title: string,
-    para: string
-}
-export default function Paragraph({ scope, title, para }: paragraph) {
+export default function Paragraph({children }:{children: React.ReactNode[]}) {
+    const [scope,title,...para]=children
     return (
         <div className="p-10">
             <div className="text-primary text-2xl relative font-semibold px-6 peer">{scope}</div>
