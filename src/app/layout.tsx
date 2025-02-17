@@ -18,7 +18,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         <NavbarMobile />
         <Hero />
         <div className="bg-white">
-          <div className="m-auto lg:py-20 py-10 max-w-500">
+          <div className="container m-auto lg:py-20 py-10">
             {children}
           </div>
         </div>
