@@ -5,7 +5,7 @@ import ImageFrame from "@/components/ui/util/imageFrame/imageFrame";
 
 export default function Page() {
     return (
-        <div className="text-[1.2rem] text-ash">
+        <div>
             <Story>
                 <StoryImage>
                     <ImageFrame>

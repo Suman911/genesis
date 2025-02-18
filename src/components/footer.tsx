@@ -15,7 +15,7 @@ export default function Footer() {
         <footer className="bg-gray-800 text-white p-5 pt-16">
             {/* <!-- Main Footer Content --> */}
             <div className="container mx-auto">
-                <div className="grid justify-evenly grid-cols-[auto] md:grid-cols-[200px_200px] lg:grid-cols-2 xl:grid-cols-[300px_auto_auto_300px] 2xl:grid-cols-4 gap-8">
+                <div className="grid justify-evenly grid-cols-[auto] md:grid-cols-[200px_200px] lg:grid-cols-[auto_auto] xl:grid-cols-[300px_auto_auto_300px] 2xl:grid-cols-4 gap-8">
 
                     {/* <!-- Get In Touch Section --> */}
                     <div className="space-y-4 lg:col-span-1 md:col-span-2">
@@ -34,10 +34,10 @@ export default function Footer() {
                                 8697458798
                             </p>
                             <div className="flex gap-4 mt-4">
-                                <Link href="#" className="hover:text-gray-300"><FaFacebook /></Link>
-                                <Link href="#" className="hover:text-gray-300"><FaTwitter /></Link>
-                                <Link href="#" className="hover:text-gray-300"><FaInstagram /></Link>
-                                <Link href="#" className="hover:text-gray-300"><FaLinkedin /></Link>
+                                <Link href="#" className="hover:text-gray-300"><FaFacebook className="size-8" /></Link>
+                                <Link href="#" className="hover:text-gray-300"><FaTwitter className="size-8" /></Link>
+                                <Link href="#" className="hover:text-gray-300"><FaInstagram className="size-8" /></Link>
+                                <Link href="#" className="hover:text-gray-300"><FaLinkedin className="size-8" /></Link>
                             </div>
                         </div>
                     </div>

@@ -7,17 +7,9 @@ const source = path.join(__dirname, '../out');
 const destination = path.join(__dirname, '../../genesis_production');
 
 // Path to the index.php file inside the destination
-const indexPhpPath = path.join(destination, 'api', 'index.php');
+const indexPhpPath = path.join(source, 'api', 'index.php');
 
 try {
-    console.log(`Clearing destination: ${destination}...`);
-    fse.emptyDirSync(destination); // Deletes everything inside but keeps the folder
-
-    console.log(`Copying from ${source} to ${destination}...`);
-    fse.copySync(source, destination, { overwrite: true });
-
-    console.log('Build successfully copied to genesis_production.');
-
     // Modify index.php to comment out the require_once line if it exists
     if (fs.existsSync(indexPhpPath)) {
         let indexPhpContent = fs.readFileSync(indexPhpPath, 'utf-8');
@@ -40,6 +32,14 @@ try {
     } else {
         console.log(`index.php not found in ${indexPhpPath}`);
     }
+
+    console.log(`Clearing destination: ${destination}...`);
+    fse.emptyDirSync(destination); // Deletes everything inside but keeps the folder
+
+    console.log(`Copying from ${source} to ${destination}...`);
+    fse.copySync(source, destination, { overwrite: true });
+
+    console.log('Build successfully copied to genesis_production.');
 } catch (err) {
     console.error('Error copying build folder or modifying index.php:', err);
 }

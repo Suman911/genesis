@@ -2,17 +2,17 @@ interface ParagraphProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
 }
 
-export function Paragraph({ children, ...props }: ParagraphProps) {
+export function Paragraph({ children, className = "", ...props }: ParagraphProps) {
     return (
-        <div {...props} className={`px-5 ${props.className}`}>
+        <div {...props} className={`text-[1.2rem] text-ash px-5 ${className}`}>
             {children}
         </div>
     );
 }
 
-export function ParagraphScope({ children, ...props }: ParagraphProps) {
+export function ParagraphScope({ children, className = "", ...props }: ParagraphProps) {
     return (
-        <div {...props} className={`relative w-fit ${props.className}`}>
+        <div {...props} className={`relative w-fit ${className}`}>
             <div className="text-primary text-2xl font-semibold px-6 peer flex items-center gap-4 after:block after:w-16 after:h-[3px] after:bg-primary">
                 {children}
             </div>
@@ -21,16 +21,16 @@ export function ParagraphScope({ children, ...props }: ParagraphProps) {
     );
 }
 
-export function ParagraphTitle({ children, ...props }: ParagraphProps) {
+export function ParagraphTitle({ children, className = "", ...props }: ParagraphProps) {
     return (
-        <h1 {...props} className={`font-bold md:text-6xl text-4xl p-6 ${props.className}`}>
+        <h1 {...props} className={`font-bold md:text-5xl text-4xl p-6 ${className}`}>
             {children}
         </h1>
     );
 }
-export function ParagraphPara({ children, ...props }: ParagraphProps) {
+export function ParagraphPara({ children, className = "", ...props }: ParagraphProps) {
     return (
-        <div {...props} className={`font-medium text-justify my-2 cols ${props.className}`}>
+        <div {...props} className={`font-medium text-justify my-2 cols ${className}`}>
             {children}
         </div>
     );
