@@ -5,6 +5,6 @@
     --color-foreground: #cecece;
     --color-primary: #4c5a7d;
     --color-ash: #606060;
-
+    --color-bg: #f2f2f2;
     --breakpoint-xs: 480px;
 }

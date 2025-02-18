@@ -6,6 +6,7 @@ import { LiaIndustrySolid } from "react-icons/lia";
 import { FcBusinessman } from "react-icons/fc";
 import { GrGallery } from "react-icons/gr";
 import { TiContacts } from "react-icons/ti";
+
 export const navs:Location[]= [
     { path: '/', name: 'Home',icon:<FaHome/> },
     { path: '/story/', name: 'Our Story' ,icon:<IoIosInformationCircle/>},
