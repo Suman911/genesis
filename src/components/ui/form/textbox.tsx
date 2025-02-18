@@ -11,7 +11,7 @@ export function TextGrid2({children, className = "",...props}:text){
 }
 export function TextBox({children, className = "",...props}:text){
     return (
-        <div className={`w-full p-4  ${className}`}>
+        <div className={`w-full py-4 px-0 sm:py-4 ${className}`}>
             <input {...props} className="w-full p-2 border-2 border-primary rounded-xl" type="text" />
         {children}
     </div>

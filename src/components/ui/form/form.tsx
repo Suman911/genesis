@@ -1,3 +1,5 @@
+import Button from "../util/button";
+
 interface form extends React.HTMLAttributes<HTMLDivElement>{
     children:React.ReactNode
 }
@@ -11,24 +13,24 @@ export function Form({children, className = "",...props}:form){
 
 export function Formtitle({children, className = "",...props}:form){
     return (
-        <div {...props} className={`text-center text-3xl  ${className}`}>
+        <div {...props} className={`text-center text-3xl pt-6 ${className}`}>
         {children}
     </div>
     );
 }
 export function FormBody({children, className = "",...props}:form){
     return (
-        <div {...props} className={`w-full px-12 py-6 ${className}`}>
+        <div {...props} className={`w-full px-2 sm:px-12 py-6 ${className}`}>
         {children}
     </div>
     );
 }
 export function FormBtn({children, className = "",...props}:form){
     return (
-        <div {...props} className={` w-full px-10 ${className}`}>
-            <button className="w-full h-14 text-xl bg-primary text-white rounded-2xl hover:bg-gray-600">    
+        <div {...props} className={`flex w-full px-2 sm:px-12 ${className}`}>
+            <Button className="w-full sm:w-1/2 m-auto">    
             {children}
-            </button>
+            </Button>
         </div>
     );
 }

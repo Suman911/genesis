@@ -3,11 +3,12 @@ import { Heading, TopHeading, MainHeading } from "@/components/ui/text/heading";
 import { FaMapLocationDot } from "react-icons/fa6";
 import { IoMdCall } from "react-icons/io";
 import { HiOutlineMail } from "react-icons/hi";
-import {Form, FormBody, FormBtn, Formtitle} from "@/components/ui/contact/form";
-import { TextBox, TextGrid2 } from "@/components/ui/text/textbox";
+import { Form, FormBody, FormBtn, Formtitle } from "@/components/ui/form/form";
+import { TextBox, TextGrid2 } from "@/components/ui/form/textbox";
+
 export default function Page() {
     return (
-        <>
+        <div>
             <Heading>
                 <TopHeading>
                     Contact Us
@@ -35,7 +36,7 @@ export default function Page() {
                             Mobile
                         </CMtitle>
                         <CMdescription>
-                            8697458798
+                            +91-86974-58798
                         </CMdescription>
                     </ContactMethod>
                     <ContactMethod>
@@ -46,27 +47,27 @@ export default function Page() {
                             Email
                         </CMtitle>
                         <CMdescription>
-                            info@genesislifesciences.org.in
+                            mitragenesis@gmail.com
                         </CMdescription>
                     </ContactMethod>
                 </Contactcard>
                 <Form>
                     <Formtitle>
-                    Send us a message
+                        Send us a message
                     </Formtitle>
                     <FormBody>
                         <TextGrid2>
-                            <TextBox placeholder="Your Name"/>
-                            <TextBox placeholder="Your Email"/>
+                            <TextBox placeholder="Your Name" />
+                            <TextBox placeholder="Your Email" />
                         </TextGrid2>
-                        <TextBox placeholder="subject"/>
-                        <TextBox placeholder="message"/>
+                        <TextBox placeholder="subject" />
+                        <TextBox placeholder="message" />
                     </FormBody>
                     <FormBtn>
                         Submit
                     </FormBtn>
                 </Form>
             </Contact>
-        </>
+        </div>
     );
 }
