@@ -27,11 +27,11 @@ export default function Footer() {
                             </p>
                             <p className="flex items-center gap-2">
                                 <MdAlternateEmail />
-                                info@genesislifesciences.org.in
+                                mitragenesis@gmail.com
                             </p>
                             <p className="flex items-center gap-2">
                                 <MdPhoneInTalk />
-                                8697458798
+                                +91-86974-58798
                             </p>
                             <div className="flex gap-4 mt-4">
                                 <Link href="#" className="hover:text-gray-300"><FaFacebook className="size-8" /></Link>
