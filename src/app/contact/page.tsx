@@ -4,6 +4,7 @@ import { FaMapLocationDot } from "react-icons/fa6";
 import { IoMdCall } from "react-icons/io";
 import { HiOutlineMail } from "react-icons/hi";
 import {Form, FormBody, FormBtn, Formtitle} from "@/components/ui/contact/form";
+import { TextBox, TextGrid2 } from "@/components/ui/text/textbox";
 export default function Page() {
     return (
         <>
@@ -54,7 +55,12 @@ export default function Page() {
                     Send us a message
                     </Formtitle>
                     <FormBody>
-                        hibrew
+                        <TextGrid2>
+                            <TextBox placeholder="Your Name"/>
+                            <TextBox placeholder="Your Email"/>
+                        </TextGrid2>
+                        <TextBox placeholder="subject"/>
+                        <TextBox placeholder="message"/>
                     </FormBody>
                     <FormBtn>
                         Submit
