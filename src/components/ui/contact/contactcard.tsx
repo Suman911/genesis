@@ -4,14 +4,14 @@ interface card extends React.HTMLAttributes<HTMLDivElement>{
 }
 export function Contact({children,...props}:card){
     return (
-        <div {...props} className={`grid grid-cols-12 gap-10 p-16 ${props.className||''}`}>
+        <div {...props} className={`lg:grid grid-cols-12 gap-6 p-8 md:p-12 lg:p-16 ${props.className||''}`}>
             {children}
         </div>
     );
 }
 export function Contactcard({children,...props}:card){
     return (
-        <div {...props} className={`col-span-4 p-8 bg-white rounded-2xl ${props.className||''}`}>
+        <div {...props} className={`col-span-4 p-4 lg:p-6 bg-white rounded-2xl ${props.className||''}`}>
             {children}
         </div>
     );

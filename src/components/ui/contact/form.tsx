@@ -3,7 +3,7 @@ interface form extends React.HTMLAttributes<HTMLDivElement>{
 }
 export function Form({children,...props}:form){
     return (
-        <div {...props} className={`col-span-8 p-8 h-full place-content-center${props.className || ''}`}>
+        <div {...props} className={`col-span-8 p-2 md:p-4 lg:p-8 h-full place-content-center${props.className || ''}`}>
         {children}
     </div>
     );
