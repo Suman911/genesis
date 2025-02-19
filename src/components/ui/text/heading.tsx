@@ -25,7 +25,7 @@ export function TopHeading({ children, className = "", ...props }: heading) {
 
 export function Line() {
     return (
-        <div className='h-1 bg-ash w-16'>
+        <div  className='h-1 bg-ash w-16 rounded-2xl'>
         </div>
     );
 }
