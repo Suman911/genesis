@@ -57,8 +57,8 @@ export default function Page() {
                     </Formtitle>
                     <FormBody>
                         <TextGrid2>
-                            <TextBox placeholder="Your Name" />
-                            <TextBox placeholder="Your Email" />
+                            <TextBox id="name" placeholder="Your Name" />
+                            <TextBox id="email" placeholder="Your Email" />
                         </TextGrid2>
                         <TextBox placeholder="subject" />
                         <TextBox placeholder="message" />
