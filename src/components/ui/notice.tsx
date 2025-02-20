@@ -33,9 +33,7 @@ export default function Notice({ notice, className = "", ...props }: NoticeProps
                 {/* Metadata */}
                 <div className="text-sm text-gray-500 mt-2">
                     <p>Posted on: {new Date(notice.posted_date).toLocaleDateString()}</p>
-                    {notice.target_timestamp && (
-                        <p>Event Date: {new Date(notice.target_timestamp).toLocaleString()}</p>
-                    )}
+                    <p>Event Date: {new Date(notice.target_timestamp).toLocaleString()}</p>
                     <p>Expires on: {new Date(notice.expiry_date).toLocaleDateString()}</p>
                 </div>
 
@@ -53,9 +51,8 @@ export default function Notice({ notice, className = "", ...props }: NoticeProps
 
                 {/* Tag */}
                 <span
-                    className={`inline-block mt-3 px-3 py-1 text-xs font-semibold rounded-full ${
-                        notice.isUrgent ? "bg-red-200 text-red-800" : "bg-blue-200 text-blue-800"
-                    }`}
+                    className={`inline-block mt-3 px-3 py-1 text-xs font-semibold rounded-full ${notice.isUrgent ? "bg-red-200 text-red-800" : "bg-blue-200 text-blue-800"
+                        }`}
                 >
                     {notice.tag}
                 </span>
