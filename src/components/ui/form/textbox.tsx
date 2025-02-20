@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useState } from "react";
-import { regexs } from "@/lib/regexs";
+import { validate } from "./validation";
 interface text extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode
     placeholder?: string
@@ -15,7 +15,7 @@ export function TextGrid2({ children, className = "", ...props }: text) {
 export function TextBox({ children, className = "", ...props }: text) {
     const [value, setValue] = useState("")
     const txtbox = useRef<HTMLInputElement | null>(null);
-    const msg = useRef<HTMLDivElement | null>(null);
+    const msgbox = useRef<HTMLDivElement | null>(null);
     return (
         <div className={`w-full relative py-4 px-0 sm:py-4  ${className}`}>
             <input ref={txtbox} value={value}
@@ -25,27 +25,11 @@ export function TextBox({ children, className = "", ...props }: text) {
                     }
                 }
                 onBlur={
-                    () => {
-                        const curr = txtbox.current
-                        const id = curr?.id || '';
-                        if (Object.keys(regexs).includes(id)) {
-                            // check regex
-                            const regex = regexs[id];
-                            const isValid = value.match(regex) !== null;
-                            // Toggle the border color based on validation
-                            curr?.classList.toggle('!border-red-600', !isValid);
-                            curr?.classList.toggle('!border-green-400', isValid);
-
-                            // Toggle the visibility of the error message
-                            if (msg?.current) {
-                                msg.current.classList.toggle('hidden', isValid);
-                            }
-                        }
-                    }
+                    ()=>validate(txtbox,msgbox,value)
                 }
-                {...props} className="w-full p-2 outline-none border-2 border-primary rounded-xl" type="text" required/>
+                {...props} className="w-full p-2 outline-none border-2 border-primary rounded-xl" type="text" required />
             {children}
-            {props.id && <div ref={msg} className="w-full text-sm text-center absolute left-0 top-15 text-red-500 hidden">Please enter your correct {props.id}</div>}
+            <div ref={msgbox} className="w-full text-sm text-center absolute left-0 top-15 text-red-500 hidden"></div>
         </div>
     );
 }
