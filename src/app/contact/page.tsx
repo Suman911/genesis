@@ -5,6 +5,7 @@ import { IoMdCall } from "react-icons/io";
 import { HiOutlineMail } from "react-icons/hi";
 import { Form, FormBody, FormBtn, Formtitle } from "@/components/ui/form/form";
 import { TextBox, TextGrid2 } from "@/components/ui/form/textbox";
+import { TextArea } from "@/components/ui/form/textarea";
 
 export default function Page() {
     return (
@@ -61,7 +62,7 @@ export default function Page() {
                             <TextBox id="email" placeholder="Your Email" />
                         </TextGrid2>
                         <TextBox placeholder="subject" />
-                        <TextBox placeholder="message" />
+                        <TextArea placeholder="message" />
                     </FormBody>
                     <FormBtn>
                         Submit
