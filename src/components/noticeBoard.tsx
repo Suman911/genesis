@@ -1,0 +1,49 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Heading, TopHeading, MainHeading } from "@/components/ui/text/heading";
+import Notice from "./ui/notice";
+import { NoticeType } from "@/lib/definitions";
+
+export default function NoticeBoard() {
+    const [notices, setNotices] = useState<NoticeType[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        const fetchNotices = async () => {
+            try {
+                const response = await axios.get("/notices.json");
+                setNotices(response.data.notices);
+            } catch (err) {
+                console.error("Error fetching notices:", err);
+                setError("Failed to load notices. Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchNotices();
+    }, []);
+
+    return (
+        <div className="p-2 py-10 xl:px-8">
+            <Heading>
+                <TopHeading>Importants</TopHeading>
+                <MainHeading>Notice Board</MainHeading>
+            </Heading>
+
+            {loading && <p className="text-center text-gray-500">Loading notices...</p>}
+            {error && <p className="text-center text-red-500">{error}</p>}
+
+            {!loading && !error && (
+                <div className="space-y-4">
+                    {notices.map((notice) => (
+                        <Notice key={notice.id} notice={notice} />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
