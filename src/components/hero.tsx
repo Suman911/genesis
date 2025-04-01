@@ -1,6 +1,6 @@
 "use client";
 
-import OptimisedImage from "./ui/image/OptimisedImage";
+// import OptimisedImage from "./ui/image/OptimisedImage";
 import HeroVideo from "./ui/video/herovideo";
 import { usePathname } from "next/navigation";
 
@@ -35,10 +35,10 @@ export default function Hero() {
     return (
         <div className="md:h-[500px] h-[350px] relative w-full flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 w-full h-full">
-                <OptimisedImage
-                    src="hero.png"
-                    sizes="md:1200"
+                <img
+                    src="/assets/images/hero.png"
                     className="w-full h-full object-cover md:fixed relative -z-10"
+                    loading="lazy"
                     alt="Hero Background"
                 />
             </div>

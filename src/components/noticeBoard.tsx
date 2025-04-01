@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Heading, TopHeading, MainHeading } from "@/components/ui/text/heading";
-import Notice from "./ui/notice";
+import Notice from "./ui/notice/notice";
 import { NoticeType } from "@/lib/definitions";
 
 export default function NoticeBoard() {
@@ -28,7 +28,7 @@ export default function NoticeBoard() {
     }, []);
 
     return (
-        <div className="p-2 py-10 xl:px-8">
+        <div className="p-2 py-10 xl:px-8 text-ash">
             <Heading>
                 <TopHeading>Importants</TopHeading>
                 <MainHeading>Notice Board</MainHeading>
@@ -38,7 +38,7 @@ export default function NoticeBoard() {
             {error && <p className="text-center text-red-500">{error}</p>}
 
             {!loading && !error && (
-                <div className="space-y-4">
+                <div id="notice" className="py-8 space-y-4 max-w-[1000px] mx-auto">
                     {notices.map((notice) => (
                         <Notice key={notice.id} notice={notice} />
                     ))}

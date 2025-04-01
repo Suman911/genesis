@@ -32,7 +32,7 @@ export function Line() {
 
 export function MainHeading({ children, className = "", ...props }: heading) {
     return (
-        <div {...props} className={`text-black text-3xl text-center md:text-4xl lg:text-5xl font-semibold ${className}`}>
+        <div {...props} className={`text-3xl text-center md:text-4xl lg:text-5xl font-semibold ${className}`}>
             {children}
         </div>
     );

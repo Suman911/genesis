@@ -28,7 +28,7 @@ export function FormBody({children, className = "",...props}:form){
 export function FormBtn({children, className = "",...props}:form){
     return (
         <div {...props} className={`flex w-full px-2 sm:px-12 ${className}`}>
-            <Button className="w-full sm:w-1/2 m-auto">    
+            <Button className="w-full sm:w-1/2 m-auto px-5 py-3">    
             {children}
             </Button>
         </div>

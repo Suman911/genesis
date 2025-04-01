@@ -13,7 +13,7 @@ const poppins = Poppins({
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} mt-10`}>
+      <body className={`${poppins.className}`}>
         <NavbarPc />
         <NavbarMobile />
         <Hero />

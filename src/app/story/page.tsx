@@ -1,6 +1,6 @@
 import { Story, StoryImage, StoryParagraph, ShortStory, ShortStoryParagraph } from "@/components/ui/text/story";
 import { Paragraph, ParagraphScope, ParagraphTitle, ParagraphPara } from "@/components/ui/text/paragraph";
-import OptimisedImage from "@/components/ui/image/OptimisedImage";
+// import OptimisedImage from "@/components/ui/image/OptimisedImage";
 import ImageFrame from "@/components/ui/util/imageFrame/imageFrame";
 
 export default function Page() {
@@ -9,8 +9,10 @@ export default function Page() {
             <Story>
                 <StoryImage>
                     <ImageFrame>
-                        <OptimisedImage
-                            src="home_about.jpg"
+                        <img
+                            src="/assets/images/home_about.jpg"
+                            alt="home about"
+                            loading="lazy"
                         />
                     </ImageFrame>
                 </StoryImage>
@@ -46,8 +48,10 @@ export default function Page() {
                 </StoryParagraph>
                 <StoryImage>
                     <ImageFrame>
-                        <OptimisedImage
-                            src="about_2.jpg"
+                        <img
+                            src="/assets/images/about_2.jpg"
+                            alt="about 2"
+                            loading="lazy"
                         />
                     </ImageFrame>
                 </StoryImage>

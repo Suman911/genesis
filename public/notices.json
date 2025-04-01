@@ -71,54 +71,6 @@
       "type": "Circular",
       "isUrgent": true,
       "tag": "Financial Aid"
-    },
-    {
-      "id": 7,
-      "title": "Holiday Notice: Summer Break 2025",
-      "description": "The university will be closed for summer break.",
-      "document_url": "https://example.com/files/Summer_Holidays_2025.pdf",
-      "posted_date": "2025-02-20",
-      "target_timestamp": "2025-06-01 08:00 AM",
-      "expiry_date": "2025-06-30 11:59 PM",
-      "type": "Holiday",
-      "isUrgent": false,
-      "tag": "General Notice"
-    },
-    {
-      "id": 8,
-      "title": "Semester III Mid-Term Exam Schedule",
-      "description": "The exam timetable for Semester III has been released.",
-      "document_url": "https://example.com/files/Sem3_Midterm_2025.pdf",
-      "posted_date": "2025-02-12",
-      "target_timestamp": "2025-03-15 09:30 AM",
-      "expiry_date": "2025-04-01 11:59 PM",
-      "type": "Exam",
-      "isUrgent": true,
-      "tag": "Exam Schedule"
-    },
-    {
-      "id": 9,
-      "title": "Sports Fest 2025 Registration",
-      "description": "Students can register for various sports events.",
-      "document_url": "https://example.com/files/SportsFest_2025.pdf",
-      "posted_date": "2025-02-18",
-      "target_timestamp": "2025-03-10 10:00 AM",
-      "expiry_date": "2025-03-20 11:59 PM",
-      "type": "Event",
-      "isUrgent": false,
-      "tag": "Sports"
-    },
-    {
-      "id": 10,
-      "title": "Student Council Elections 2025",
-      "description": "Nomination process and election schedule announced.",
-      "document_url": "https://example.com/files/Elections_2025.pdf",
-      "posted_date": "2025-01-28",
-      "target_timestamp": "2025-02-05 12:00 PM",
-      "expiry_date": "2025-02-15 11:59 PM",
-      "type": "Announcement",
-      "isUrgent": false,
-      "tag": "Expired Notice"
     }
   ]
 }
