@@ -17,7 +17,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         <NavbarPc />
         <NavbarMobile />
         <Hero />
-        <div className="bg-bg">
+        <div className="bg-bg overflow-x-hidden">
           <div className="container m-auto lg:py-20 py-10">
             {children}
           </div>

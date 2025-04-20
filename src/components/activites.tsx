@@ -69,9 +69,18 @@ export default function Activites() {
     )
 }
 
-interface WorkshopCardProps extends React.HTMLAttributes<HTMLDivElement> {
-    workshop: any;
+interface Workshop {
+    id: number;
+    image: string;
+    desc: string;
+    date: string;
+    link: string;
 }
+
+interface WorkshopCardProps extends React.HTMLAttributes<HTMLDivElement> {
+    workshop: Workshop;
+}
+
 
 export function WorkshopCard({ workshop, className = "", ...props }: WorkshopCardProps) {
     return (

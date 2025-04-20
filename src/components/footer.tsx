@@ -46,15 +46,31 @@ export default function Footer() {
                     <div className="lg:order-2">
                         <h3 className="text-xl font-semibold mb-4">Company</h3>
                         <ul className="space-y-2 px-4">
-                            {
-                                navs.map(nav => (
-                                    <li key={nav.name}>
-                                        <Link onClick={scrollToTop} href={nav.path} className={clsx("hover:text-gray-300 flex gap-2 items-center", {
-                                            "text-orange-500": pathname == nav.path
-                                        })}>{nav.icon}{nav.name}</Link>
-                                    </li>
-                                ))
-                            }
+                            {navs.map(nav => (
+                                <li key={nav.name}>
+                                    <Link
+                                        href={nav.path}
+                                        scroll={false} // Disable Next.js auto-scroll
+                                        onClick={(e) => {
+                                            // Only prevent default if we're on the same page
+                                            if (pathname === nav.path) {
+                                                e.preventDefault();
+                                                scrollToTop();
+                                            } else {
+                                                // For new pages, scroll after navigation completes
+                                                setTimeout(scrollToTop, 100);
+                                            }
+                                        }}
+                                        className={clsx(
+                                            "hover:text-gray-300 flex gap-2 items-center",
+                                            { "text-orange-500": pathname === nav.path }
+                                        )}
+                                    >
+                                        {nav.icon}
+                                        {nav.name}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 

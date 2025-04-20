@@ -2,7 +2,7 @@
 import { Form, FormBody, FormBtn, Formtitle } from "@/components/ui/form/form";
 import { Input, TextGrid2 } from "@/components/ui/form/input";
 import { TextArea } from "@/components/ui/form/textarea";
-import { RefObject, useRef } from "react";
+import { useRef } from "react";
 import { validate } from "../form/validation";
 export default function Contactform({ }) {
     const name=useRef(null)

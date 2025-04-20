@@ -53,7 +53,15 @@ const testimonials = [
     }
 ];
 
-const TestimonialSlide = ({ testimonial }: { testimonial: any }) => {
+interface Testimonial {
+    id: number;
+    message: string;
+    image: string;
+    name: string;
+}
+
+
+const TestimonialSlide = ({ testimonial } : { testimonial: Testimonial }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const truncatedText = testimonial.message.slice(0, 200) + "...";
 
@@ -89,7 +97,7 @@ export default function Alumni() {
         <div className="p-2 py-10 xl:px-8 text-ash">
             <Heading>
                 <TopHeading>Alumni</TopHeading>
-                <MainHeading>Whats Student's Say About us</MainHeading>
+                <MainHeading>Whats Student&apos;s Say About us</MainHeading>
             </Heading>
             <Swiper
                 modules={[
@@ -126,7 +134,7 @@ export default function Alumni() {
             </Swiper>
 
             {/* Pagination and Navigation Buttons */}
-            <div className="flex justify-center text-primary text-2xl">
+            <div className="flex justify-center text-primary text-2xl select-none">
                 <div id="alumni-prev" className="sm:block hidden cursor-pointer">◀</div>
                 <div id="alumni-pagination" className="xs:flex hidden justify-center items-center gap-3 !max-w-96 !min-w-80"></div>
                 <div id="alumni-next" className="sm:block hidden cursor-pointer">▶</div>

@@ -3,7 +3,13 @@
 import { useState, useEffect } from "react";
 
 export const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Check if scroll is possible
+    if (typeof window !== 'undefined' && window.scrollTo) {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
 };
 
 export default function useToTop(): [boolean, () => void] {

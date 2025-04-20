@@ -9,3 +9,29 @@
     --color-bg: #f2f2f2;
     --breakpoint-xs: 480px;
 }
+
+/* @layer utilities {
+    @supports (transition-behavior: smooth) {
+        .transition-\[height\] {
+            transition-behavior: smooth;
+        }
+    }
+} */
+
+/* Hide scrollbar for Chrome, Safari, Edge, and Opera */
+html::-webkit-scrollbar {
+    display: none;
+    width: 0;
+}
+
+html {
+    /* Hide scrollbar for Firefox */
+    scrollbar-width: none;
+    overflow: -moz-scrollbars-none;
+
+    /* Hide scrollbar for IE/Edge */
+    -ms-overflow-style: none;
+
+    /* Ensure content remains scrollable */
+    overflow: auto;
+}
