@@ -1,61 +1,112 @@
 <?php return array (
   'GET' => 
   array (
+    '' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\Controller',
+          1 => 'index',
+        ),
+        'middlewares' => 
+        array (
+        ),
+      ),
+    ),
     'users' => 
     array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\UserController',
+          1 => 'index',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\AuthMiddleware',
+        ),
+      ),
       '{param}' => 
       array (
         '_name' => 'id',
-        '{param}' => 
+        '_handler' => 
         array (
-          '_name' => 'post',
-          '_handler' => 
+          'handler' => 
           array (
-            'handler' => 
-            array (
-              0 => 'Api\\Controller\\UserController',
-              1 => 'index',
-            ),
-            'middlewares' => 
-            array (
-              0 => 'Api\\Middleware\\AuthMiddleware',
-            ),
+            0 => 'Api\\Controller\\UserController',
+            1 => 'show',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+      'me' => 
+      array (
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\UserController',
+            1 => 'me',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
           ),
         ),
       ),
     ),
-    'params' => 
+    'admins' => 
     array (
-      '{param}' => 
+      '_handler' => 
       array (
-        '_name' => 'a',
-        '{param}' => 
+        'handler' => 
         array (
-          '_name' => 'b',
-          'c' => 
-          array (
-            '{param}' => 
-            array (
-              '_name' => 'd',
-              '_handler' => 
-              array (
-                'handler' => 
-                array (
-                  0 => 'Api\\Controller\\UserController',
-                  1 => 'params',
-                ),
-                'middlewares' => 
-                array (
-                ),
-              ),
-            ),
-          ),
+          0 => 'Api\\Controller\\UserController',
+          1 => 'getAdmins',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\AuthMiddleware',
         ),
       ),
     ),
   ),
   'POST' => 
   array (
+    'login' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\UserController',
+          1 => 'login',
+        ),
+        'middlewares' => 
+        array (
+        ),
+      ),
+    ),
+    'logout' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\UserController',
+          1 => 'logout',
+        ),
+        'middlewares' => 
+        array (
+        ),
+      ),
+    ),
     'users' => 
     array (
       '_handler' => 
@@ -68,6 +119,50 @@
         'middlewares' => 
         array (
           0 => 'Api\\Middleware\\AuthMiddleware',
+        ),
+      ),
+    ),
+  ),
+  'PUT' => 
+  array (
+    'users' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\UserController',
+            1 => 'update',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
+  ),
+  'DELETE' => 
+  array (
+    'users' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\UserController',
+            1 => 'delete',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
         ),
       ),
     ),

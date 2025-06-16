@@ -37,6 +37,8 @@
   "exclude": [
     "node_modules",
     "public/api",
-    "out"
+    "out",
+    "db.sh",
+    "api_test"
   ]
 }

@@ -1,0 +1,15 @@
+{
+  "version": "1",
+  "name": "genesis",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "size": 0,
+  "filesCount": 0,
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "http://genesis.test/public/api/"
+  }
+}

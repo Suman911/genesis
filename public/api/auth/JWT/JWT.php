@@ -3,18 +3,22 @@
 namespace Auth\JWT;
 
 use Exception;
-use Firebase\JWT\JWT;
+use Firebase\JWT\JWT as FirebaseJWT;
 use Firebase\JWT\Key;
 
-class JWTHandler
+class JWT
 {
-    private static $privateKey = "file://" . __DIR__  . '../private_key.pem';  // Path to RSA private key
-    private static $publicKey = "file://" . __DIR__  . '../public_key.pem';    // Path to RSA public key
+    private static $privateKey = "file://" . __DIR__  . '/../private_key.pem';  // Path to RSA private key
+    private static $publicKey = "file://" . __DIR__  . '/../public_key.pem';    // Path to RSA public key
     private static $alg = 'RS256';  // Default algorithm
+    private static $exp = 24 * 60 * 60;
 
     // Encode the JWT with header, payload, and signature
-    public static function encode(array $payload, $exp = 86400)
+    public static function encode(array $payload, $exp = null)
     {
+        if ($exp === null) {
+            $exp = self::$exp;
+        }
         $payload['exp'] = time() + $exp;  // Expiration time
         $payload['iat'] = time();         // Issued at time
         $payload['nbf'] = time();         // Not before time
@@ -26,7 +30,7 @@ class JWTHandler
         }
 
         // Generate the JWT
-        return JWT::encode($payload, $privateKey, self::$alg);
+        return FirebaseJWT::encode($payload, $privateKey, self::$alg);
     }
 
     // Decode and verify the JWT
@@ -40,7 +44,7 @@ class JWTHandler
 
         // Decode and verify the JWT
         try {
-            return (array) JWT::decode($jwt, new Key($publicKey, self::$alg));
+            return (array) FirebaseJWT::decode($jwt, new Key($publicKey, self::$alg));
         } catch (Exception $e) {
             throw new Exception('Invalid token: ' . $e->getMessage());
         }

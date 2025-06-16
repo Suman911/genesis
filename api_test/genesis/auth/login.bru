@@ -1,0 +1,22 @@
+meta {
+  name: login
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://genesis.test/public/api/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {{admin}}
+  
+  
+}
+
+vars:pre-request {
+  admin: {"email": "admin1@example.com","password": "AdminPassword1!"}
+  user: 
+}

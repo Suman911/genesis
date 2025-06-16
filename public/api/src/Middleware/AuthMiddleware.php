@@ -2,7 +2,7 @@
 
 namespace Api\Middleware;
 
-use Auth\JWT\JWTHandler;
+use Auth\JWT\JWT;
 use Api\Http\Request;
 use Api\Http\Response;
 use Exception;
@@ -12,12 +12,12 @@ class AuthMiddleware
     public static function handle(Request $request, Response $response, $next)
     {
         // Retrieve JWT from cookies
-        $token = $_COOKIE['jwt'] ?? null;
+        $token = $_COOKIE['jwt_token'] ?? null;
 
         if ($token) {
             // Validate the token using JWTHandler
             try {
-                $payload = JWTHandler::decode($token);  // Assuming you have a JWTHandler that decodes the token
+                $payload = JWT::decode($token);  // Assuming you have a JWTHandler that decodes the token
                 // Set the payload in the request object
                 $request->setJwtPayload((array) $payload);  // Use the method to store the JWT payload
             } catch (Exception $e) {
