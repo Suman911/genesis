@@ -15,13 +15,6 @@ class UserController extends Controller
     {
         $this->userRepository = new UserRepository();
     }
-    private function validateUserId(Response $response, $id)
-    {
-        if (!$id) {
-            $response->setStatusCode(400)->send(['message' => 'Missing ID parameter']);
-            return;
-        }
-    }
     private function validateUserData(Response $response, array $data)
     {
         foreach (['name', 'user_name', 'email', 'ph_number'] as $field) {
@@ -54,7 +47,7 @@ class UserController extends Controller
 
     public function index(Request $request, Response $response)
     {
-        $this->isAuthorized($request, $response);
+        $this->Authorized($request, $response);
 
         $users = $this->userRepository->getAllUsers();
         $response->send(['users' => $users]);
@@ -62,7 +55,7 @@ class UserController extends Controller
 
     public function show(Request $request, Response $response)
     {
-        $this->isAuthorized($request, $response);
+        $this->Authorized($request, $response);
 
         $id = $request->getParams()['id'];
         if (!$id) {
@@ -81,7 +74,7 @@ class UserController extends Controller
 
     public function create(Request $request, Response $response)
     {
-        $this->isAuthorized($request, $response);
+        $this->Authorized($request, $response);
 
         $data = $request->getBody(); // Get JSON data from the request body
 
@@ -111,10 +104,10 @@ class UserController extends Controller
 
     public function update(Request $request, Response $response)
     {
-        $this->isAuthorized($request, $response);
+        $this->Authorized($request, $response);
 
         $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
-        $this->validateUserId($response, $id);
+        $this->validateId($response, $id);
 
         $data = $request->getBody(); // Get JSON data from the request body
 
@@ -146,7 +139,7 @@ class UserController extends Controller
             $id = $payload['id'] ?? null; // Fetch user ID from JWT payload
         }
 
-        $this->validateUserId( $response, $id);
+        $this->validateId( $response, $id);
 
         $data = $request->getBody(); // Get JSON data from the request body
         $this->isPasswordSet($response, $data);
@@ -167,9 +160,9 @@ class UserController extends Controller
         $response->send(['message' => 'User password updated', 'user' => $user]);
     }
 
-    public function destroy(Request $request, Response $response)
+    public function delete(Request $request, Response $response)
     {
-        $this->isAuthorized($request, $response);
+        $this->Authorized($request, $response);
 
         $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
 
@@ -237,7 +230,7 @@ class UserController extends Controller
 
     public function getAdmins(Request $request, Response $response)
     {
-        $this->isAuthorized($request, $response);
+        $this->Authorized($request, $response);
 
         $admins = $this->userRepository->getAdmins();
         $response->send(['admins' => $admins]);

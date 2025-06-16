@@ -15,16 +15,40 @@ class Controller
         }
         return true;
     }
-    protected function isAuthorized(Request $request, Response $response)
+    protected function Authorized(Request $request, Response $response)
     {
         $payload = $request->getJwtPayload();
-        if ($this->isAdmin($payload)) {
+        if (!$this->isAdmin($payload)) {
             $response->setStatusCode(403)->send(['message' => 'Forbidden: You do not have permission to access this resource']);
+        }
+    }
+    protected function validateId(Response $response, $id)
+    {
+        if (!$id) {
+            $response->setStatusCode(400)->send(['message' => 'Missing ID parameter']);
+            return;
         }
     }
 
     public function index(Request $request, Response $response)
     {
-        $response->send(['message' => 'API is working.']);
+        $clientInfo = [
+            'ip' => $_SERVER['REMOTE_ADDR'] ?? null,
+            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null,
+        ];
+
+        $serverInfo = [
+            'server_name' => $_SERVER['SERVER_NAME'] ?? null,
+            'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? null,
+            'php_version' => phpversion(),
+            'request_method' => $_SERVER['REQUEST_METHOD'] ?? null,
+            'protocol' => $_SERVER['SERVER_PROTOCOL'] ?? null,
+        ];
+
+        $response->send([
+            'message' => 'API is working.',
+            'client' => $clientInfo,
+            'server' => $serverInfo,
+        ]);
     }
 }

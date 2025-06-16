@@ -76,6 +76,36 @@
         ),
       ),
     ),
+    'notices' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\NoticeController',
+          1 => 'index',
+        ),
+        'middlewares' => 
+        array (
+        ),
+      ),
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\NoticeController',
+            1 => 'show',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
   ),
   'POST' => 
   array (
@@ -114,7 +144,22 @@
         'handler' => 
         array (
           0 => 'Api\\Controller\\UserController',
-          1 => 'store',
+          1 => 'create',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\AuthMiddleware',
+        ),
+      ),
+    ),
+    'notices' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\NoticeController',
+          1 => 'create',
         ),
         'middlewares' => 
         array (
@@ -143,6 +188,56 @@
           ),
         ),
       ),
+      'password' => 
+      array (
+        '{param}' => 
+        array (
+          '_name' => 'id',
+          '_handler' => 
+          array (
+            'handler' => 
+            array (
+              0 => 'Api\\Controller\\UserController',
+              1 => 'updatePassword',
+            ),
+            'middlewares' => 
+            array (
+              0 => 'Api\\Middleware\\AuthMiddleware',
+            ),
+          ),
+        ),
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\UserController',
+            1 => 'updatePassword',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
+    'notices' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\NoticeController',
+            1 => 'update',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
     ),
   ),
   'DELETE' => 
@@ -157,6 +252,25 @@
           'handler' => 
           array (
             0 => 'Api\\Controller\\UserController',
+            1 => 'delete',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
+    'notices' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\NoticeController',
             1 => 'delete',
           ),
           'middlewares' => 

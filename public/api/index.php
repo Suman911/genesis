@@ -8,6 +8,7 @@ use Dotenv\Dotenv;
 use Api\Router\Router;
 use Api\Controller\Controller;
 use Api\Controller\UserController;
+use Api\Controller\NoticeController;
 use Api\Middleware\AuthMiddleware;
 use Api\Middleware\ErrorHandlerMiddleware;
 
@@ -36,14 +37,20 @@ $router->add('GET', '/users', [UserController::class, 'index'], [AuthMiddleware:
 $router->add('GET', '/users/{id}', [UserController::class, 'show'], [AuthMiddleware::class]);
 $router->add('POST', '/users', [UserController::class, 'create'], [AuthMiddleware::class]);
 $router->add('PUT', '/users/{id}', [UserController::class, 'update'], [AuthMiddleware::class]);
-$router->add('DELETE', '/users/{id}', [UserController::class, 'delete'], [AuthMiddleware::class]);
 $router->add('PUT', '/users/password/{id}', [UserController::class, 'updatePassword'], [AuthMiddleware::class]);
+$router->add('DELETE', '/users/{id}', [UserController::class, 'delete'], [AuthMiddleware::class]);
 $router->add('GET', '/admins', [UserController::class, 'getAdmins'], [AuthMiddleware::class]);
 
 // user routes
 $router->add('GET', '/users/me', [UserController::class, 'me'], [AuthMiddleware::class]);
 $router->add('PUT', '/users/password', [UserController::class, 'updatePassword'], [AuthMiddleware::class]);
 
+// notice routes
+$router->add('GET', '/notices', [NoticeController::class, 'index']);
+$router->add('GET', '/notices/{id}', [NoticeController::class, 'show'], [AuthMiddleware::class]);
+$router->add('POST', '/notices', [NoticeController::class, 'create'], [AuthMiddleware::class]);
+$router->add('PUT', '/notices/{id}', [NoticeController::class, 'update'], [AuthMiddleware::class]);
+$router->add('DELETE', '/notices/{id}', [NoticeController::class, 'delete'], [AuthMiddleware::class]);
 
 
 
