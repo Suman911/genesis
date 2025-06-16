@@ -7,7 +7,7 @@ use PDO;
 
 class UserRepository
 {
-    private $pdo;
+    private PDO $pdo;
 
     public function __construct()
     {

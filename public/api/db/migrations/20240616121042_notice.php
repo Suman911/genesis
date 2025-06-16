@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class User extends AbstractMigration
+final class Notice extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,41 +19,41 @@ final class User extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('users');
+        $table = $this->table('notices');
         $table
-            ->addColumn('name', 'string', [
+            ->addColumn('title', 'string', [
                 'limit' => 100,
                 'null' => false,
             ])
-            ->addColumn('user_name', 'string', [
+            ->addColumn('description', 'text', [
+                'null' => false,
+            ])
+            ->addColumn('document_url', 'string', [
                 'limit' => 100,
                 'null' => true,
             ])
-            ->addColumn('email', 'string', [
-                'limit' => 150,
+            ->addColumn('posted_date', 'date', [
                 'null' => false,
             ])
-            ->addColumn('ph_number', 'string', [
-                'limit' => 20,
+            ->addColumn('target_timestamp', 'datetime', [
                 'null' => false,
             ])
-            ->addColumn('password', 'string', [
-                'limit' => 255,
+            ->addColumn('expiry_date', 'datetime', [
                 'null' => false,
             ])
-            ->addColumn('email_verified_at', 'datetime', [
-                'default' => null,
-            ])
-            ->addColumn('role', 'string', [
+            ->addColumn('type', 'string', [
                 'limit' => 50,
+                'null' => true,
+            ])
+            ->addColumn('is_urgent', 'boolean', [
+                'default' => false,
                 'null' => false,
-                'default' => 'user',
+            ])
+            ->addColumn('tag', 'string', [
+                'limit' => 100,
+                'null' => true,
             ])
             ->addTimestamps()
-            ->addIndex(['email'], [
-                'unique' => true,
-                'name' => 'idx_users_email_unique',
-            ])
             ->create();
     }
 }
