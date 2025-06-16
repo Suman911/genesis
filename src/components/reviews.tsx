@@ -39,6 +39,25 @@ const reviewsData = [
     }
 ];
 
+const ReviewText = ({ text }: { text: string }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const truncated = text.length > 200 ? text.slice(0, 200) + "..." : text;
+
+  return (
+    <>
+      {isExpanded ? text : truncated}
+      {text.length > 200 && (
+        <button
+          className="font-semibold text-ash group-hover:text-white ml-1"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          {isExpanded ? "Show Less" : "Show More"}
+        </button>
+      )}
+    </>
+  );
+};
+
 export default function Reviews() {
     const [visibleReviews, setVisibleReviews] = useState(2);
 
@@ -103,7 +122,8 @@ export default function Reviews() {
                         </div>
 
                         <p className="text-gray-600 mt-3 group-hover:text-white transition-colors">
-                            {review.text}
+                            {/* {review.text} */}
+                            <ReviewText text={review.text} />
                         </p>
 
                         <motion.a

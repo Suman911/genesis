@@ -15,7 +15,7 @@ export function TopHeading({ children, className = "", ...props }: heading) {
     return (
         <div {...props} className={`flex gap-2 md:gap-4 lg:gap-6 items-center ${className}`}>
             <Line />
-            <div className="text-2xl text-ash">
+            <div className="md:text-xl text-2xl text-ash">
                 {children}
             </div>
             <Line />
@@ -32,7 +32,7 @@ export function Line() {
 
 export function MainHeading({ children, className = "", ...props }: heading) {
     return (
-        <div {...props} className={`text-3xl text-center md:text-4xl lg:text-5xl font-semibold ${className}`}>
+        <div {...props} className={`text-3xl text-center md:text-4xl font-semibold ${className}`}>
             {children}
         </div>
     );

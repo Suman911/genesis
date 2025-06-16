@@ -61,13 +61,13 @@ interface Testimonial {
 }
 
 
-const TestimonialSlide = ({ testimonial } : { testimonial: Testimonial }) => {
+const TestimonialSlide = ({ testimonial }: { testimonial: Testimonial }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const truncatedText = testimonial.message.slice(0, 200) + "...";
 
     return (
         <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg text-center">
-            <p className="text-gray-700 p-6 pb-20 bg-gray-300 rounded-2xl rounded-b-4xl">
+            <p className="text-gray-700 p-4 lg:pb-12 pb-20 bg-gray-300 rounded-2xl rounded-b-4xl">
                 {isExpanded ? testimonial.message : truncatedText}
                 <button
                     className="font-semibold text-ash ml-1"
@@ -77,16 +77,18 @@ const TestimonialSlide = ({ testimonial } : { testimonial: Testimonial }) => {
                 </button>
             </p>
 
-            <div className="border-4 border-dashed border-primary rounded-full relative -top-16">
-                <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="size-28 object-cover bg-ash rounded-full shadow-md m-1"
-                    loading="lazy"
-                />
-            </div>
+            <div className="relative w-full h-32 flex flex-col items-center justify-center">
+                <div className="border-4 border-dashed border-primary rounded-full absolute -top-10">
+                    <img
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        className="md:size-20 size-28 object-cover bg-ash rounded-full shadow-md m-1"
+                        loading="lazy"
+                    />
+                </div>
 
-            <h5 className="px-5 pb-12 text-3xl">{testimonial.name}</h5>
+                <h5 className="px-5 pt-8 md:text-xl text-3xl">{testimonial.name}</h5>
+            </div>
         </div>
     );
 };
@@ -124,17 +126,17 @@ export default function Alumni() {
                     820: { slidesPerView: 2.2 },
                     1200: { slidesPerView: 3 },
                 }}
-                className="!p-10"
+                className="!p-10 !max-w-[1000px] !mx-auto"
             >
                 {testimonials.map((testimonial) => (
-                    <SwiperSlide key={testimonial.id} className="w-[300px] p-5">
+                    <SwiperSlide key={testimonial.id} className="p-2 !width-[250px]">
                         <TestimonialSlide testimonial={testimonial} />
                     </SwiperSlide>
                 ))}
             </Swiper>
 
             {/* Pagination and Navigation Buttons */}
-            <div className="flex justify-center text-primary text-2xl select-none">
+            <div className="flex justify-center text-primary select-none">
                 <div id="alumni-prev" className="sm:block hidden cursor-pointer">◀</div>
                 <div id="alumni-pagination" className="xs:flex hidden justify-center items-center gap-3 !max-w-96 !min-w-80"></div>
                 <div id="alumni-next" className="sm:block hidden cursor-pointer">▶</div>

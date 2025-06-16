@@ -60,7 +60,7 @@ export default function NavbarPc() {
 
                 {/* Navigation Links */}
                 <nav className="navigation block">
-                    <ul className="flex space-x-4">
+                    <ul className="flex">
                         {navs.map((nav) => (
                             <li key={nav.name}>
                                 <Link

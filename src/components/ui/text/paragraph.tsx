@@ -4,7 +4,7 @@ interface ParagraphProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Paragraph({ children, className = "", ...props }: ParagraphProps) {
     return (
-        <div {...props} className={`text-[1.2rem] text-ash px-5 ${className}`}>
+        <div {...props} className={`text-ash px-5 ${className}`}>
             {children}
         </div>
     );
@@ -13,7 +13,7 @@ export function Paragraph({ children, className = "", ...props }: ParagraphProps
 export function ParagraphScope({ children, className = "", ...props }: ParagraphProps) {
     return (
         <div {...props} className={`relative w-fit ${className}`}>
-            <div className="text-primary text-2xl font-semibold px-6 peer flex items-center gap-4 after:block after:w-16 after:h-[3px] after:bg-primary">
+            <div className="text-primary text-xl font-semibold px-6 peer flex items-center gap-4 after:block after:w-16 after:h-[3px] after:bg-primary">
                 {children}
             </div>
             <div className="absolute left-0 right-0 mx-6 h-1 w-20 rounded-full bg-gradient-to-r from-primary to-orange-400 duration-500 peer-hover:w-full"></div>
@@ -23,7 +23,7 @@ export function ParagraphScope({ children, className = "", ...props }: Paragraph
 
 export function ParagraphTitle({ children, className = "", ...props }: ParagraphProps) {
     return (
-        <h1 {...props} className={`font-bold md:text-5xl text-4xl p-6 ${className}`}>
+        <h1 {...props} className={`font-bold text-4xl p-6 ${className}`}>
             {children}
         </h1>
     );

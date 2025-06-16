@@ -5,6 +5,9 @@ import NavbarPc from '@/components/navbar/navbarPc';
 import NavbarMobile from '@/components/navbar/navbarMobile';
 import ToTopButton from '@/components/ui/util/toTop/ToTopButton';
 import Hero from '@/components/hero';
+import { ScreenSize } from '@/components/ui/util/screen';
+
+const env = process.env.NEXT_PUBLIC_ENV;
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -24,6 +27,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         </div>
         <Footer />
         <ToTopButton />
+        {env === 'dev' && <ScreenSize />}
       </body>
     </html>
   );

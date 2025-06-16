@@ -38,7 +38,7 @@ export default function NoticeBoard() {
             {error && <p className="text-center text-red-500">{error}</p>}
 
             {!loading && !error && (
-                <div className="py-8 space-y-4 max-w-[1000px] mx-auto">
+                <div className="py-8 space-y-4 max-w-[600px] mx-auto">
                     {notices.map((notice) => (
                         <Notice key={notice.id} notice={notice} />
                     ))}

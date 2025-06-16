@@ -14,7 +14,7 @@ export default function Notice({ notice, className = "", ...props }: NoticeProps
             {...props}
             className={`group border border-gray-300 rounded-lg p-4 shadow-sm bg-white flex items-start gap-4 transition-colors duration-300 hover:bg-primary-fade hover:delay-0 delay-100 ${className}`}
         >
-            <div className="text-3xl">
+            <div className="text-2xl">
                 {notice.isUrgent ? (
                     <ImportantIcon />
                 ) : (
@@ -24,13 +24,13 @@ export default function Notice({ notice, className = "", ...props }: NoticeProps
 
             {/* Notice Content */}
             <div className="flex-1">
-                <h2 className="text-3xl font-semibold text-gray-900 flex items-start gap-2">
+                <h2 className="text-xl font-semibold text-gray-900 flex items-start gap-2">
                     <span className="size-8">
                         <IoNewspaperSharp className="text-primary" />
                     </span>
                     {notice.title}
                 </h2>
-                <p className="text-gray-600 mb-5">{notice.description}</p>
+                <p className="text-gray-600 mb-2">{notice.description}</p>
 
                 {/* Metadata */}
                 {/* <div className="text-sm text-gray-500 mt-2">
