@@ -4,6 +4,22 @@ import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
+import {Location, LocationGroup} from "@/lib/definitions";
+
+type NavDropdownProps = {
+  nav: LocationGroup;
+  pathname: string;
+  openDropdowns: Record<string, boolean>;
+  setOpenDropdowns: Dispatch<SetStateAction<Record<string, boolean>>>;
+  handleNavigation: (path: string) => void;
+};
+
+type NavLinkProps = {
+  nav: Location;
+  pathname: string;
+  handleNavigation: (path: string) => void;
+};
 
 export default function NavbarPc() {
     const pathname = usePathname();
@@ -44,7 +60,7 @@ export default function NavbarPc() {
         } else {
             setTimeout(() => {
                 window.scrollTo({ top: 0, behavior: "smooth" });
-            }, 100);
+            }, 500);
         }
     };
 
@@ -73,79 +89,25 @@ export default function NavbarPc() {
                 {/* Navigation Links */}
                 <nav className="navigation block">
                     <ul className="flex">
-                        {navs.map((nav) => {
-                            if ("group" in nav) {
-                                return (
-                                    <li key={nav.group} className="relative navbar-dropdown">
-                                        <button
-                                            type="button"
-                                            className={clsx(
-                                                "m-2 p-3 hover:bg-slate-700/80 rounded-lg text-lg transition-all duration-300 block",
-                                                {
-                                                    "bg-slate-800/80 text-orange-400":
-                                                        nav.locations.some((loc) => pathname === loc.path),
-                                                }
-                                            )}
-                                            onClick={() =>
-                                                setOpenDropdowns((prev) => ({
-                                                    ...prev,
-                                                    [nav.group]: !prev[nav.group],
-                                                }))
-                                            }
-                                        >
-                                            {nav.group}
-                                        </button>
-                                        {openDropdowns[nav.group] && (
-                                            <ul className="absolute left-0 mt-3 w-64 bg-gradient-to-br from-slate-900/90 via-slate-800/90 to-slate-500/80 rounded-xl transition-all duration-200 shadow-2xl">
-                                                {nav.locations.map((item) => (
-                                                    <li key={item.path}>
-                                                        <Link
-                                                            href={item.path}
-                                                            scroll={false}
-                                                            onClick={() => {
-                                                                setOpenDropdowns({});
-                                                                handleNavigation(item.path);
-                                                            }}
-                                                            className={clsx(
-                                                                "flex items-center gap-2 px-5 py-3 hover:bg-orange-500/20 hover:text-orange-400 rounded-xl text-base transition-all duration-200",
-                                                                {
-                                                                    "bg-orange-500/10 text-orange-400": pathname === item.path,
-                                                                }
-                                                            )}
-                                                        >
-                                                            {item.name}
-                                                        </Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </li>
-                                );
-                            }
-                            return (
-                                <li key={nav.path}>
-                                    <Link
-                                        href={nav.path}
-                                        scroll={false}
-                                        onClick={(e) => {
-                                            if (pathname === nav.path) {
-                                                e.preventDefault();
-                                                window.scrollTo({ top: 0, behavior: "smooth" });
-                                            }
-                                            handleNavigation(nav.path);
-                                        }}
-                                        className={clsx(
-                                            "m-2 p-3 hover:bg-slate-700/80 rounded-lg text-lg transition-all duration-300 block",
-                                            {
-                                                "bg-slate-800/80 text-orange-400": pathname === nav.path,
-                                            }
-                                        )}
-                                    >
-                                        {nav.name}
-                                    </Link>
-                                </li>
-                            );
-                        })}
+                        {navs.map((nav) => (
+                            ("group" in nav) ? (
+                                <NavDropdown
+                                    key={nav.group}
+                                    nav={nav}
+                                    pathname={pathname}
+                                    openDropdowns={openDropdowns}
+                                    setOpenDropdowns={setOpenDropdowns}
+                                    handleNavigation={handleNavigation}
+                                />
+                            ) : (
+                                <NavLink
+                                    key={nav.path}
+                                    nav={nav}
+                                    pathname={pathname}
+                                    handleNavigation={handleNavigation}
+                                />
+                            )
+                        ))}
                     </ul>
                 </nav>
 
@@ -170,4 +132,84 @@ export default function NavbarPc() {
             </div>
         </div>
     );
+}
+
+function NavDropdown({
+    nav,
+    pathname,
+    openDropdowns,
+    setOpenDropdowns,
+    handleNavigation,
+}: NavDropdownProps): JSX.Element {
+    const isActive = nav.locations.some((loc) => pathname === loc.path);
+
+    return (
+        <li className="relative navbar-dropdown">
+            <button
+                type="button"
+                className={clsx(
+                    "m-2 p-3 hover:bg-slate-700/80 rounded-lg text-lg transition-all duration-300 block",
+                    { "bg-slate-800/80 text-orange-400": isActive }
+                )}
+                onClick={() =>
+                    setOpenDropdowns((prev) => ({
+                        ...prev,
+                        [nav.group]: !prev[nav.group],
+                    }))
+                }
+            >
+                {nav.group}
+            </button>
+            {openDropdowns[nav.group] && (
+                <ul className="absolute left-0 mt-3 w-64 rounded-xl transition-all duration-200 shadow-2xl bg-gradient-to-br from-primary/90 via-slate-800/90 to-primary/80">
+                    {nav.locations.map((item) => (
+                        <li key={item.path}>
+                            <Link
+                                href={item.path}
+                                scroll={false}
+                                onClick={() => {
+                                    setOpenDropdowns({});
+                                    handleNavigation(item.path);
+                                }}
+                                className={clsx(
+                                    "flex items-center gap-2 px-5 py-3 hover:bg-orange-500/20 hover:text-orange-400 rounded-xl text-base transition-all duration-200",
+                                    {
+                                        "bg-orange-500/10 text-orange-400": pathname === item.path,
+                                    }
+                                )}
+                            >
+                                {item.name}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </li>
+    );
+}
+
+function NavLink({ nav, pathname, handleNavigation }: NavLinkProps): JSX.Element {
+  return (
+    <li>
+      <Link
+        href={nav.path}
+        scroll={false}
+        onClick={(e) => {
+          if (pathname === nav.path) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+          handleNavigation(nav.path);
+        }}
+        className={clsx(
+          "m-2 p-3 hover:bg-slate-700/80 rounded-lg text-lg transition-all duration-300 block",
+          {
+            "bg-slate-800/80 text-orange-400": pathname === nav.path,
+          }
+        )}
+      >
+        {nav.name}
+      </Link>
+    </li>
+  );
 }
