@@ -5,7 +5,7 @@ import Image from "next/image";
 import { navs, supports, flattenNavs } from "@/lib/navs";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
-import { scrollToTop } from "./ui/util/toTop/useToTop";
+import { scrollToTop } from "@/components/ui/util/toTop/useToTop";
 import { FaLocationDot, FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa6";
 import { MdAlternateEmail, MdPhoneInTalk } from "react-icons/md";
 
