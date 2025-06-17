@@ -1,12 +1,14 @@
 "use client";
 
-import { navs } from "@/lib/navs";
+import { navs, flattenNavs } from "@/lib/navs";
 import clsx from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiAlignJustify } from "react-icons/fi";
 import { TfiClose } from "react-icons/tfi";
+
+const flatNavs = flattenNavs(navs);
 
 export default function NavbarMobile() {
     const pathname = usePathname();
@@ -44,7 +46,7 @@ export default function NavbarMobile() {
     return (
         <div
             className={clsx(
-                "p-4 z-50 w-full text-white fixed top-0 backdrop-blur-md shadow-lg block xl:hidden transition-all duration-500",
+                "p-4 z-50 w-full text-white fixed top-0 backdrop-blur-md shadow-lg block md:hidden transition-all duration-500",
                 isScrolled ? "bg-primary/80 shadow-lg" : "bg-black/30"
             )}
         >
@@ -82,8 +84,8 @@ export default function NavbarMobile() {
                     dropmenu ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
                 )}
             >
-                <ul className="flex flex-col p-4">
-                    {navs.map((nav) => (
+                <ul className="flex flex-col p-4 overflow-y-auto max-h-[calc(100vh-5rem)]">
+                    {flatNavs.map((nav) => (
                         <li key={nav.name}>
                             <Link
                                 href={nav.path}

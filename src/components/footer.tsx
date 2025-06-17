@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { navs, supports } from "@/lib/navs";
+import { navs, supports, flattenNavs } from "@/lib/navs";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import { scrollToTop } from "./ui/util/toTop/useToTop";
 import { FaLocationDot, FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa6";
 import { MdAlternateEmail, MdPhoneInTalk } from "react-icons/md";
+
+const footerNavs = flattenNavs(navs);
 
 export default function Footer() {
     const pathname = usePathname();
@@ -46,31 +48,34 @@ export default function Footer() {
                     <div className="lg:order-2">
                         <h3 className="text-xl font-semibold mb-4">Company</h3>
                         <ul className="space-y-2 px-4">
-                            {navs.map(nav => (
-                                <li key={nav.name}>
-                                    <Link
-                                        href={nav.path}
-                                        scroll={false} // Disable Next.js auto-scroll
-                                        onClick={(e) => {
-                                            // Only prevent default if we're on the same page
-                                            if (pathname === nav.path) {
-                                                e.preventDefault();
-                                                scrollToTop();
-                                            } else {
-                                                // For new pages, scroll after navigation completes
-                                                setTimeout(scrollToTop, 100);
-                                            }
-                                        }}
-                                        className={clsx(
-                                            "hover:text-gray-300 flex gap-2 items-center",
-                                            { "text-orange-500": pathname === nav.path }
-                                        )}
-                                    >
-                                        {nav.icon}
-                                        {nav.name}
-                                    </Link>
-                                </li>
-                            ))}
+                            {footerNavs.map(nav => {
+                                if (!nav.icon) return null;
+                                return (
+                                    <li key={nav.name}>
+                                        <Link
+                                            href={nav.path}
+                                            scroll={false} // Disable Next.js auto-scroll
+                                            onClick={(e) => {
+                                                // Only prevent default if we're on the same page
+                                                if (pathname === nav.path) {
+                                                    e.preventDefault();
+                                                    scrollToTop();
+                                                } else {
+                                                    // For new pages, scroll after navigation completes
+                                                    setTimeout(scrollToTop, 100);
+                                                }
+                                            }}
+                                            className={clsx(
+                                                "hover:text-gray-300 flex gap-2 items-center",
+                                                { "text-orange-500": pathname === nav.path }
+                                            )}
+                                        >
+                                            {nav.icon}
+                                            {nav.name}
+                                        </Link>
+                                    </li>
+                                )
+                            })}
                         </ul>
                     </div>
 

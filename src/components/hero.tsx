@@ -11,9 +11,9 @@ export default function Hero() {
     const headlines: Record<string, string> = {
         "/": "Welcome to Genesis",
         "/story/": "About Us",
-        "/academic/": "Academics",
-        "/training/": "Industry Training",
-        "/profession/": "Professional Grooming",
+        "/career/academic/": "Academics",
+        "/career/training/": "Industry Training",
+        "/career/profession/": "Professional Grooming",
         "/gallery/": "Gallery",
         "/contact/": "Contact Us",
     };

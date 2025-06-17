@@ -6,6 +6,13 @@ export type Location ={
     icon?:React.ReactNode
 }
 
+export type LocationGroup = {
+    group: string;
+    locations: Location[];
+};
+
+export type Navs = (Location | LocationGroup)[];
+
 export type NoticeType = {
     id: number;
     title: string;
