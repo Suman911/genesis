@@ -11,7 +11,7 @@ export type LocationGroup = {
     locations: Location[];
 };
 
-export type Navs = (Location | LocationGroup)[];
+export type Nav = (Location | LocationGroup);
 
 export type NoticeType = {
     id: number;

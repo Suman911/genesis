@@ -5,21 +5,21 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
-import {Location, LocationGroup} from "@/lib/definitions";
+import { Location, LocationGroup } from "@/lib/definitions";
 
-type NavDropdownProps = {
-  nav: LocationGroup;
-  pathname: string;
-  openDropdowns: Record<string, boolean>;
-  setOpenDropdowns: Dispatch<SetStateAction<Record<string, boolean>>>;
-  handleNavigation: (path: string) => void;
-};
+interface NavDropdownProps extends React.HTMLAttributes<HTMLLIElement> {
+    nav: LocationGroup;
+    pathname: string;
+    openDropdowns: Record<string, boolean>;
+    setOpenDropdowns: Dispatch<SetStateAction<Record<string, boolean>>>;
+    handleNavigation: (path: string) => void;
+}
 
-type NavLinkProps = {
-  nav: Location;
-  pathname: string;
-  handleNavigation: (path: string) => void;
-};
+interface NavLinkProps extends React.HTMLAttributes<HTMLLIElement> {
+    nav: Location;
+    pathname: string;
+    handleNavigation: (path: string) => void;
+}
 
 export default function NavbarPc() {
     const pathname = usePathname();
@@ -140,7 +140,7 @@ function NavDropdown({
     openDropdowns,
     setOpenDropdowns,
     handleNavigation,
-}: NavDropdownProps): JSX.Element {
+}: NavDropdownProps){
     const isActive = nav.locations.some((loc) => pathname === loc.path);
 
     return (
@@ -188,28 +188,28 @@ function NavDropdown({
     );
 }
 
-function NavLink({ nav, pathname, handleNavigation }: NavLinkProps): JSX.Element {
-  return (
-    <li>
-      <Link
-        href={nav.path}
-        scroll={false}
-        onClick={(e) => {
-          if (pathname === nav.path) {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }
-          handleNavigation(nav.path);
-        }}
-        className={clsx(
-          "m-2 p-3 hover:bg-slate-700/80 rounded-lg text-lg transition-all duration-300 block",
-          {
-            "bg-slate-800/80 text-orange-400": pathname === nav.path,
-          }
-        )}
-      >
-        {nav.name}
-      </Link>
-    </li>
-  );
+function NavLink({ nav, pathname, handleNavigation }: NavLinkProps){
+    return (
+        <li>
+            <Link
+                href={nav.path}
+                scroll={false}
+                onClick={(e) => {
+                    if (pathname === nav.path) {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                    handleNavigation(nav.path);
+                }}
+                className={clsx(
+                    "m-2 p-3 hover:bg-slate-700/80 rounded-lg text-lg transition-all duration-300 block",
+                    {
+                        "bg-slate-800/80 text-orange-400": pathname === nav.path,
+                    }
+                )}
+            >
+                {nav.name}
+            </Link>
+        </li>
+    );
 }

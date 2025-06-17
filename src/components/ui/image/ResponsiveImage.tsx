@@ -103,7 +103,7 @@ export default function ResponsiveImage({ src, sizes = "", ...props }: Responsiv
             ))}
 
             {/* Fallback to original image */}
-            <img src={`${basePath}/${src}`} loading="lazy" {...props} />
+            <img alt="" src={`${basePath}/${src}`} loading="lazy" {...props} />
         </picture>
     );
 }

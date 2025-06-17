@@ -43,7 +43,7 @@ export default function OptimisedImage({ src, sizes = "", _static = true, ...pro
             ))}
 
             {/* Fallback to original image */}
-            <img src={`${basePath}/${imageSrc}${src}`} loading="lazy" {...props} />
+            <img alt="" src={`${basePath}/${imageSrc}${src}`} loading="lazy" {...props} />
         </picture>
     );
 }

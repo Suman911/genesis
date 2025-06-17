@@ -1,4 +1,4 @@
-import { Location, Navs } from "./definitions";
+import { Location, Nav } from "./definitions";
 import { FaHome } from "react-icons/fa";
 import { IoIosInformationCircle } from "react-icons/io";
 import { HiMiniAcademicCap } from "react-icons/hi2";
@@ -7,7 +7,7 @@ import { FcBusinessman } from "react-icons/fc";
 import { GrGallery } from "react-icons/gr";
 import { TiContacts } from "react-icons/ti";
 
-export function flattenNavs(navs: Navs[]): Location[] {
+export function flattenNavs(navs: Nav[]): Location[] {
     const result: Location[] = [];
     for (const nav of navs) {
         if ("group" in nav && Array.isArray(nav.locations)) {
@@ -19,7 +19,7 @@ export function flattenNavs(navs: Navs[]): Location[] {
     return result;
 }
 
-export const navs: Navs[] = [
+export const navs: Nav[] = [
     { path: '/', name: 'Home', icon: <FaHome /> },
     { path: '/story/', name: 'Our Story', icon: <IoIosInformationCircle /> },
     {

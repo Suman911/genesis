@@ -52,6 +52,4 @@ $router->add('POST', '/notices', [NoticeController::class, 'create'], [AuthMiddl
 $router->add('PUT', '/notices/{id}', [NoticeController::class, 'update'], [AuthMiddleware::class]);
 $router->add('DELETE', '/notices/{id}', [NoticeController::class, 'delete'], [AuthMiddleware::class]);
 
-
-
 $router->dispatch();
