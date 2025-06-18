@@ -9,7 +9,7 @@ export default function ToTopButton() {
     return (
         <button
             onClick={scrollToTop}
-            className={`group fixed bottom-4 right-4 p-2 border-2 border-primary bg-primary text-white rounded-full shadow-lg overflow-hidden transition-all duration-200 ease-linear 
+            className={`z-50 group fixed bottom-4 right-4 p-2 border-2 border-primary bg-primary text-white rounded-full shadow-lg overflow-hidden transition-all duration-200 ease-linear 
                 ${visible ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         >
             {/* Expanding Background */}

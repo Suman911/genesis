@@ -77,17 +77,18 @@ const TestimonialSlide = ({ testimonial }: { testimonial: Testimonial }) => {
                 </button>
             </p>
 
-            <div className="relative w-full h-32 flex flex-col items-center justify-center">
-                <div className="border-4 border-dashed border-primary rounded-full absolute -top-10">
+            <div className="w-full flex flex-col items-center justify-center">
+                <div className="border-4 border-dashed border-primary rounded-full relative -top-10">
                     <img
-                        src={testimonial.image}
+                        src="example.jpg"
+                        // src={testimonial.image}
                         alt={testimonial.name}
                         className="md:size-20 size-28 object-cover bg-ash rounded-full shadow-md m-1"
                         loading="lazy"
                     />
                 </div>
 
-                <h5 className="px-5 pt-8 md:text-xl text-3xl">{testimonial.name}</h5>
+                <h5 className="relative -top-5 px-5 pb-5 md:text-xl text-3xl">{testimonial.name}</h5>
             </div>
         </div>
     );
@@ -123,6 +124,7 @@ export default function Alumni() {
                 spaceBetween={32}
                 breakpoints={{
                     0: { slidesPerView: 1 },
+                    500: { slidesPerView: 1.8 },
                     820: { slidesPerView: 2.2 },
                     1200: { slidesPerView: 3 },
                 }}
