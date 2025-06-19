@@ -5,7 +5,7 @@ interface heading extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Heading({ children, className = "", ...props }: heading) {
     return (
-        <div {...props} className={`grid gap-y-6 place-items-center w-full ${className}`}>
+        <div {...props} className={`grid gap-y-6 place-items-center w-full select-none ${className}`}>
             {children}
         </div>
     );

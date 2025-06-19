@@ -38,7 +38,7 @@ export function ScreenSize() {
   if (!mounted) return null;
 
   return (
-    <div className="fixed bottom-5 left-15 bg-gray-900 text-white px-4 py-2 rounded-lg font-mono text-sm z-50 opacity-80 pointer-events-none select-none">
+    <div className="fixed bottom-5 left-15 bg-black/50 hover:bg-black text-white px-4 py-2 rounded-lg font-mono text-sm z-50 select-none">
       <span>
         {size.width}px — <b>{size.breakpoint}</b>
       </span>
