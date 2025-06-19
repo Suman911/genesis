@@ -7,29 +7,40 @@ import ToTopButton from '@/components/ui/util/toTop/ToTopButton';
 import Hero from '@/components/hero';
 import ProfileWidget from '@/components/profile/profile';
 import { ScreenSize } from '@/components/ui/util/screen';
+import { MetaData } from './metadata';
 
-const env = process.env.NEXT_PUBLIC_ENV;
+const env = process.env;
+const isDev = env.NEXT_PUBLIC_ENV === 'dev';
+
+export const metadata = MetaData;
 
 const poppins = Poppins({
   subsets: ['latin'],
   weight: "400",
 });
+
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
       <body className={`${poppins.className}`}>
-        <NavbarPc />
-        <NavbarMobile />
-        <ProfileWidget />
-        <Hero />
-        <div className="bg-bg overflow-x-hidden">
-          <div className="container m-auto lg:py-20 py-10">
-            {children}
+        <main>
+          <div className="select-none">
+            <NavbarPc />
+            <NavbarMobile />
+            <ProfileWidget />
+            <Hero />
           </div>
-        </div>
-        <Footer />
-        <ToTopButton />
-        {env === 'dev' && <ScreenSize />}
+          <div className="bg-bg overflow-x-hidden">
+            <div className="container m-auto lg:py-20 py-10">
+              {children}
+            </div>
+          </div>
+          <div className="select-none">
+            <Footer />
+            <ToTopButton />
+          </div>
+        </main>
+        {isDev && <ScreenSize />}
       </body>
     </html>
   );
