@@ -97,7 +97,7 @@ export default function Page() {
                         />
 
                         {/* Overlay for all except hovered */}
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/item:opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                        <div className="absolute inset-0 bg-black/50 opacity-0 md:group-hover/item:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
                     </div>
                 ))}
             </div>

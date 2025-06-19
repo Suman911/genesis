@@ -1,45 +1,69 @@
 const path = require('path');
-const fse = require('fs-extra'); // fs-extra for easy recursive copying
-const fs = require('fs'); // Native fs module for reading and modifying files
+const fse = require('fs-extra');
+const fs = require('fs');
 
 // Paths
 const source = path.join(__dirname, '../out');
 const destination = path.join(__dirname, '../../genesis_production');
-
-// Path to the index.php file inside the destination
 const indexPhpPath = path.join(source, 'api', 'index.php');
 
+// Items to delete before copying
+const itemsToDelete = [
+    'api/db',
+    'api/composer.json',
+    'api/composer.lock',
+    'api/notes.md',
+    'api/.env.local',
+    'api/.gitignore',
+].map((item) => path.join(source, item));
+
+// Styled log helper
+const log = {
+    info: (msg) => console.log(`\x1b[36m[INFO]\x1b[0m ${msg}`),
+    success: (msg) => console.log(`\x1b[32m[SUCCESS]\x1b[0m ${msg}`),
+    warn: (msg) => console.log(`\x1b[33m[WARN]\x1b[0m ${msg}`),
+    error: (msg) => console.error(`\x1b[31m[ERROR]\x1b[0m ${msg}`),
+};
+
 try {
-    // Modify index.php to comment out the require_once line if it exists
+    // 1. Modify index.php to comment out a line
+    log.info('Checking index.php for development require line...');
     if (fs.existsSync(indexPhpPath)) {
         let indexPhpContent = fs.readFileSync(indexPhpPath, 'utf-8');
-
         const lineToCheck = "require_once __DIR__ . '/src/dev.php';";
 
-        // Check if the line exists, and comment it out if present
         if (indexPhpContent.includes(lineToCheck)) {
-            indexPhpContent = indexPhpContent.replace(
-                lineToCheck,
-                `// ${lineToCheck}`
-            );
-
-            // Write the modified content back to index.php
+            indexPhpContent = indexPhpContent.replace(lineToCheck, `// ${lineToCheck}`);
             fs.writeFileSync(indexPhpPath, indexPhpContent, 'utf-8');
-            console.log('index.php updated with commented-out require_once line.');
+            log.success('Commented out development require line in index.php.');
         } else {
-            console.log('Line not found in index.php, no changes made.');
+            log.warn('Development require line not found in index.php. No changes made.');
         }
     } else {
-        console.log(`index.php not found in ${indexPhpPath}`);
+        log.warn(`index.php not found at: ${indexPhpPath}`);
     }
 
-    console.log(`Clearing destination: ${destination}...`);
-    fse.emptyDirSync(destination); // Deletes everything inside but keeps the folder
+    // 2. Delete unwanted files/folders
+    log.info('Cleaning up unwanted files and folders in /out...');
+    for (const itemPath of itemsToDelete) {
+        if (fse.existsSync(itemPath)) {
+            fse.removeSync(itemPath);
+            log.success(`Deleted: ${itemPath}`);
+        } else {
+            log.warn(`Not found (skipped): ${itemPath}`);
+        }
+    }
 
-    console.log(`Copying from ${source} to ${destination}...`);
+    // 3. Empty destination folder
+    log.info(`Clearing destination directory: ${destination}`);
+    fse.emptyDirSync(destination);
+    log.success('Destination directory cleared.');
+
+    // 4. Copy the build
+    log.info(`Copying cleaned build from ${source} to ${destination}...`);
     fse.copySync(source, destination, { overwrite: true });
-
-    console.log('Build successfully copied to genesis_production.');
+    log.success('Build successfully copied to genesis_production.');
 } catch (err) {
-    console.error('Error copying build folder or modifying index.php:', err);
+    log.error('An error occurred during the build process.');
+    console.error(err);
 }

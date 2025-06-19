@@ -25,7 +25,7 @@ function useUserFromCookie(): User | null {
             const userCookie = Cookies.get("user");
             setUser(userCookie ? JSON.parse(userCookie) : null);
         } catch {
-            setUser(null);
+            setUser(defaultUser);
         }
     }, []);
     return user;

@@ -37,7 +37,7 @@ export default function Hero() {
             <div className="absolute inset-0 w-full h-full">
                 <img
                     src="/assets/images/hero.png"
-                    className="w-full h-full object-cover md:fixed relative -z-10"
+                    className="relative md:top-0 top-[30%] w-full h-full object-cover md:fixed md:scale-100 scale-150 -z-50"
                     loading="lazy"
                     alt="Hero Background"
                 />

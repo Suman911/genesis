@@ -58,7 +58,7 @@ export default function NavbarMobile() {
                     onClick={() => handleNavigation('/')}
                 >
                     <img
-                        className="size-12 ml-4"
+                        className="md:size-12 size-10 ml-4"
                         src="/assets/images/logo_main.png"
                         loading="lazy"
                         alt="logo"

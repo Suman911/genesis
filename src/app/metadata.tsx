@@ -1,9 +1,8 @@
 const env = process.env;
 
-const isDev = env.NEXT_PUBLIC_ENV === 'dev';
-const url = env.NEXT_PUBLIC_URL;
+const url = env.NEXT_PUBLIC_URL || "";
 const name = env.NEXT_PUBLIC_NAME;
-const description = 'This is a description for SEO.';
+const description = "Preserving Life Science on Planet Earth";
 
 export const MetaData = {
   title: name,
@@ -22,16 +21,16 @@ export const MetaData = {
         url: '/assets/images/og-image.jpg',
         width: 800,
         height: 600,
-        alt: 'Generic',
+        alt: name,
       },
     ],
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary_image',
     title: name,
-    description: 'This is a description for SEO.',
+    description: description,
     images: ['/assets/images/og-image.jpg'],
   },
   icons: {
