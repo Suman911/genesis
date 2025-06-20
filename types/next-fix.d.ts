@@ -1,0 +1,1 @@
+type HeadersIterator<T> = IterableIterator<T>;
