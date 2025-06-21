@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Heading, TopHeading, MainHeading } from "@/components/ui/text/heading";
-import Notice from "./ui/notice/notice";
+import Notice from "./notice";
 import { NoticeType } from "@/lib/definitions";
 
 export default function NoticeBoard() {

@@ -1,8 +1,8 @@
 import { IoNewspaperSharp } from "react-icons/io5";
-import { NewIcon } from "../icon/newIcon";
-import { ImportantIcon } from "../icon/important";
+import { NewIcon } from "../ui/icon/newIcon";
+import { ImportantIcon } from "../ui/icon/important";
 import { NoticeType } from "@/lib/definitions";
-import Button from "../util/button";
+import Button from "../ui/util/button";
 
 interface NoticeProps extends React.HTMLAttributes<HTMLDivElement> {
     notice: NoticeType;
