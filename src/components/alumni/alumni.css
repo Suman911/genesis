@@ -15,17 +15,17 @@
     border-radius: 10px;
 }
 
-.swiper-slide-active{
-    p{
+.swiper-slide-active {
+    & > div > div:first-child {
         background-color: var(--color-primary);
         color: white;
 
-        button{
+        button {
             color: white;
         }
     }
 
-    div{
+    div {
         border-color: rgb(211, 211, 211);
     }
 }
