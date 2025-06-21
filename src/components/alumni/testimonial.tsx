@@ -28,8 +28,7 @@ const TestimonialSlide = ({ testimonial }: { testimonial: TestimonialType }) => 
             <div className="w-full flex flex-col items-center justify-center">
                 <div className="border-4 border-dashed border-primary rounded-full relative -top-10">
                     <img
-                        src="example.jpg"
-                        // src={testimonial.image}
+                        src={`/assets/images/testimonials/${testimonial.image}`}
                         alt={testimonial.name}
                         className="md:size-20 size-28 object-cover bg-ash rounded-full shadow-md m-1"
                         loading="lazy"
