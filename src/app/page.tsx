@@ -4,10 +4,10 @@ import { Paragraph, ParagraphScope, ParagraphTitle, ParagraphPara } from "@/comp
 import ImageFrame from "@/components/ui/util/imageFrame/imageFrame";
 import Link from "next/link";
 import Button from "@/components/ui/util/button";
-import NoticeBoard from "@/components/noticeBoard";
+import NoticeBoard from "@/components/notice/noticeBoard";
 import Activites from "@/components/activites";
 import Alumni from "@/components/alumni/alumni";
-import Reviews from "@/components/reviews";
+import Reviews from "@/components/review/reviews";
 
 
 export default function Home() {

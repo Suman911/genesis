@@ -1,5 +1,5 @@
 import '../styles/index.tsx';
-import { Poppins } from 'next/font/google'
+import { Poppins } from 'next/font/google';
 import Footer from '@/components/footer';
 import NavbarPc from '@/components/navbar/navbarPc';
 import NavbarMobile from '@/components/navbar/navbarMobile';
@@ -8,6 +8,7 @@ import Hero from '@/components/hero';
 import ProfileWidget from '@/components/profile/profile';
 import { ScreenSize } from '@/components/ui/util/screen';
 import { MetaData } from './metadata';
+import Preloader from './preloader';
 
 const env = process.env;
 const isDev = env.NEXT_PUBLIC_ENV === 'dev';
@@ -23,6 +24,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
   return (
     <html lang="en">
       <body className={`${poppins.className}`}>
+        <Preloader/>
         <main>
           <div className="select-none">
             <NavbarPc />
@@ -42,6 +44,6 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
         </main>
         {isDev && <ScreenSize />}
       </body>
-    </html>
+    </html >
   );
 }
