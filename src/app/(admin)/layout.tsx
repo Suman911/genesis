@@ -1,4 +1,4 @@
-import '../../styles/index.tsx';
+import '@/styles/index';
 import { Poppins } from 'next/font/google';
 import { ScreenSize } from '@/components/ui/util/screen';
 
@@ -10,7 +10,7 @@ const poppins = Poppins({
   weight: "400",
 });
 
-export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
+export default function AuthLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
       <body className={`${poppins.className}`}>

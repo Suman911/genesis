@@ -1,4 +1,4 @@
-import '../styles/index.tsx';
+import '@/styles/index';
 import { Poppins } from 'next/font/google';
 import Footer from '@/components/footer';
 import NavbarPc from '@/components/navbar/navbarPc';
@@ -8,7 +8,7 @@ import Hero from '@/components/hero';
 import ProfileWidget from '@/components/profile/profile';
 import { ScreenSize } from '@/components/ui/util/screen';
 import { MetaData } from './metadata';
-import Preloader from './preloader';
+import Preloader from '@/components/ui/preloader/preloader';
 
 const env = process.env;
 const isDev = env.NEXT_PUBLIC_ENV === 'dev';
