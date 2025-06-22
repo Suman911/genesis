@@ -18,16 +18,23 @@ const defaultUser: User = {
     image: "",
 };
 
-function useUserFromCookie(): User | null {
+function useUserFromCookie(pathname: string): User | null {
     const [user, setUser] = useState<User | null>(null);
+
     useEffect(() => {
-        try {
-            const userCookie = Cookies.get("user");
-            setUser(userCookie ? JSON.parse(userCookie) : null);
-        } catch {
-            setUser(defaultUser);
-        }
-    }, []);
+        const checkCookie = () => {
+            try {
+                const userCookie = Cookies.get("genesis_user");
+                setUser(userCookie ? JSON.parse(userCookie) : null);
+            } catch {
+                setUser(defaultUser);
+            }
+        };
+        checkCookie(); // Initial check
+        // const interval = setInterval(checkCookie, 1000); // Check every second
+        // return () => clearInterval(interval);
+    }, [pathname]);
+
     return user;
 }
 
@@ -38,7 +45,7 @@ const ProfileWidget = () => {
     const expandTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const retractTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const user = useUserFromCookie();
+    const user = useUserFromCookie(pathname);
     const isLoggedIn = !!user;
 
     // Auto-collapse after 5s

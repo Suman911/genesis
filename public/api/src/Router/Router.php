@@ -116,7 +116,10 @@ class Router
                 return call_user_func($this->notFoundHandler, $this->request, $this->response);
             }
 
-            $this->response->setStatusCode(404)->send(['message' => "404 Not Found"]);
+            $this->response->setStatusCode(404)->send([
+                'message' => "404 Not Found",
+                'error' => "No route matches the request for {$method} {$uri}"
+            ]);
         } catch (Exception $e) {
             $this->handleError($e);
         }

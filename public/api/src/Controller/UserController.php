@@ -135,16 +135,16 @@ class UserController extends Controller
 
         if ($this->isAdmin($payload)) {
             $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
-        }else {
+        } else {
             $id = $payload['id'] ?? null; // Fetch user ID from JWT payload
         }
 
-        $this->validateId( $response, $id);
+        $this->validateId($response, $id);
 
         $data = $request->getBody(); // Get JSON data from the request body
         $this->isPasswordSet($response, $data);
         $this->validatePassword($response, $data['password']);
-        
+
         // Hash the password
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
@@ -189,28 +189,35 @@ class UserController extends Controller
 
         $payload = [
             'id' => $user['id'],
+            'name' => $user['name'],
             'email' => $user['email'],
             'role' => $user['role'] ?? 'user',
         ];
 
         $token = JWT::encode($payload);
+        $payloadString = json_encode($payload, JSON_UNESCAPED_SLASHES);
 
         setcookie('jwt_token', $token, [
-            'expires' => time() + 24 * 60 * 60,
+            'expires' => time() + 86400,
             'path' => '/',
-            'secure' => false,
+            'secure' => true,
             'httponly' => true,
-            'samesite' => 'Lax',
+            'samesite' => 'None',
+            // 'samesite' => 'Strict', // Uncomment for stricter cookie policy in production
+        ]);
+
+        setcookie('genesis_user', $payloadString, [
+            'expires' => time() + 86400,
+            'path' => '/',
+            'secure' => true,
+            'httponly' => false,
+            'samesite' => 'None',
+            // 'samesite' => 'Strict', // Uncomment for stricter cookie policy in production
         ]);
 
         $payload = [
             'message' => 'Login successful',
-            'user' => [
-                'id' => $user['id'],
-                'name' => $user['name'],
-                'email' => $user['email'],
-                'role' => $user['role'] ?? 'user',
-            ],
+            'user' => $payload,
         ];
 
         return $response->send($payload);
@@ -220,9 +227,10 @@ class UserController extends Controller
     {
         setcookie('jwt_token', '', [
             'expires' => time() - 3600,
-            'path' => '/',
-            'httponly' => true,
-            'samesite' => 'Lax',
+        ]);
+
+        setcookie('genesis_user', '', [
+            'expires' => time() - 3600,
         ]);
 
         return $response->send(['message' => 'Logged out successfully']);
