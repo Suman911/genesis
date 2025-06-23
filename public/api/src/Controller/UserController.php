@@ -256,4 +256,22 @@ class UserController extends Controller
             $response->setStatusCode(404)->send(['message' => 'User not found']);
         }
     }
+
+    public function meAdmin(Request $request, Response $response)
+    {
+        $payload = $request->getJwtPayload();
+        if (!$this->isAdmin($payload)) {
+            $response->setStatusCode(403)->send(['message' => 'Forbidden: You do not have permission to access this resource']);
+            return;
+        }
+
+        $id = $payload['id'] ?? null; // Fetch user ID from JWT payload
+
+        $user = $this->userRepository->getUserById($id);
+        if ($user) {
+            $response->send(['user' => $user]);
+        } else {
+            $response->setStatusCode(404)->send(['message' => 'User not found']);
+        }
+    }
 }

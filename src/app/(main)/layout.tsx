@@ -7,7 +7,7 @@ import ToTopButton from '@/components/ui/util/toTop/ToTopButton';
 import Hero from '@/components/hero';
 import ProfileWidget from '@/components/profile/profile';
 import { ScreenSize } from '@/components/ui/util/screen';
-import { MetaData } from './metadata';
+import { MetaData } from '@/components/meta/metadata';
 import Preloader from '@/components/ui/preloader/preloader';
 
 const env = process.env;

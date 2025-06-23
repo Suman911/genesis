@@ -8,6 +8,7 @@ use PDO;
 class UserRepository
 {
     private PDO $pdo;
+    private string $userFields = "id, name, user_name, email, ph_number, email_verified_at, role";
 
     public function __construct()
     {
@@ -16,25 +17,26 @@ class UserRepository
 
     public function getAllUsers()
     {
-        $stmt = $this->pdo->query("SELECT * FROM users WHERE role != 'admin'");
+        $stmt = $this->pdo->query("SELECT {$this->userFields} FROM users WHERE role != 'admin'");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function getAdmins()
     {
-        $stmt = $this->pdo->query("SELECT * FROM users WHERE role = 'admin'");
+        $stmt = $this->pdo->query("SELECT {$this->userFields} FROM users WHERE role = 'admin'");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getUserById($id)
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt = $this->pdo->prepare("SELECT {$this->userFields} FROM users WHERE id = :id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function getUserByEmail($email)
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE email = :email"); // Keep this for login
         $stmt->execute(['email' => $email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
@@ -52,7 +54,7 @@ class UserRepository
             ':password' => $data['password'],
         ]);
         $id = $this->pdo->lastInsertId();
-        return $this->findUserById($id);
+        return $this->getUserById($id);
     }
 
     public function updateUser($id, array $data)
@@ -66,19 +68,12 @@ class UserRepository
         $sql = "UPDATE users SET " . implode(', ', $fields) . " WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
-        return $this->findUserById($id);
+        return $this->getUserById($id);
     }
 
     public function deleteUser($id)
     {
         $stmt = $this->pdo->prepare("DELETE FROM users WHERE id = :id");
         return $stmt->execute(['id' => $id]);
-    }
-
-    public function findUserById($id)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
-        $stmt->execute([':id' => $id]);
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 }

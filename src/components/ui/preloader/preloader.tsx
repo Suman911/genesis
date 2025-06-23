@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-const Spinner = ({ children, }: Readonly<{ children: React.ReactNode; }>) => {
+export const Spinner = ({ children, }: Readonly<{ children: React.ReactNode; }>) => {
   return (
     <div className="relative">
       {[0, 1, 2].map((quantum) => {

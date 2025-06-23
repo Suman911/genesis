@@ -1,25 +1,50 @@
 import '@/styles/index';
 import { Poppins } from 'next/font/google';
 import { ScreenSize } from '@/components/ui/util/screen';
+import Preloader from '@/components/ui/preloader/preloader';
+import { MetaData } from '@/components/meta/metadata';
+import Footer from '@/components/footer';
+import ToTopButton from '@/components/ui/util/toTop/ToTopButton';
+import ProfileWidget from '@/components/profile/profile';
+import IsAdmin from '@/components/admin/isAdmin';
+import AdminNav from '@/components/navbar/adminNav';
 
 const env = process.env;
 const isDev = env.NEXT_PUBLIC_ENV === 'dev';
+
+export const metadata = MetaData;
 
 const poppins = Poppins({
   subsets: ['latin'],
   weight: "400",
 });
 
-export default function AuthLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
+export default function AdminLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
   return (
     <html lang="en">
       <body className={`${poppins.className}`}>
+        <Preloader />
         <main>
-          <div className="bg-bg overflow-x-hidden">
-            <div className="container m-auto lg:py-20 py-10">
-              {children}
+          <IsAdmin>
+            <div className="flex min-h-screen bg-bg text-gray-800">
+              <aside className="w-64 bg-white shadow-md h-screen sticky top-0 hidden md:block">
+                <AdminNav />
+              </aside>
+              <div className="flex-1">
+                <div className="select-none">
+                  <ProfileWidget />
+                </div>
+                <div className="bg-bg overflow-x-hidden">
+                  <div className="container m-auto lg:py-20 py-10">
+                    {children}
+                  </div>
+                </div>
+                <div className="select-none">
+                  <ToTopButton />
+                </div>
+              </div>
             </div>
-          </div>
+          </IsAdmin>
         </main>
         {isDev && <ScreenSize />}
       </body>

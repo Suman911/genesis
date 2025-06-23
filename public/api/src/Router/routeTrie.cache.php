@@ -63,6 +63,21 @@
     ),
     'admins' => 
     array (
+      'me' => 
+      array (
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\UserController',
+            1 => 'meAdmin',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
       '_handler' => 
       array (
         'handler' => 

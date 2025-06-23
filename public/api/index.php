@@ -39,6 +39,7 @@ $router->add('POST', '/users', [UserController::class, 'create'], [AuthMiddlewar
 $router->add('PUT', '/users/{id}', [UserController::class, 'update'], [AuthMiddleware::class]);
 $router->add('PUT', '/users/password/{id}', [UserController::class, 'updatePassword'], [AuthMiddleware::class]);
 $router->add('DELETE', '/users/{id}', [UserController::class, 'delete'], [AuthMiddleware::class]);
+$router->add('GET', '/admins/me', [UserController::class, 'meAdmin'], [AuthMiddleware::class]);
 $router->add('GET', '/admins', [UserController::class, 'getAdmins'], [AuthMiddleware::class]);
 
 // user routes

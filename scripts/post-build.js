@@ -26,19 +26,27 @@ const log = {
 };
 
 try {
-    // 1. Modify index.php to comment out a line
-    log.info('Checking index.php for development require line...');
+    // 1. Modify index.php to comment out lines
+    log.info('Processing index.php...');
     if (fs.existsSync(indexPhpPath)) {
         let indexPhpContent = fs.readFileSync(indexPhpPath, 'utf-8');
-        const lineToCheck = "require_once __DIR__ . '/src/dev.php';";
+        const lines = indexPhpContent.split('\n');
 
-        if (indexPhpContent.includes(lineToCheck)) {
-            indexPhpContent = indexPhpContent.replace(lineToCheck, `// ${lineToCheck}`);
-            fs.writeFileSync(indexPhpPath, indexPhpContent, 'utf-8');
-            log.success('Commented out development require line in index.php.');
-        } else {
-            log.warn('Development require line not found in index.php. No changes made.');
-        }
+        const linesToComment = [
+            "require_once __DIR__ . '/src/dev.php';",
+            // "sleep(3);"
+        ];
+        const updatedLines = lines.map((line) => {
+            const trimmed = line.trim();
+            for (const target of linesToComment) {
+                if (trimmed === target && !trimmed.startsWith('//')) {
+                    return '// ' + line;
+                }
+            }
+            return line;
+        });
+        fs.writeFileSync(indexPhpPath, updatedLines.join('\n'), 'utf-8');
+        log.success('index.php processed successfully (development lines commented out).');
     } else {
         log.warn(`index.php not found at: ${indexPhpPath}`);
     }
