@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spinner } from "@/components/ui/preloader/preloader";
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import Axios from "@/utils/Axios";
+import { User } from "@/lib/definitions";
 
 const IsAdmin = ({ children }: { children: React.ReactNode }) => {
     const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
@@ -14,17 +14,8 @@ const IsAdmin = ({ children }: { children: React.ReactNode }) => {
     useEffect(() => {
         const checkAdmin = async () => {
             try {
-                const res = await fetch(`${apiUrl}/admins/me`, {
-                    method: "GET",
-                    credentials: "include",
-                });
-
-                if (!res.ok) {
-                    setIsAdmin(false);
-                } else {
-                    const data = await res.json();
-                    setIsAdmin(data.user?.role === "admin");
-                }
+                const data: User = await Axios.get("/admins/me");
+                setIsAdmin(data.role === "admin");
             } catch (error) {
                 console.error("Failed to verify admin:", error);
                 setIsAdmin(false);
@@ -38,8 +29,8 @@ const IsAdmin = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         if (isAdmin === false) {
-            const timeout = setTimeout(() => router.replace("/"), 5000);
-            return () => clearTimeout(timeout);
+            // const timeout = setTimeout(() => router.replace("/"), 5000);
+            // return () => clearTimeout(timeout);
         }
     }, [isAdmin]);
 

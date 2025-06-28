@@ -1,9 +1,9 @@
 import React from "react";
 
-export type Location ={
+export type Location = {
     path: string;
     name: string;
-    icon?:React.ReactNode
+    icon?: React.ReactNode
 }
 
 export type LocationGroup = {
@@ -18,10 +18,28 @@ export type NoticeType = {
     title: string;
     description: string;
     document_url: string;
-    posted_date: string;
     target_timestamp: string;
     expiry_date: string;
     type: string;
-    isUrgent: boolean;
+    is_urgent: boolean;
     tag: string;
 };
+
+export type TestimonialType = {
+    id: number;
+    message: string;
+    image: string;
+    name: string;
+}
+
+export type User = {
+    id: number;
+    name: string;
+    user_name?: string | null;
+    email: string;
+    ph_number?: string;
+    password?: string;
+    email_verified_at?: string | null;
+    role: "user" | "alumni" | "admin";
+};
+

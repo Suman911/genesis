@@ -19,14 +19,14 @@ class UserController extends Controller
     {
         foreach (['name', 'user_name', 'email', 'ph_number'] as $field) {
             if (empty($data[$field])) {
-                $response->setStatusCode(400)->send(['error' => "$field is required."]);
+                $response->error(400, "$field is required.");
             }
         }
     }
     private function isPasswordSet(Response $response, array $data)
     {
         if (empty($data['password'])) {
-            $response->setStatusCode(400)->send(['error' => "password is required."]);
+            $response->error(400, "password is required.");
         }
     }
     private function validatePassword(Response $response, string $password)
@@ -58,17 +58,14 @@ class UserController extends Controller
         $this->Authorized($request, $response);
 
         $id = $request->getParams()['id'];
-        if (!$id) {
-            $response->setStatusCode(400)->send(['message' => 'Missing ID parameter']);
-            return;
-        }
+        $this->validateId($response, $id);
 
         $user = $this->userRepository->getUserById($id);
 
         if ($user) {
             $response->send(['user' => $user]);
         } else {
-            $response->setStatusCode(404)->send(['message' => 'User not found']);
+            $response->error(404, 'User not found');
         }
     }
 
@@ -95,11 +92,11 @@ class UserController extends Controller
         ]);
 
         if (!$user) {
-            $response->setStatusCode(500)->send(['message' => 'Failed to create user']);
+            $response->error(500, 'Failed to create user');
             return;
         }
 
-        $response->send(['message' => 'User created', 'user' => $user]);
+        $response->setStatusCode(201)->send($user);
     }
 
     public function update(Request $request, Response $response)
@@ -122,11 +119,11 @@ class UserController extends Controller
         ]);
 
         if (!$user) {
-            $response->setStatusCode(500)->send(['message' => 'Failed to update user']);
+            $response->error(500, 'Failed to update user');
             return;
         }
 
-        $response->send(['message' => 'User updated', 'user' => $user]);
+        $response->send($user);
     }
 
     private function updatePassword(Request $request, Response $response)
@@ -153,11 +150,11 @@ class UserController extends Controller
         ]);
 
         if (!$user) {
-            $response->setStatusCode(500)->send(['message' => 'Failed to update user password']);
+            $response->error(500, 'Failed to update user password');
             return;
         }
 
-        $response->send(['message' => 'User password updated', 'user' => $user]);
+        $response->send($user);
     }
 
     public function delete(Request $request, Response $response)
@@ -166,10 +163,7 @@ class UserController extends Controller
 
         $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
 
-        if (!$id) {
-            $response->setStatusCode(400)->send(['message' => 'Missing ID parameter']);
-            return;
-        }
+        $this->validateId($response, $id);
 
         $this->userRepository->deleteUser($id);
         $response->send(['message' => "User with ID $id deleted"]);
@@ -179,12 +173,12 @@ class UserController extends Controller
     {
         $data = $request->getBody();
         if (empty($data['email']) || empty($data['password'])) {
-            return $response->setStatusCode(400)->send(['message' => 'Email and password are required']);
+            return $response->error(400, 'Email and password are required');
         }
 
         $user = $this->userRepository->getUserByEmail($data['email']);
         if (!$user || !password_verify($data['password'], $user['password'])) {
-            return $response->setStatusCode(401)->send(['message' => 'Invalid credentials']);
+            return $response->error(401, 'Invalid credentials');
         }
 
         $payload = [
@@ -215,11 +209,6 @@ class UserController extends Controller
             // 'samesite' => 'Strict', // Uncomment for stricter cookie policy in production
         ]);
 
-        $payload = [
-            'message' => 'Login successful',
-            'user' => $payload,
-        ];
-
         return $response->send($payload);
     }
 
@@ -241,7 +230,7 @@ class UserController extends Controller
         $this->Authorized($request, $response);
 
         $admins = $this->userRepository->getAdmins();
-        $response->send(['admins' => $admins]);
+        $response->send($admins);
     }
 
     // user profile
@@ -253,7 +242,7 @@ class UserController extends Controller
         if ($user) {
             $response->send(['user' => $user]);
         } else {
-            $response->setStatusCode(404)->send(['message' => 'User not found']);
+            $response->error(404, 'User not found');
         }
     }
 
@@ -261,17 +250,17 @@ class UserController extends Controller
     {
         $payload = $request->getJwtPayload();
         if (!$this->isAdmin($payload)) {
-            $response->setStatusCode(403)->send(['message' => 'Forbidden: You do not have permission to access this resource']);
+            $response->error(403, 'Forbidden: You do not have permission to access this resource');
             return;
         }
 
-        $id = $payload['id'] ?? null; // Fetch user ID from JWT payload
+        $id = $payload['id'] ?? null;
 
         $user = $this->userRepository->getUserById($id);
         if ($user) {
-            $response->send(['user' => $user]);
+            $response->send($user);
         } else {
-            $response->setStatusCode(404)->send(['message' => 'User not found']);
+            $response->error(404, 'User not found');
         }
     }
 }

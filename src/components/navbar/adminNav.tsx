@@ -1,33 +1,89 @@
-import { FiHome, FiUsers, FiSettings } from 'react-icons/fi';
-import { FaRegUserCircle } from 'react-icons/fa';
-import Link from 'next/link';
+"use client";
+
+import { IoIosImages } from "react-icons/io";
+import { RiDashboardHorizontalFill } from "react-icons/ri";
+import { FaUserGroup, FaCircleUser } from "react-icons/fa6";
+import { IoNewspaperSharp } from "react-icons/io5";
+import { FaUserGraduate } from "react-icons/fa";
+import { SiGoogleforms } from "react-icons/si";
+import Link from "next/link";
 
 export default function AdminNav() {
     return (
-        <nav className="bg-white shadow-md h-screen sticky top-0 flex flex-col w-full">
-            <div className="p-6 border-b">
-                <h1 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-                    <FaRegUserCircle className="text-primary" size={24} />
-                    Admin Panel
-                </h1>
+        <nav className="bg-white border-r border-gray-200 h-screen sticky top-0 flex flex-col w-64 shadow-sm">
+            {/* Logo */}
+            <div className="flex items-center gap-3 px-6 py-5 border-b">
+                <img
+                    src="/assets/images/logo_main.png"
+                    alt="Logo"
+                    className="object-contain size-12"
+                />
+                <h1 className="text-xl font-bold text-primary">Admin Panel</h1>
             </div>
+
+            {/* Navigation Links */}
             <ul className="flex-1 p-4 space-y-2 text-gray-700">
                 <li>
-                    <Link href="/admin/" className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 transition">
-                        <FiHome size={18} />
+                    <Link
+                        href="/admin/"
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
+                    >
+                        <RiDashboardHorizontalFill size={18} />
                         <span>Dashboard</span>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/admin/users/" className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 transition">
-                        <FiUsers size={18} />
-                        <span>Users</span>
+                    <Link
+                        href="/admin/batches"
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
+                    >
+                        <FaUserGroup size={18} />
+                        <span>Batches</span>
                     </Link>
                 </li>
                 <li>
-                    <Link href="/admin/settings/" className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 transition">
-                        <FiSettings size={18} />
-                        <span>Settings</span>
+                    <Link
+                        href="/admin/notices"
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
+                    >
+                        <IoNewspaperSharp size={18} />
+                        <span>Notice</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        href="/admin/gallery"
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
+                    >
+                        <IoIosImages size={18} />
+                        <span>Gallery</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        href="/admin/students"
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
+                    >
+                        <FaCircleUser size={18} />
+                        <span>Students</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        href="/admin/alumni"
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
+                    >
+                        <FaUserGraduate size={18} />
+                        <span>Alumni</span>
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        href="/admin/forms"
+                        className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
+                    >
+                        <SiGoogleforms size={18} />
+                        <span>Forms</span>
                     </Link>
                 </li>
             </ul>

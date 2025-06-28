@@ -19,13 +19,13 @@ class Controller
     {
         $payload = $request->getJwtPayload();
         if (!$this->isAdmin($payload)) {
-            $response->setStatusCode(403)->send(['message' => 'Forbidden: You do not have permission to access this resource']);
+            $response->error(403, 'Forbidden: You do not have permission to access this resource');
         }
     }
     protected function validateId(Response $response, $id)
     {
         if (!$id) {
-            $response->setStatusCode(400)->send(['message' => 'Missing ID parameter']);
+            $response->error(400, 'Missing ID parameter');
             return;
         }
     }

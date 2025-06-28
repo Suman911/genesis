@@ -121,6 +121,35 @@
         ),
       ),
     ),
+    'testimonials' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\TestimonialController',
+          1 => 'index',
+        ),
+        'middlewares' => 
+        array (
+        ),
+      ),
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\TestimonialController',
+            1 => 'show',
+          ),
+          'middlewares' => 
+          array (
+          ),
+        ),
+      ),
+    ),
   ),
   'POST' => 
   array (
@@ -174,6 +203,21 @@
         'handler' => 
         array (
           0 => 'Api\\Controller\\NoticeController',
+          1 => 'create',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\AuthMiddleware',
+        ),
+      ),
+    ),
+    'testimonials' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\TestimonialController',
           1 => 'create',
         ),
         'middlewares' => 
@@ -254,6 +298,25 @@
         ),
       ),
     ),
+    'testimonials' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\TestimonialController',
+            1 => 'update',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
   ),
   'DELETE' => 
   array (
@@ -286,6 +349,25 @@
           'handler' => 
           array (
             0 => 'Api\\Controller\\NoticeController',
+            1 => 'delete',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
+    'testimonials' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\TestimonialController',
             1 => 'delete',
           ),
           'middlewares' => 

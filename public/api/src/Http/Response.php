@@ -32,4 +32,11 @@ class Response
         echo json_encode($data);
         exit;
     }
+
+    public function error(int $statusCode = 400, string $message = ''): void
+    {
+        $this->setStatusCode($statusCode)->send([
+            'message' => $message
+        ]);
+    }
 }

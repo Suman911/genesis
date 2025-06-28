@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+import Axios from "@/utils/Axios";
+import { User } from "@/lib/definitions";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -17,24 +17,14 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const res = await fetch(`${apiUrl}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
-      });
+      // No need for apiUrl, Axios already has baseURL
+      const data: User = await Axios.post("/login", { email, password });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message || "Login failed");
-      } else {
-        const targetRoute = data.user?.role === "admin" ? "/admin/" : "/";
-        router.replace(targetRoute);
-      }
-    } catch (err) {
+      const targetRoute = data?.role === "admin" ? "/admin/" : "/";
+      router.replace(targetRoute);
+    } catch (err: any) {
       console.error("Login error:", err);
-      setError("Something went wrong.");
+      setError(err.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
