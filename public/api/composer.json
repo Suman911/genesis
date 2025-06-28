@@ -3,7 +3,8 @@
     "autoload": {
         "psr-4": {
             "Api\\": "src/",
-            "Auth\\": "auth/"
+            "Auth\\": "auth/",
+            "Db\\": "db/"
         }
     },
     "authors": [

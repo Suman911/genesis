@@ -12,6 +12,9 @@ PHINX_BIN="$PHINX_DIR/vendor/bin/phinx"
 PHINX_CONFIG="$PHINX_DIR/db/phinx.php"
 
 case "$1" in
+  (autoload)
+    cd "$PHINX_DIR" && composer dump-autoload
+    ;;
   (migrate)
     cd "$PHINX_DIR" && php vendor/bin/phinx migrate -c db/phinx.php
     ;;

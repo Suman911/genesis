@@ -9,46 +9,46 @@ interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 }
 
 // Create Axios instance
-const Api: AxiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+const Axios: AxiosInstance = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
     withCredentials: true, // Allow sending cookies
     headers: { "Content-Type": "application/json", },
 });
 
 // Function to create a timeout signal with optional external controllers
-const createTimeoutSignal = (timeout: number = 5000, externalControllers: AbortController[] = []) => {
-    const timeoutController = new AbortController();
-    const timeoutId = setTimeout(() => timeoutController.abort("timeout"), timeout);
+// const createTimeoutSignal = (timeout: number = 10000, externalControllers: AbortController[] = []) => {
+//     const timeoutController = new AbortController();
+//     const timeoutId = setTimeout(() => timeoutController.abort("timeout"), timeout);
 
-    return {
-        signal: externalControllers.length
-            ? AbortSignal.any([timeoutController.signal, ...externalControllers.map(ctrl => ctrl.signal)])
-            : timeoutController.signal, // Use timeout signal if no external controllers
-        cleanup: () => clearTimeout(timeoutId),
-        timeoutController
-    };
-};
+//     return {
+//         signal: externalControllers.length
+//             ? AbortSignal.any([timeoutController.signal, ...externalControllers.map(ctrl => ctrl.signal)])
+//             : timeoutController.signal, // Use timeout signal if no external controllers
+//         cleanup: () => clearTimeout(timeoutId),
+//         timeoutController
+//     };
+// };
 
 // Request Interceptor (Attach signals)
-Api.interceptors.request.use(
-    (config: InternalAxiosRequestConfig) => {
-        const customConfig = config as CustomAxiosRequestConfig;
+// Axios.interceptors.request.use(
+//     (config: InternalAxiosRequestConfig) => {
+//         const customConfig = config as CustomAxiosRequestConfig;
 
-        const externalControllers = customConfig.externalControllers || [];
+//         const externalControllers = customConfig.externalControllers || [];
 
-        const { signal, cleanup, timeoutController } = createTimeoutSignal(customConfig.timeout ?? 5000, externalControllers);
+//         const { signal, cleanup, timeoutController } = createTimeoutSignal(customConfig.timeout ?? 10000, externalControllers);
 
-        customConfig.signal = signal;
-        customConfig.cleanup = cleanup;
-        customConfig.timeoutController = timeoutController;
+//         customConfig.signal = signal;
+//         customConfig.cleanup = cleanup;
+//         customConfig.timeoutController = timeoutController;
 
-        return customConfig;
-    },
-    (error) => Promise.reject(error)
-);
+//         return customConfig;
+//     },
+//     (error) => Promise.reject(error)
+// );
 
 // Response Interceptor (Handle errors & cleanup)
-Api.interceptors.response.use(
+Axios.interceptors.response.use(
     (response: AxiosResponse) => {
         (response.config as CustomAxiosRequestConfig).cleanup?.(); // Cleanup timeout
         return response.data;
@@ -57,7 +57,7 @@ Api.interceptors.response.use(
         (error.config as CustomAxiosRequestConfig)?.cleanup?.(); // Cleanup timeout
 
         let message = "An error occurred. Please try again.";
-
+        console.error("Axios error:", error);
         if (axios.isCancel(error)) {
             message = error.message === "timeout" ? "Request timed out. Please try again." : "Request was cancelled.";
         } else if (error.response) {
@@ -67,10 +67,8 @@ Api.interceptors.response.use(
         } else {
             message = error.message;
         }
-
-        console.error("API Error:", message);
         return Promise.reject(new Error(message));
     }
 );
 
-export default Api;
+export default Axios;
