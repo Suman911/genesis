@@ -17,7 +17,6 @@ const IsAdmin = ({ children }: { children: React.ReactNode }) => {
                 const data: User = await Axios.get("/admins/me");
                 setIsAdmin(data.role === "admin");
             } catch (error) {
-                console.error("Failed to verify admin:", error);
                 setIsAdmin(false);
             } finally {
                 setLoading(false);
@@ -29,8 +28,8 @@ const IsAdmin = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         if (isAdmin === false) {
-            // const timeout = setTimeout(() => router.replace("/"), 5000);
-            // return () => clearTimeout(timeout);
+            const timeout = setTimeout(() => router.replace("/"), 5000);
+            return () => clearTimeout(timeout);
         }
     }, [isAdmin]);
 

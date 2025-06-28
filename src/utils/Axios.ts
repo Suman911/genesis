@@ -57,7 +57,6 @@ Axios.interceptors.response.use(
         (error.config as CustomAxiosRequestConfig)?.cleanup?.(); // Cleanup timeout
 
         let message = "An error occurred. Please try again.";
-        console.error("Axios error:", error);
         if (axios.isCancel(error)) {
             message = error.message === "timeout" ? "Request timed out. Please try again." : "Request was cancelled.";
         } else if (error.response) {

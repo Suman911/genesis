@@ -1,9 +1,7 @@
 import '@/styles/index';
 import { Poppins } from 'next/font/google';
 import { ScreenSize } from '@/components/ui/util/screen';
-import Preloader from '@/components/ui/preloader/preloader';
 import { MetaData } from '@/components/meta/metadata';
-import Footer from '@/components/footer';
 import ToTopButton from '@/components/ui/util/toTop/ToTopButton';
 import ProfileWidget from '@/components/profile/profile';
 import IsAdmin from '@/components/admin/isAdmin';
@@ -23,7 +21,6 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
   return (
     <html lang="en">
       <body className={`${poppins.className}`}>
-        <Preloader />
         <main>
           <IsAdmin>
             <div className="flex min-h-screen bg-bg text-gray-800">
