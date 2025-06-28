@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class Gallery extends AbstractMigration
+final class Batch extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,16 +19,16 @@ final class Gallery extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('gallery');
+        $table = $this->table('batches');
         $table
-            ->addColumn('src', 'string', [
+            ->addColumn('name', 'string', [
                 'limit' => 100,
                 'null' => false,
             ])
-            ->addColumn('order', 'integer', [
-                'default' => 0,
-                'null' => false,
+            ->addColumn('active', 'boolean', [
+                'default' => true,
             ])
+            ->addTimestamps()
             ->create();
     }
 }

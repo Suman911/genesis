@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class Gallery extends AbstractMigration
+final class Testimonial extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,16 +19,26 @@ final class Gallery extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('gallery');
+        $table = $this->table('testimonials');
         $table
-            ->addColumn('src', 'string', [
+            ->addColumn('alumni_id', 'integer', [
+                'null' => true,
+            ])
+            ->addColumn('message', 'text', [
+                'null' => false,
+            ])
+            ->addColumn('image', 'string', [
+                'limit' => 255,
+                'null' => false,
+            ])
+            ->addColumn('name', 'string', [
                 'limit' => 100,
                 'null' => false,
             ])
-            ->addColumn('order', 'integer', [
-                'default' => 0,
-                'null' => false,
+            ->addColumn('is_active', 'boolean', [
+                'default' => true,
             ])
+            ->addTimestamps()
             ->create();
     }
 }

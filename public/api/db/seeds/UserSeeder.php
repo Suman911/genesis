@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-use Phinx\Seed\AbstractSeed;
+use Db\Seeds\Base_Seed;
 
-final class UserSeeder extends AbstractSeed
+final class UserSeeder extends Base_Seed
 {
     public function run(): void
     {
-        $count = $this->fetchRow('SELECT COUNT(*) AS count FROM users')['count'];
-        if ($count > 0) {
+        if (!$this->isEmpty('users')) {
             return;
         }
 
@@ -92,7 +91,6 @@ final class UserSeeder extends AbstractSeed
                 'updated_at' => date('Y-m-d H:i:s'),
             ],
         ];
-
         $this->table('users')->insert($data)->saveData();
     }
 }

@@ -29,11 +29,8 @@ final class Notice extends AbstractMigration
                 'null' => false,
             ])
             ->addColumn('document_url', 'string', [
-                'limit' => 100,
+                'limit' => 255,
                 'null' => true,
-            ])
-            ->addColumn('posted_date', 'date', [
-                'null' => false,
             ])
             ->addColumn('target_timestamp', 'datetime', [
                 'null' => false,

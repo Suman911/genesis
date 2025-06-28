@@ -16,8 +16,8 @@ echo "$host $dbname $user $pass";
 
 return [
     'paths' => [
-        'migrations' => 'db/migrations',
-        'seeds' => 'db/seeds',
+        'migrations' => 'db/Migrations',
+        'seeds' => 'db/Seeds',
     ],
     'environments' => [
         'default_migration_table' => 'phinxlog',

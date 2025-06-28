@@ -9,6 +9,7 @@ use Api\Router\Router;
 use Api\Controller\Controller;
 use Api\Controller\UserController;
 use Api\Controller\NoticeController;
+use Api\Controller\TestimonialController;
 use Api\Middleware\AuthMiddleware;
 use Api\Middleware\ErrorHandlerMiddleware;
 
@@ -52,5 +53,12 @@ $router->add('GET', '/notices/{id}', [NoticeController::class, 'show'], [AuthMid
 $router->add('POST', '/notices', [NoticeController::class, 'create'], [AuthMiddleware::class]);
 $router->add('PUT', '/notices/{id}', [NoticeController::class, 'update'], [AuthMiddleware::class]);
 $router->add('DELETE', '/notices/{id}', [NoticeController::class, 'delete'], [AuthMiddleware::class]);
+
+// testimonial routes
+$router->add('GET', '/testimonials', [TestimonialController::class, 'index']);
+$router->add('GET', '/testimonials/{id}', [TestimonialController::class, 'show']);
+$router->add('POST', '/testimonials', [TestimonialController::class, 'create'], [AuthMiddleware::class]);
+$router->add('PUT', '/testimonials/{id}', [TestimonialController::class, 'update'], [AuthMiddleware::class]);
+$router->add('DELETE', '/testimonials/{id}', [TestimonialController::class, 'delete'], [AuthMiddleware::class]);
 
 $router->dispatch();

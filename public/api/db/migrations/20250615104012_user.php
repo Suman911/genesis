@@ -44,8 +44,8 @@ final class User extends AbstractMigration
             ->addColumn('email_verified_at', 'datetime', [
                 'default' => null,
             ])
-            ->addColumn('role', 'string', [
-                'limit' => 50,
+            ->addColumn('role', 'enum', [
+                'values' => ['user', 'alumni', 'admin'],
                 'null' => false,
                 'default' => 'user',
             ])

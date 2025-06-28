@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-use Phinx\Seed\AbstractSeed;
+use Db\Seeds\Base_Seed;
 
-final class GallerySeeder extends AbstractSeed
+final class GallerySeeder extends Base_Seed
 {
     public function run(): void
     {
-        $count = $this->fetchRow('SELECT COUNT(*) AS count FROM gallery')['count'];
-        if ($count > 0) {
+        if (!$this->isEmpty('gallery')) {
             return;
         }
 

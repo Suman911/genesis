@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class Testimonial extends AbstractMigration
+final class SubBatch extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,24 +19,22 @@ final class Testimonial extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('testimonials');
+        $table = $this->table('sub_batches');
         $table
-            ->addColumn('user_id', 'integer', [
-                'null' => true,
-            ])
-            ->addColumn('message', 'text', [
+            ->addColumn('batch_id', 'integer', [
                 'null' => false,
-            ])
-            ->addColumn('image', 'string', [
-                'limit' => 100,
-                'null' => false,
+                'signed' => false,
             ])
             ->addColumn('name', 'string', [
                 'limit' => 100,
                 'null' => false,
             ])
-            ->addColumn('is_active', 'boolean', [
+            ->addColumn('active', 'boolean', [
                 'default' => true,
+            ])
+            ->addForeignKey('batch_id', 'batches', 'id', [
+                'delete' => 'CASCADE',
+                'update' => 'NO_ACTION',
             ])
             ->addTimestamps()
             ->create();
