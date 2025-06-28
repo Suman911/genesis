@@ -15,7 +15,7 @@ export default function Notice({ notice, className = "", ...props }: NoticeProps
             className={`group border border-gray-300 rounded-lg p-4 shadow-sm bg-white flex items-start gap-4 transition-colors duration-300 hover:bg-primary-fade hover:delay-0 delay-100 ${className}`}
         >
             <div className="text-2xl">
-                {notice.isUrgent ? (
+                {notice.is_urgent ? (
                     <ImportantIcon />
                 ) : (
                     <NewIcon />
@@ -53,7 +53,7 @@ export default function Notice({ notice, className = "", ...props }: NoticeProps
                     </span>
                     {/* Tag */}
                     <span
-                        className={`px-3 py-1 text-xs font-semibold rounded-full ${notice.isUrgent ? "bg-red-200 text-red-800" : "bg-blue-200 text-blue-800"
+                        className={`px-3 py-1 text-xs font-semibold rounded-full ${notice.is_urgent ? "bg-red-200 text-red-800" : "bg-blue-200 text-blue-800"
                             }`}
                     >
                         {notice.tag}

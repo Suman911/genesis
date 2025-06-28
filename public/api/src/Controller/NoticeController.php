@@ -18,7 +18,7 @@ class NoticeController extends Controller
     {
         foreach (['title', 'description', 'posted_date', 'target_timestamp', 'expiry_date', 'type'] as $field) {
             if (empty($data[$field])) {
-                $response->setStatusCode(400)->send(['error' => "$field is required."]);
+                $response->error(400, "$field is required.");
             }
         }
     }
@@ -26,9 +26,9 @@ class NoticeController extends Controller
     public function index(Request $request, Response $response)
     {
         // $this->Authorized($request, $response);
-        
+
         $notices = $this->noticeRepository->getAllNotices();
-        $response->send(['notices' => $notices]);
+        $response->send(data: $notices);
     }
 
     public function show(Request $request, Response $response)
@@ -41,9 +41,9 @@ class NoticeController extends Controller
         $notice = $this->noticeRepository->getNoticeById($id);
 
         if ($notice) {
-            $response->send(['notice' => $notice]);
+            $response->send($notice);
         } else {
-            $response->setStatusCode(404)->send(['message' => 'Notice not found']);
+            $response->error(404, 'Notice not found');
         }
     }
 
@@ -57,11 +57,11 @@ class NoticeController extends Controller
         $notice = $this->noticeRepository->createNotice($data);
 
         if (!$notice) {
-            $response->setStatusCode(500)->send(['message' => 'Failed to create notice']);
+            $response->error(500, 'Failed to create notice');
             return;
         }
 
-        $response->send(['message' => 'Notice created', 'notice' => $notice]);
+        $response->setStatusCode(201)->send($notice);
     }
 
     public function update(Request $request, Response $response)
@@ -77,11 +77,11 @@ class NoticeController extends Controller
         $notice = $this->noticeRepository->updateNotice($id, $data);
 
         if (!$notice) {
-            $response->setStatusCode(500)->send(['message' => 'Failed to update notice']);
+            $response->error(500, 'Failed to update notice');
             return;
         }
 
-        $response->send(['message' => 'Notice updated', 'notice' => $notice]);
+        $response->send($notice);
     }
 
     public function delete(Request $request, Response $response)
@@ -94,7 +94,7 @@ class NoticeController extends Controller
         $deleted = $this->noticeRepository->deleteNotice($id);
 
         if (!$deleted) {
-            $response->setStatusCode(500)->send(['message' => 'Failed to delete notice']);
+            $response->error(500, 'Failed to delete notice');
             return;
         }
 

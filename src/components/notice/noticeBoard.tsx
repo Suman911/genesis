@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import axios from "axios";
+import Axios from "@/utils/Axios"; // Use your Axios instance
 import { Heading, TopHeading, MainHeading } from "@/components/ui/text/heading";
 import Notice from "./notice";
 import { NoticeType } from "@/lib/definitions";
@@ -14,8 +14,8 @@ export default function NoticeBoard() {
     useEffect(() => {
         const fetchNotices = async () => {
             try {
-                const response = await axios.get("/notices.json");
-                setNotices(response.data.notices);
+                const data: NoticeType[]= await Axios.get("/notices");
+                setNotices(data);
             } catch (err) {
                 console.error("Error fetching notices:", err);
                 setError("Failed to load notices. Please try again later.");

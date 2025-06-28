@@ -8,7 +8,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "./alumni.css";
-import TestimonialSlide, { TestimonialSlideSkeleton, TestimonialType } from "@/components/alumni/testimonial";
+import TestimonialSlide, { TestimonialSlideSkeleton } from "@/components/alumni/testimonial";
+import { TestimonialType } from "@/lib/definitions";
+import Axios from "@/utils/Axios";
 
 export default function Alumni() {
     const [testimonials, setTestimonials] = useState<TestimonialType[]>([]);
@@ -18,9 +20,7 @@ export default function Alumni() {
     useEffect(() => {
         const fetchTestimonials = async () => {
             try {
-                // await new Promise((resolve) => setTimeout(resolve, 5000));
-                const res = await fetch("/testimonials.json");
-                const data = await res.json();
+                const data: TestimonialType[] = await Axios.get("/testimonials");
                 setTestimonials(data);
             } catch (err) {
                 console.error("Error fetching testimonials:", err);

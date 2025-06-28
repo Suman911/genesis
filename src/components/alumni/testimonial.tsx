@@ -1,13 +1,6 @@
 "use client";
 import { useState } from "react";
-
-
-export interface TestimonialType {
-    id: number;
-    message: string;
-    image: string;
-    name: string;
-}
+import { TestimonialType } from "@/lib/definitions";
 
 const TestimonialSlide = ({ testimonial }: { testimonial: TestimonialType }) => {
     const [isExpanded, setIsExpanded] = useState(false);

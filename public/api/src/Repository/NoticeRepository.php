@@ -16,7 +16,7 @@ class NoticeRepository
 
     public function getAllNotices()
     {
-        $stmt = $this->pdo->query("SELECT * FROM notices ORDER BY posted_date DESC");
+        $stmt = $this->pdo->query("SELECT * FROM notices ORDER BY created_at DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -30,14 +30,13 @@ class NoticeRepository
     public function createNotice(array $data)
     {
         $stmt = $this->pdo->prepare(
-            "INSERT INTO notices (title, description, document_url, posted_date, target_timestamp, expiry_date, type, is_urgent, tag) 
-            VALUES (:title, :description, :document_url, :posted_date, :target_timestamp, :expiry_date, :type, :is_urgent, :tag)"
+            "INSERT INTO notices (title, description, document_url, target_timestamp, expiry_date, type, is_urgent, tag) 
+            VALUES (:title, :description, :document_url, :target_timestamp, :expiry_date, :type, :is_urgent, :tag)"
         );
         $stmt->execute([
             ':title' => $data['title'],
             ':description' => $data['description'],
             ':document_url' => $data['document_url'] ?? null,
-            ':posted_date' => $data['posted_date'],
             ':target_timestamp' => $data['target_timestamp'],
             ':expiry_date' => $data['expiry_date'],
             ':type' => $data['type'],
