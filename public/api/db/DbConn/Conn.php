@@ -1,6 +1,6 @@
 <?php
 
-namespace Auth\DbConn;
+namespace Db\DbConn;
 
 use PDO;
 use PDOException;

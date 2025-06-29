@@ -37,7 +37,7 @@
           'handler' => 
           array (
             0 => 'Api\\Controller\\UserController',
-            1 => 'show',
+            1 => 'fetch',
           ),
           'middlewares' => 
           array (
@@ -112,7 +112,7 @@
           'handler' => 
           array (
             0 => 'Api\\Controller\\NoticeController',
-            1 => 'show',
+            1 => 'fetch',
           ),
           'middlewares' => 
           array (
@@ -142,10 +142,56 @@
           'handler' => 
           array (
             0 => 'Api\\Controller\\TestimonialController',
-            1 => 'show',
+            1 => 'fetch',
           ),
           'middlewares' => 
           array (
+          ),
+        ),
+      ),
+    ),
+    'batches' => 
+    array (
+      'counts' => 
+      array (
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\BatchController',
+            1 => 'counts',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\BatchController',
+          1 => 'index',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\AuthMiddleware',
+        ),
+      ),
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\BatchController',
+            1 => 'fetch',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
           ),
         ),
       ),
@@ -218,6 +264,21 @@
         'handler' => 
         array (
           0 => 'Api\\Controller\\TestimonialController',
+          1 => 'create',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\AuthMiddleware',
+        ),
+      ),
+    ),
+    'batches' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\BatchController',
           1 => 'create',
         ),
         'middlewares' => 
@@ -308,6 +369,25 @@
           'handler' => 
           array (
             0 => 'Api\\Controller\\TestimonialController',
+            1 => 'update',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
+    'batches' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\BatchController',
             1 => 'update',
           ),
           'middlewares' => 

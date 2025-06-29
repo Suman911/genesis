@@ -2,18 +2,10 @@
 
 namespace Api\Repository;
 
-use Auth\DbConn\Conn;
 use PDO;
 
-class NoticeRepository
+final class NoticeRepository extends Repository
 {
-    private $pdo;
-
-    public function __construct()
-    {
-        $this->pdo = Conn::setConnection();
-    }
-
     public function getAllNotices()
     {
         $stmt = $this->pdo->query("SELECT * FROM notices ORDER BY created_at DESC");

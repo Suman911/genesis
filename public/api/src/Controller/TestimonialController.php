@@ -6,7 +6,7 @@ use Api\Http\Request;
 use Api\Http\Response;
 use Api\Repository\TestimonialRepository;
 
-class TestimonialController extends Controller
+final class TestimonialController extends Controller
 {
     private $testimonialRepository;
 
@@ -30,7 +30,7 @@ class TestimonialController extends Controller
         $response->send($testimonials);
     }
 
-    public function show(Request $request, Response $response)
+    public function fetch(Request $request, Response $response)
     {
         $id = $request->getParams()['id'] ?? null;
         $this->validateId($response, $id);

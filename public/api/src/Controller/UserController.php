@@ -7,7 +7,7 @@ use Api\Http\Response;
 use Api\Repository\UserRepository;
 use Auth\JWT\JWT;
 
-class UserController extends Controller
+final class UserController extends Controller
 {
     private $userRepository;
 
@@ -53,7 +53,7 @@ class UserController extends Controller
         $response->send(['users' => $users]);
     }
 
-    public function show(Request $request, Response $response)
+    public function fetch(Request $request, Response $response)
     {
         $this->Authorized($request, $response);
 

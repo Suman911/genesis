@@ -2,17 +2,10 @@
 
 namespace Api\Repository;
 
-use Auth\DbConn\Conn;
 use PDO;
 
-class TestimonialRepository
+final class TestimonialRepository extends Repository
 {
-    private $pdo;
-
-    public function __construct()
-    {
-        $this->pdo = Conn::setConnection();
-    }
 
     public function getAllTestimonials()
     {

@@ -6,7 +6,7 @@ use Api\Http\Request;
 use Api\Http\Response;
 use Api\Repository\NoticeRepository;
 
-class NoticeController extends Controller
+final class NoticeController extends Controller
 {
     private $noticeRepository;
 
@@ -31,7 +31,7 @@ class NoticeController extends Controller
         $response->send(data: $notices);
     }
 
-    public function show(Request $request, Response $response)
+    public function fetch(Request $request, Response $response)
     {
         $this->Authorized($request, $response);
 
