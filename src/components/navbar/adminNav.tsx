@@ -34,7 +34,7 @@ export default function AdminNav() {
                 </li>
                 <li>
                     <Link
-                        href="/admin/batches"
+                        href="/batches"
                         className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
                     >
                         <FaUserGroup size={18} />
@@ -43,7 +43,7 @@ export default function AdminNav() {
                 </li>
                 <li>
                     <Link
-                        href="/admin/notices"
+                        href="/notices"
                         className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
                     >
                         <IoNewspaperSharp size={18} />
@@ -52,7 +52,7 @@ export default function AdminNav() {
                 </li>
                 <li>
                     <Link
-                        href="/admin/gallery"
+                        href="/gallery"
                         className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
                     >
                         <IoIosImages size={18} />
@@ -61,7 +61,7 @@ export default function AdminNav() {
                 </li>
                 <li>
                     <Link
-                        href="/admin/students"
+                        href="/students"
                         className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
                     >
                         <FaCircleUser size={18} />
@@ -70,7 +70,7 @@ export default function AdminNav() {
                 </li>
                 <li>
                     <Link
-                        href="/admin/alumni"
+                        href="/alumni"
                         className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
                     >
                         <FaUserGraduate size={18} />
@@ -79,7 +79,7 @@ export default function AdminNav() {
                 </li>
                 <li>
                     <Link
-                        href="/admin/forms"
+                        href="/forms"
                         className="flex items-center gap-3 p-2 rounded-md hover:bg-primary/10 transition text-sm font-medium"
                     >
                         <SiGoogleforms size={18} />

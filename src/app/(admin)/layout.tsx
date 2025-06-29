@@ -3,7 +3,6 @@ import { Poppins } from 'next/font/google';
 import { ScreenSize } from '@/components/ui/util/screen';
 import { MetaData } from '@/components/meta/metadata';
 import ToTopButton from '@/components/ui/util/toTop/ToTopButton';
-import ProfileWidget from '@/components/profile/profile';
 import IsAdmin from '@/components/admin/isAdmin';
 import AdminNav from '@/components/navbar/adminNav';
 
@@ -28,20 +27,17 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
                 <AdminNav />
               </aside>
               <div className="flex-1">
-                <div className="select-none">
-                  <ProfileWidget />
-                </div>
                 <div className="bg-bg overflow-x-hidden">
                   <div className="container m-auto lg:py-20 py-10">
                     {children}
                   </div>
                 </div>
-                <div className="select-none">
-                  <ToTopButton />
-                </div>
               </div>
             </div>
           </IsAdmin>
+          <div className="select-none">
+            <ToTopButton />
+          </div>
         </main>
         {isDev && <ScreenSize />}
       </body>

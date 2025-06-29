@@ -27,6 +27,12 @@ case "$1" in
   (seed)
     cd "$PHINX_DIR" && php vendor/bin/phinx seed:run -c db/phinx.php
     ;;
+  (db-reset)
+    cd "$PHINX_DIR"
+    php vendor/bin/phinx rollback -c db/phinx.php -t 0
+    php vendor/bin/phinx migrate -c db/phinx.php
+    php vendor/bin/phinx seed:run -c db/phinx.php
+    ;;
   (create)
     if [ -z "$2" ]; then
       echo "Usage: $0 create MigrationName"
