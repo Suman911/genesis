@@ -1,0 +1,46 @@
+meta {
+  name: updateBatch
+  type: http
+  seq: 3
+}
+
+put {
+  url: https://localhost/genesis/public/api/batches/3
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": 3,
+    "name": "H Secondary",
+    "active": 1,
+    "sub_batches": [
+      {
+        "id": 7,
+        "batch_id": 3,
+        "seq": 1,
+        "name": "HS 1th",
+        "active": 1,
+        "student_count": 0
+      },
+      {
+        "id": 8,
+        "batch_id": 3,
+        "seq": 2,
+        "name": " 12th",
+        "active": 1,
+        "student_count": 0
+      },
+      {
+        "id": 9,
+        "batch_id": 3,
+        "seq": 4,
+        "name": "HS 12th",
+        "active": 1,
+        "student_count": 0
+      }
+    ],
+    "student_count": 0
+  }
+}

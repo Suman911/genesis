@@ -30,14 +30,14 @@ final class BatchSeeder extends Base_Seed
             return;
         }
         $subBatches = [
-            ['batch_id' => 1, 'name' => 'BSc. 1st year', 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 1, 'name' => 'BSc. 2nd year', 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 1, 'name' => 'BSc. 3rd year', 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 1, 'name' => 'BSc. 4th year', 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 2, 'name' => 'MSc. 1st year', 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 2, 'name' => 'MSc. 2nd year', 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 3, 'name' => 'HS 11th', 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 3, 'name' => 'HS 12th', 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 1, 'name' => 'BSc. 1st year', 'seq'=> 1, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 1, 'name' => 'BSc. 2nd year', 'seq'=> 2, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 1, 'name' => 'BSc. 3rd year', 'seq'=> 3, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 1, 'name' => 'BSc. 4th year', 'seq'=> 4, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 2, 'name' => 'MSc. 1st year', 'seq'=> 1, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 2, 'name' => 'MSc. 2nd year', 'seq'=> 2, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 3, 'name' => 'HS 11th', 'seq'=> 1, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 3, 'name' => 'HS 12th', 'seq'=> 2, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
         ];
         $this->table('sub_batches')->insert($subBatches)->saveData();
     }

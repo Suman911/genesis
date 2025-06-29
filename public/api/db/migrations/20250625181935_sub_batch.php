@@ -25,6 +25,10 @@ final class SubBatch extends AbstractMigration
                 'null' => false,
                 'signed' => false,
             ])
+            ->addColumn('seq', 'integer', [
+                'null' => false,
+                'signed' => false,
+            ])
             ->addColumn('name', 'string', [
                 'limit' => 100,
                 'null' => false,
@@ -36,7 +40,9 @@ final class SubBatch extends AbstractMigration
                 'delete' => 'CASCADE',
                 'update' => 'NO_ACTION',
             ])
+            ->addIndex(['batch_id', 'seq'], ['unique' => true, 'name' => 'idx_batch'])
             ->addTimestamps()
             ->create();
     }
+
 }

@@ -2,18 +2,11 @@
 
 namespace Api\Repository;
 
-use Auth\DbConn\Conn;
 use PDO;
 
-class UserRepository
+final class UserRepository extends Repository
 {
-    private PDO $pdo;
     private string $userFields = "id, name, user_name, email, ph_number, email_verified_at, role";
-
-    public function __construct()
-    {
-        $this->pdo = Conn::setConnection();
-    }
 
     public function getAllUsers()
     {
