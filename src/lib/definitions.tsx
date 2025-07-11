@@ -43,3 +43,19 @@ export type User = {
     role: "user" | "alumni" | "admin";
 };
 
+export type SubBatch = {
+    id: number;
+    batch_id: number;
+    seq: number | null;
+    name: string;
+    active: number;
+    student_count: number;
+};
+
+export type Batch = {
+    id: number;
+    name: string;
+    active: number;
+    sub_batches: SubBatch[];
+    student_count: number;
+};

@@ -32,5 +32,5 @@ if (stripos($userAgent, 'Mozilla') !== false && stripos($userAgent, 'Postman') =
 
 // Sleep if request is from browser
 if ($isBrowser) {
-    // sleep(3);
+    sleep(1);
 }

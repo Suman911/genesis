@@ -46,60 +46,41 @@ final class BatchController extends Controller
         $response->send($batches);
     }
 
-    public function fetch(Request $request, Response $response)
-    {
-        $this->Authorized($request, $response);
-        $id = $request->getParams()['id'] ?? null;
-        $this->validateId($response, $id);
-        $batch = $this->batchRepository->getBatchById($id);
-
-        if (!$batch) {
-            $response->error(404, 'Batch not found');
-        }
-
-        $batch = $this->getStudentCount($batch);
-        $response->send($batch);
-    }
-
-    public function create(Request $request, Response $response)
-    {
-        $this->Authorized($request, $response);
-        $data = $request->getBody();
-        if (empty($data['name'])) {
-            $response->error(400, 'Batch name is required');
-        }
-        $batch = $this->batchRepository->createBatch($data);
-        $response->setStatusCode(201)->send($batch);
-    }
-
     public function update(Request $request, Response $response)
     {
         $this->Authorized($request, $response);
-        $id = $request->getParams()['id'] ?? null;
-        $this->validateId($response, $id);
+        $id = (int) ($request->getParams()['id'] ?? 0);
 
         $data = $request->getBody();
 
         try {
             $this->batchRepository->startTransaction();
 
-            // Update batch main fields
+            $isNew = $id === 0;
+
             $batchData = [
                 'name' => $data['name'] ?? null,
                 'active' => $data['active'] ?? 1,
             ];
-            $batch = $this->batchRepository->updateBatch($id, $batchData);
 
-            if (!$batch) {
-                throw new \RuntimeException('Failed to save Batch.');
+            // Create or update the batch
+            $batch = $isNew
+                ? $this->batchRepository->createBatch($batchData)
+                : $this->batchRepository->updateBatch($id, $batchData);
+
+            if (!$batch || !isset($batch['id'])) {
+                throw new \RuntimeException('Failed to save batch.');
             }
-            // Handle sub_batches
+
+            $batchId = (int) $batch['id'];
+
+            // Process sub-batches
             if (!empty($data['sub_batches']) && is_array($data['sub_batches'])) {
                 foreach ($data['sub_batches'] as $subBatch) {
                     $subBatchId = (int) ($subBatch['id'] ?? 0);
 
                     $subBatchData = [
-                        'batch_id' => $id,
+                        'batch_id' => $batchId,
                         'name' => $subBatch['name'] ?? '',
                         'active' => $subBatch['active'] ?? 1,
                         'seq' => $subBatch['seq'] ?? null,
@@ -113,18 +94,66 @@ final class BatchController extends Controller
                         throw new \RuntimeException('Failed to save sub-batch.');
                     }
                 }
-
             }
 
             $this->batchRepository->commitTransaction();
 
-            // Return updated batch with sub-batches
-            $updatedBatch = $this->batchRepository->getBatchById($id);
+            // Return updated or created batch with sub-batches
+            $updatedBatch = $this->batchRepository->getBatchById($batchId);
             $updatedBatch = $this->getStudentCount($updatedBatch);
             $response->send($updatedBatch);
+
         } catch (\Throwable $e) {
             $this->batchRepository->rollbackTransaction();
-            $response->error(500, 'Batch update failed: ' . $e->getMessage());
+            $response->error(500, 'Batch save failed: ' . $e->getMessage());
+        }
+    }
+
+    public function delete(Request $request, Response $response)
+    {
+        $this->Authorized($request, $response);
+        $id = $request->getParams()['id'];
+
+        $this->validateId($response, $id);
+
+        try {
+            // Check if the batch has sub-batches
+            $subBatches = $this->batchRepository->getSubBatchesByBatchId($id);
+            if (!empty($subBatches)) {
+                $response->error(400, 'Cannot delete batch with sub-batches.');
+                return;
+            }
+
+            // Soft delete the batch
+            $this->batchRepository->deleteBatch($id);
+            $response->send(['message' => 'Batch deleted successfully.']);
+
+        } catch (\Throwable $e) {
+            $response->error(500, 'Batch deletion failed: ' . $e->getMessage());
+        }
+    }
+
+    public function deleteSubBatch(Request $request, Response $response)
+    {
+        $this->Authorized($request, $response);
+        $id = $request->getParams()['id'];
+
+        $this->validateId($response, $id);
+
+        try {
+            // Check if the sub-batch has students
+            $studentCount = $this->batchRepository->getStudentCountForSubBatch($id);
+            if ($studentCount > 0) {
+                $response->error(400, 'Cannot delete sub-batch with students.');
+                return;
+            }
+
+            // Delete the sub-batch
+            $this->batchRepository->deleteSubBatch($id);
+            $response->send(['message' => 'Sub-batch deleted successfully.']);
+
+        } catch (\Throwable $e) {
+            $response->error(500, 'Sub-batch deletion failed: ' . $e->getMessage());
         }
     }
 }

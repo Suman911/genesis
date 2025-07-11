@@ -25,10 +25,6 @@ final class StudentBatch extends AbstractMigration
                 'null' => false,
                 'signed' => false
             ])
-            ->addColumn('batch_id', 'integer', [
-                'null' => false,
-                'signed' => false
-            ])
             ->addColumn('sub_batch_id', 'integer', [
                 'null' => false,
                 'signed' => false
@@ -39,10 +35,6 @@ final class StudentBatch extends AbstractMigration
                 'default' => 'active',
             ])
             ->addForeignKey('student_id', 'users', 'id', [
-                'delete'=> 'CASCADE',
-                'update'=> 'NO_ACTION'
-            ])
-            ->addForeignKey('batch_id', 'batches', 'id', [
                 'delete'=> 'CASCADE',
                 'update'=> 'NO_ACTION'
             ])

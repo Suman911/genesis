@@ -179,22 +179,6 @@
           0 => 'Api\\Middleware\\AuthMiddleware',
         ),
       ),
-      '{param}' => 
-      array (
-        '_name' => 'id',
-        '_handler' => 
-        array (
-          'handler' => 
-          array (
-            0 => 'Api\\Controller\\BatchController',
-            1 => 'fetch',
-          ),
-          'middlewares' => 
-          array (
-            0 => 'Api\\Middleware\\AuthMiddleware',
-          ),
-        ),
-      ),
     ),
   ),
   'POST' => 
@@ -264,21 +248,6 @@
         'handler' => 
         array (
           0 => 'Api\\Controller\\TestimonialController',
-          1 => 'create',
-        ),
-        'middlewares' => 
-        array (
-          0 => 'Api\\Middleware\\AuthMiddleware',
-        ),
-      ),
-    ),
-    'batches' => 
-    array (
-      '_handler' => 
-      array (
-        'handler' => 
-        array (
-          0 => 'Api\\Controller\\BatchController',
           1 => 'create',
         ),
         'middlewares' => 
@@ -453,6 +422,44 @@
           'middlewares' => 
           array (
             0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
+    'batches' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\BatchController',
+            1 => 'delete',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+      'sub' => 
+      array (
+        '{param}' => 
+        array (
+          '_name' => 'id',
+          '_handler' => 
+          array (
+            'handler' => 
+            array (
+              0 => 'Api\\Controller\\BatchController',
+              1 => 'deleteSubBatch',
+            ),
+            'middlewares' => 
+            array (
+              0 => 'Api\\Middleware\\AuthMiddleware',
+            ),
           ),
         ),
       ),

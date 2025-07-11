@@ -65,9 +65,9 @@ $router->add('DELETE', '/testimonials/{id}', [TestimonialController::class, 'del
 // batch routes
 $router->add('GET', '/batches/counts', [BatchController::class, 'counts'], [AuthMiddleware::class]);
 $router->add('GET', '/batches', [BatchController::class, 'index'], [AuthMiddleware::class]);
-$router->add('GET', '/batches/{id}', [BatchController::class, 'fetch'], [AuthMiddleware::class]);
-$router->add('POST', '/batches', [BatchController::class, 'create'], [AuthMiddleware::class]);
 $router->add('PUT', '/batches/{id}', [BatchController::class, 'update'], [AuthMiddleware::class]);
+$router->add('DELETE', '/batches/{id}', [BatchController::class, 'delete'], [AuthMiddleware::class]);
+$router->add('DELETE', '/batches/sub/{id}', [BatchController::class, 'deleteSubBatch'], [AuthMiddleware::class]);
 
 
 $router->dispatch();

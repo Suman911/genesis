@@ -28,7 +28,7 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
               </aside>
               <div className="flex-1">
                 <div className="bg-bg overflow-x-hidden">
-                  <div className="container m-auto lg:py-20 py-10">
+                  <div className="container m-auto">
                     {children}
                   </div>
                 </div>

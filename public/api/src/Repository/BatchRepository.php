@@ -23,7 +23,7 @@ final class BatchRepository extends Repository
     // Get all batches and sub-batches (no logic, just data)
     public function getAllBatchesWithSubBatches()
     {
-        $sql = "SELECT $this->batchFields FROM batches ORDER BY created_at DESC";
+        $sql = "SELECT $this->batchFields FROM batches ORDER BY id ASC";
         $stmt = $this->pdo->query($sql);
         $batches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -130,5 +130,25 @@ final class BatchRepository extends Repository
         $sql = "UPDATE sub_batches SET " . implode(', ', $fields) . ", updated_at = NOW() WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute($params);
+    }
+
+    public function deleteBatch(int $id): bool
+    {
+        if ($id <= 0) {
+            throw new \InvalidArgumentException('Batch ID is required for deletion');
+        }
+
+        $stmt = $this->pdo->prepare("DELETE FROM batches WHERE id = :id");
+        return $stmt->execute([':id' => $id]);
+    }
+
+    public function deleteSubBatch(int $id): bool
+    {
+        if ($id <= 0) {
+            throw new \InvalidArgumentException('Sub-batch ID is required for deletion');
+        }
+
+        $stmt = $this->pdo->prepare("DELETE FROM sub_batches WHERE id = :id");
+        return $stmt->execute([':id' => $id]);
     }
 }

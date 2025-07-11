@@ -9,7 +9,6 @@ use Error;
 
 class ErrorHandlerMiddleware
 {
-
     public static function handle(Request $request, Response $response, callable $next)
     {
         $isDev = $_ENV['APP_ENV'] === 'DEV';
