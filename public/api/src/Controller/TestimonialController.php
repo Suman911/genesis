@@ -8,11 +8,9 @@ use Api\Repository\TestimonialRepository;
 
 final class TestimonialController extends Controller
 {
-    private $testimonialRepository;
-
     public function __construct()
     {
-        $this->testimonialRepository = new TestimonialRepository();
+        $this->repository = new TestimonialRepository();
     }
 
     private function validateTestimonialData(Response $response, array $data)
@@ -26,7 +24,7 @@ final class TestimonialController extends Controller
 
     public function index(Request $request, Response $response)
     {
-        $testimonials = $this->testimonialRepository->getAllTestimonials();
+        $testimonials = $this->repository->getAllTestimonials();
         $response->send($testimonials);
     }
 
@@ -35,7 +33,7 @@ final class TestimonialController extends Controller
         $id = $request->getParams()['id'] ?? null;
         $this->validateId($response, $id);
 
-        $testimonial = $this->testimonialRepository->getTestimonialById($id);
+        $testimonial = $this->repository->getTestimonialById($id);
 
         if ($testimonial) {
             $response->send(['testimonial' => $testimonial]);
@@ -51,7 +49,7 @@ final class TestimonialController extends Controller
         $data = $request->getBody();
         $this->validateTestimonialData($response, $data);
 
-        $testimonial = $this->testimonialRepository->createTestimonial($data);
+        $testimonial = $this->repository->createTestimonial($data);
 
         if (!$testimonial) {
             $response->error(500, 'Failed to create testimonial');
@@ -71,7 +69,7 @@ final class TestimonialController extends Controller
         $data = $request->getBody();
         $this->validateTestimonialData($response, $data);
 
-        $testimonial = $this->testimonialRepository->updateTestimonial($id, $data);
+        $testimonial = $this->repository->updateTestimonial($id, $data);
 
         if (!$testimonial) {
             $response->error(500, 'Failed to update testimonial');
@@ -88,7 +86,7 @@ final class TestimonialController extends Controller
         $id = $request->getParams()['id'] ?? null;
         $this->validateId($response, $id);
 
-        $deleted = $this->testimonialRepository->deleteTestimonial($id);
+        $deleted = $this->repository->deleteTestimonial($id);
 
         if (!$deleted) {
             $response->error(500, 'Failed to delete testimonial');

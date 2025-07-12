@@ -1,14 +1,19 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from "axios";
+import axios, {
+    AxiosInstance,
+    InternalAxiosRequestConfig,
+    AxiosResponse,
+    GenericAbortSignal,
+} from "axios";
 
-// Define a custom request config type that extends Axios' internal config
+type AnyAbortSignal = AbortSignal | GenericAbortSignal;
+
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     externalControllers?: AbortController[];
     cleanup?: () => void;
     timeoutController?: AbortController;
-    timeout?: number; // Optional user-defined timeout
+    timeout?: number;
 }
 
-// map status codes to messages
 const statusMessages: Record<number, string> = {
     400: "Bad Request",
     401: "Unauthorized",
@@ -17,90 +22,69 @@ const statusMessages: Record<number, string> = {
     500: "Internal Server Error",
 };
 
-// Create Axios instance
 const Axios: AxiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
-    withCredentials: true, // Allow sending cookies
-    headers: { "Content-Type": "application/json", },
+    withCredentials: true,
+    headers: { "Content-Type": "application/json" },
+    timeout: 10000,
 });
 
-// // Function to create a timeout signal with optional external controllers
-// const createTimeoutSignal = (timeout: number = 10000, externalControllers: AbortController[] = []) => {
-//     const timeoutController = new AbortController();
-//     const timeoutId = setTimeout(() => timeoutController.abort("timeout"), timeout);
+Axios.interceptors.request.use((cfg) => {
+    const config = cfg as CustomAxiosRequestConfig;
+    const mergedController = new AbortController();
 
-//     // If no external controllers, return simple timeout setup
-//     if (externalControllers.length === 0) {
-//         return {
-//             signal: timeoutController.signal,
-//             cleanup: () => clearTimeout(timeoutId),
-//             timeoutController
-//         };
-//     }
+    const attach = (signal?: AnyAbortSignal) => {
+        if (!signal) return;
+        if (signal.aborted) {
+            mergedController.abort((signal as any).reason);
+            return;
+        }
+        // GenericAbortSignal may not expose addEventListener in older Node types, so optional‑chain
+        (signal as any).addEventListener?.("abort", () =>
+            mergedController.abort((signal as any).reason)
+        );
+    };
 
-//     // Combine signals using custom implementation
-//     const compositeController = new AbortController();
-//     const signals = [timeoutController.signal, ...externalControllers.map(ctrl => ctrl.signal)];
-//     const listeners: (() => void)[] = [];
+    attach(config.signal as AnyAbortSignal);
 
-//     // Handle each signal
-//     signals.forEach(signal => {
-//         if (signal.aborted) {
-//             // If already aborted, propagate immediately
-//             compositeController.abort(signal.reason);
-//         } else {
-//             const handleAbort = () => {
-//                 compositeController.abort(signal.reason);
-//             };
-//             signal.addEventListener('abort', handleAbort);
-//             listeners.push(() => signal.removeEventListener('abort', handleAbort));
-//         }
-//     });
+    (config.externalControllers ?? []).forEach((c) =>
+        attach(c.signal as AnyAbortSignal)
+    );
 
-//     const cleanupAll = () => {
-//         clearTimeout(timeoutId);
-//         listeners.forEach(cleanup => cleanup());
-//     };
+    const timeout = config.timeout ?? Axios.defaults.timeout;
+    if (timeout && timeout > 0) {
+        const tCtrl = new AbortController();
+        const id = setTimeout(() => tCtrl.abort("timeout"), timeout);
+        config.cleanup = () => clearTimeout(id);
+        config.timeoutController = tCtrl;
+        attach(tCtrl.signal);
+    }
 
-//     return {
-//         signal: compositeController.signal,
-//         cleanup: cleanupAll,
-//         timeoutController
-//     };
-// };
+    // cast because AbortSignal ⊆ GenericAbortSignal structurally
+    config.signal = mergedController.signal as unknown as GenericAbortSignal;
+    return config;
+});
 
-// // Request Interceptor (Attach signals)
-// Axios.interceptors.request.use(
-//     (config: InternalAxiosRequestConfig) => {
-//         const customConfig = config as CustomAxiosRequestConfig;
-//         const externalControllers = customConfig.externalControllers || [];
-//         const { signal, cleanup, timeoutController } = createTimeoutSignal(customConfig.timeout ?? 10000, externalControllers);
-
-//         customConfig.signal = signal;
-//         customConfig.cleanup = cleanup;
-//         customConfig.timeoutController = timeoutController;
-
-//         return customConfig;
-//     },
-//     (error) => Promise.reject(error)
-// );
-
-// Response Interceptor (Handle errors & cleanup)
 Axios.interceptors.response.use(
     (response: AxiosResponse) => {
-        (response.config as CustomAxiosRequestConfig).cleanup?.(); // Cleanup timeout
+        (response.config as CustomAxiosRequestConfig).cleanup?.();
         return response.data;
     },
     (error) => {
-        (error.config as CustomAxiosRequestConfig)?.cleanup?.(); // Cleanup timeout
+        (error.config as CustomAxiosRequestConfig)?.cleanup?.();
 
         let message = "An error occurred. Please try again.";
         if (axios.isCancel(error)) {
-            message = error.message === "timeout" ? "Request timed out. Please try again." : "Request was cancelled.";
+            message =
+                error.message === "timeout"
+                    ? "Request timed out. Please try again."
+                    : "Request was cancelled.";
         } else if (error.response) {
-            message = error.response.data?.message || statusMessages[error.response.status];
+            message =
+                error.response.data?.message || statusMessages[error.response.status];
         } else if (error.request) {
-            message = "No response from server. Please check your internet connection.";
+            message =
+                "No response from server. Please check your internet connection.";
         } else {
             message = error.message;
         }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class UserDetail extends AbstractMigration
+final class Student extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,7 +19,7 @@ final class UserDetail extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('user_details');
+        $table = $this->table('students');
         $table
             ->addColumn('user_id', 'integer', [
                 'null' => false,
@@ -27,29 +27,22 @@ final class UserDetail extends AbstractMigration
             ])
             ->addColumn('photo', 'string', [
                 'limit' => 255,
-                'null' => false,
             ])
             ->addColumn('address', 'string', [
                 'limit' => 255,
-                'null' => false,
             ])
-            ->addColumn('date_of_birth', 'date', [
-                'null' => false,
-            ])
+            ->addColumn('date_of_birth', 'date', [])
             ->addColumn('facebook_profile', 'string', [
                 'limit' => 255,
-                'null' => false,
             ])
             ->addColumn('guardian_name', 'string', [
                 'limit' => 100,
-                'null' => false,
             ])
             ->addColumn('guardian_number', 'string', [
                 'limit' => 20,
-                'null' => false,
             ])
             ->addColumn('college', 'string', [
-                'limit' => 255,
+                'limit' => 512,
                 'null' => false,
             ])
             ->addColumn('date_of_admission', 'date', [
@@ -59,12 +52,12 @@ final class UserDetail extends AbstractMigration
                 'limit' => 100,
                 'null' => false,
             ])
-            ->addColumn('active', 'boolean', [
+            ->addColumn('isAlumni', 'boolean', [
                 'default' => false,
             ])
             ->addForeignKey('user_id', 'users', 'id', [
-                'delete'=> 'CASCADE',
-                'update'=> 'NO_ACTION'
+                'delete' => 'CASCADE',
+                'update' => 'NO_ACTION'
             ])
             ->addTimestamps()
             ->create();

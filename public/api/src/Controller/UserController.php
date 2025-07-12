@@ -9,15 +9,21 @@ use Auth\JWT\JWT;
 
 final class UserController extends Controller
 {
-    private $userRepository;
-
     public function __construct()
     {
-        $this->userRepository = new UserRepository();
+        $this->repository = new UserRepository();
     }
     private function validateUserData(Response $response, array $data)
     {
         foreach (['name', 'user_name', 'email', 'ph_number'] as $field) {
+            if (empty($data[$field])) {
+                $response->error(400, "$field is required.");
+            }
+        }
+    }
+    private function validateStudentData(Response $response, array $data)
+    {
+        foreach (['college', 'subject', 'sub_batch_id', 'batch_id'] as $field) {
             if (empty($data[$field])) {
                 $response->error(400, "$field is required.");
             }
@@ -49,7 +55,7 @@ final class UserController extends Controller
     {
         $this->Authorized($request, $response);
 
-        $users = $this->userRepository->getAllUsers();
+        $users = $this->repository->getAllUsers();
         $response->send(['users' => $users]);
     }
 
@@ -60,7 +66,7 @@ final class UserController extends Controller
         $id = $request->getParams()['id'];
         $this->validateId($response, $id);
 
-        $user = $this->userRepository->getUserById($id);
+        $user = $this->repository->getUserById($id);
 
         if ($user) {
             $response->send(['user' => $user]);
@@ -76,27 +82,56 @@ final class UserController extends Controller
         $data = $request->getBody(); // Get JSON data from the request body
 
         $this->validateUserData($response, $data);
+        $this->validateStudentData($response, $data);
         $this->isPasswordSet($response, $data);
         $this->validatePassword($response, $data['password']);
 
         // Hash the password
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
-        // Insert user
-        $user = $this->userRepository->createUser([
-            'name' => $data['name'],
-            'user_name' => $data['user_name'],
-            'email' => $data['email'],
-            'ph_number' => $data['ph_number'],
-            'password' => $hashedPassword,
-        ]);
+        try {
+            $this->repository->startTransaction();
 
-        if (!$user) {
-            $response->error(500, 'Failed to create user');
+            $user = $this->repository->getUserByEmail($data['email']);
+            if ($user) {
+                throw new \Exception('Email already exists');
+            }
+
+            $id = $this->repository->createUser([
+                'name' => $data['name'],
+                'user_name' => $data['user_name'],
+                'email' => $data['email'],
+                'ph_number' => $data['ph_number'],
+                'password' => $hashedPassword,
+            ]);
+
+            $studentId = $this->repository->createStudent([
+                'user_id' => $id,
+                'college' => $data['college'],
+                'date_of_admission' => date('Y-m-d H:i:s'),
+                'subject' => $data['subject'],
+            ]);
+
+            $batchId = $this->repository->addToBatch([
+                'student_id' => $studentId,
+                'sub_batch_id' => $data['sub_batch_id'],
+            ]);
+
+            if (!$batchId) {
+                throw new \Exception('Failed to create student');
+            }
+            $this->repository->commitTransaction();
+
+            $response->setStatusCode(201)->send([
+                'student_id' => (int) $studentId,
+                'batch_id' => $data['batch_id'],
+                'sub_batch_id' => $data['sub_batch_id'],
+            ]);
+        } catch (\Throwable $e) {
+            $this->repository->rollbackTransaction();
+            $response->error(500, 'Failed to create user: ' . $e->getMessage());
             return;
         }
-
-        $response->setStatusCode(201)->send($user);
     }
 
     public function update(Request $request, Response $response)
@@ -111,7 +146,7 @@ final class UserController extends Controller
         $this->validateUserData($response, $data);
 
         // Insert user
-        $user = $this->userRepository->updateUser($id, [
+        $user = $this->repository->updateUser($id, [
             'name' => $data['name'],
             'user_name' => $data['user_name'],
             'email' => $data['email'],
@@ -145,7 +180,7 @@ final class UserController extends Controller
         // Hash the password
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
-        $user = $this->userRepository->updateUser($id, [
+        $user = $this->repository->updateUser($id, [
             'password' => $hashedPassword,
         ]);
 
@@ -165,7 +200,7 @@ final class UserController extends Controller
 
         $this->validateId($response, $id);
 
-        $this->userRepository->deleteUser($id);
+        $this->repository->deleteUser($id);
         $response->send(['message' => "User with ID $id deleted"]);
     }
 
@@ -176,7 +211,7 @@ final class UserController extends Controller
             return $response->error(400, 'Email and password are required');
         }
 
-        $user = $this->userRepository->getUserByEmail($data['email']);
+        $user = $this->repository->getUserByEmail($data['email']);
         if (!$user || !password_verify($data['password'], $user['password'])) {
             return $response->error(401, 'Invalid credentials');
         }
@@ -229,7 +264,7 @@ final class UserController extends Controller
     {
         $this->Authorized($request, $response);
 
-        $admins = $this->userRepository->getAdmins();
+        $admins = $this->repository->getAdmins();
         $response->send($admins);
     }
 
@@ -238,7 +273,7 @@ final class UserController extends Controller
     {
         $id = $request->getJwtPayload()['id'] ?? null; // Fetch user ID from JWT payload
 
-        $user = $this->userRepository->getUserById($id);
+        $user = $this->repository->getUserById($id);
         if ($user) {
             $response->send(['user' => $user]);
         } else {
@@ -256,7 +291,7 @@ final class UserController extends Controller
 
         $id = $payload['id'] ?? null;
 
-        $user = $this->userRepository->getUserById($id);
+        $user = $this->repository->getUserById($id);
         if ($user) {
             $response->send($user);
         } else {

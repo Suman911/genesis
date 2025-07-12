@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import Axios from "@/utils/Axios";
 import Button from "@/components/ui/util/button";
-import { FaPen, FaSave, FaPlus, FaUndo, FaEyeSlash, FaTrashAlt } from "react-icons/fa";
+import { FaPen, FaSave, FaPlus, FaUndo, FaEye, FaEyeSlash, FaTrashAlt } from "react-icons/fa";
 import { Batch, SubBatch } from "@/lib/definitions";
 
 type BatchVM = Batch & { editing: boolean };
 
 const deepClone = <T,>(o: T): T => JSON.parse(JSON.stringify(o));
+// const deepClone = <T,>(o: T): T => structuredClone(o); don't remove this, it's a better way to deep clone but not supported in all browsers yet
 const stripUiFields = ({ editing, ...payload }: BatchVM): Batch => payload as Batch;
 
 export default function BatchesPage() {
@@ -199,7 +200,9 @@ export default function BatchesPage() {
                         <Button className="p-1" onClick={() => toggleEdit(bIdx)} disabled={savingIndex !== null}><FaPen /></Button>
                         {batch.editing && (
                             <>
-                                <Button className="p-1" onClick={() => updateBatchField(bIdx, "active", batch.active ? 0 : 1)} disabled={savingIndex !== null}><FaEyeSlash /></Button>
+                                <Button className="p-1" onClick={() => updateBatchField(bIdx, "active", batch.active ? 0 : 1)} disabled={savingIndex !== null}>
+                                    {batch.active ? <FaEye /> : <FaEyeSlash />}
+                                </Button>
                                 <Button className="p-1" onClick={() => addSubBatch(bIdx)} disabled={savingIndex !== null}><FaPlus /></Button>
                                 {batch.id === 0 ?
                                     <Button className="p-1" onClick={() => removeBatch(bIdx)} disabled={savingIndex !== null}><FaTrashAlt /></Button> :
@@ -231,7 +234,7 @@ export default function BatchesPage() {
                                 {batch.editing && (
                                     <div className="flex justify-end gap-1 mt-1">
                                         <Button className="p-1" onClick={() => updateSubField(bIdx, sIdx, "active", sub.active ? 0 : 1)} disabled={savingIndex !== null}>
-                                            <FaEyeSlash />
+                                            {sub.active ? <FaEye /> : <FaEyeSlash />}
                                         </Button>
                                         {sub.student_count === 0 && sub.id !== 0 && (
                                             <Button className="p-1" onClick={() => deleteSubBatch(bIdx, sIdx)} disabled={savingIndex !== null}>

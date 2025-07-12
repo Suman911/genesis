@@ -25,19 +25,16 @@ final class BatchSeeder extends Base_Seed
         ];
         $this->table('batches')->insert($batches)->saveData();
 
-
         if (!$this->isEmpty('sub_batches')) {
             return;
         }
         $subBatches = [
-            ['batch_id' => 1, 'name' => 'BSc. 1st year', 'seq'=> 1, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 1, 'name' => 'BSc. 2nd year', 'seq'=> 2, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 1, 'name' => 'BSc. 3rd year', 'seq'=> 3, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 1, 'name' => 'BSc. 4th year', 'seq'=> 4, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 2, 'name' => 'MSc. 1st year', 'seq'=> 1, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 2, 'name' => 'MSc. 2nd year', 'seq'=> 2, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 3, 'name' => 'HS 11th', 'seq'=> 1, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['batch_id' => 3, 'name' => 'HS 12th', 'seq'=> 2, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 1, 'name' => 'BSc. 2023', 'seq'=> 1, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 1, 'name' => 'BSc. 2024', 'seq'=> 2, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 2, 'name' => 'MSc. 2023', 'seq'=> 1, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 2, 'name' => 'MSc. 2024', 'seq'=> 2, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 3, 'name' => 'HS 2023', 'seq'=> 1, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
+            ['batch_id' => 3, 'name' => 'HS 2024', 'seq'=> 2, 'active' => true, 'created_at' => $now, 'updated_at' => $now],
         ];
         $this->table('sub_batches')->insert($subBatches)->saveData();
     }

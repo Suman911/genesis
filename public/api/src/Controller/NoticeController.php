@@ -8,11 +8,9 @@ use Api\Repository\NoticeRepository;
 
 final class NoticeController extends Controller
 {
-    private $noticeRepository;
-
     public function __construct()
     {
-        $this->noticeRepository = new NoticeRepository();
+        $this->repository = new NoticeRepository();
     }
     private function validateNoticeData(Response $response, array $data)
     {
@@ -27,7 +25,7 @@ final class NoticeController extends Controller
     {
         // $this->Authorized($request, $response);
 
-        $notices = $this->noticeRepository->getAllNotices();
+        $notices = $this->repository->getAllNotices();
         $response->send(data: $notices);
     }
 
@@ -38,7 +36,7 @@ final class NoticeController extends Controller
         $id = $request->getParams()['id'] ?? null;
         $this->validateId($response, $id);
 
-        $notice = $this->noticeRepository->getNoticeById($id);
+        $notice = $this->repository->getNoticeById($id);
 
         if ($notice) {
             $response->send($notice);
@@ -54,7 +52,7 @@ final class NoticeController extends Controller
         $data = $request->getBody();
         $this->validateNoticeData($response, $data);
 
-        $notice = $this->noticeRepository->createNotice($data);
+        $notice = $this->repository->createNotice($data);
 
         if (!$notice) {
             $response->error(500, 'Failed to create notice');
@@ -74,7 +72,7 @@ final class NoticeController extends Controller
         $data = $request->getBody();
         $this->validateNoticeData($response, $data);
 
-        $notice = $this->noticeRepository->updateNotice($id, $data);
+        $notice = $this->repository->updateNotice($id, $data);
 
         if (!$notice) {
             $response->error(500, 'Failed to update notice');
@@ -91,7 +89,7 @@ final class NoticeController extends Controller
         $id = $request->getParams()['id'] ?? null;
         $this->validateId($response, $id);
 
-        $deleted = $this->noticeRepository->deleteNotice($id);
+        $deleted = $this->repository->deleteNotice($id);
 
         if (!$deleted) {
             $response->error(500, 'Failed to delete notice');

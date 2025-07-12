@@ -6,6 +6,21 @@ meta {
 
 post {
   url: https://localhost/genesis/public/api/users/
-  body: none
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "name": "Riya Sen",
+    "user_name": "riya_sen",
+    "email": "riya.sen@example.com",
+    "ph_number": "9876543210",
+    "password": "StrongP@ssw0rd!",
+    "college": "ABC College of Science",
+    "subject": "Physics",
+    "batch_id": 1,
+    "sub_batch_id": 2
+  }
+  
 }

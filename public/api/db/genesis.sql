@@ -19,6 +19,28 @@
 CREATE DATABASE IF NOT EXISTS `genesis` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `genesis`;
 
+-- Dumping structure for table genesis.alumnis
+CREATE TABLE IF NOT EXISTS `alumnis` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `student_id` int unsigned NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `current_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `current_phone` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `current_email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `current_occupation` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `current_company` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `current_designation` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `current_facebook` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `current_linkedin` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `student_id` (`student_id`),
+  CONSTRAINT `alumnis_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table genesis.batches
 CREATE TABLE IF NOT EXISTS `batches` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -27,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `batches` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -47,7 +69,6 @@ CREATE TABLE IF NOT EXISTS `notices` (
   `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `document_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `posted_date` date NOT NULL,
   `target_timestamp` datetime NOT NULL,
   `expiry_date` datetime NOT NULL,
   `type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -72,21 +93,42 @@ CREATE TABLE IF NOT EXISTS `phinxlog` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table genesis.students
+CREATE TABLE IF NOT EXISTS `students` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int unsigned NOT NULL,
+  `photo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `facebook_profile` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guardian_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guardian_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `college` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date_of_admission` date NOT NULL,
+  `subject` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `isAlumni` tinyint(1) DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `students_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table genesis.student_batches
 CREATE TABLE IF NOT EXISTS `student_batches` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `student_id` int unsigned NOT NULL,
-  `batch_id` int unsigned NOT NULL,
   `sub_batch_id` int unsigned NOT NULL,
+  `status` enum('active','completed','dropped') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `student_id` (`student_id`),
-  KEY `batch_id` (`batch_id`),
   KEY `sub_batch_id` (`sub_batch_id`),
-  CONSTRAINT `student_batches_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `student_batches_ibfk_2` FOREIGN KEY (`batch_id`) REFERENCES `batches` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `student_batches_ibfk_3` FOREIGN KEY (`sub_batch_id`) REFERENCES `sub_batches` (`id`) ON DELETE CASCADE
+  CONSTRAINT `student_batches_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `student_batches_ibfk_2` FOREIGN KEY (`sub_batch_id`) REFERENCES `sub_batches` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
@@ -94,19 +136,23 @@ CREATE TABLE IF NOT EXISTS `student_batches` (
 -- Dumping structure for table genesis.sub_batches
 CREATE TABLE IF NOT EXISTS `sub_batches` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `batch_id` int unsigned NOT NULL,
+  `seq` int unsigned NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `active` tinyint(1) DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_batch` (`batch_id`,`seq`),
+  CONSTRAINT `sub_batches_ibfk_1` FOREIGN KEY (`batch_id`) REFERENCES `batches` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
 -- Dumping structure for table genesis.testimonials
 CREATE TABLE IF NOT EXISTS `testimonials` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
+  `alumni_id` int DEFAULT NULL,
   `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -132,30 +178,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Data exporting was unselected.
-
--- Dumping structure for table genesis.user_details
-CREATE TABLE IF NOT EXISTS `user_details` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int unsigned NOT NULL,
-  `photo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_of_birth` date NOT NULL,
-  `facebook_profile` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guardian_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guardian_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `college` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_of_admission` date NOT NULL,
-  `subject` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `active` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `user_details_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 

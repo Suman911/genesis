@@ -28,7 +28,21 @@ final class BatchRepository extends Repository
         $batches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($batches as &$batch) {
-            $subStmt = $this->pdo->prepare("SELECT $this->subBatchFields FROM sub_batches WHERE batch_id = :batch_id ORDER BY seq ASC");
+            $subStmt = $this->pdo->prepare("SELECT $this->subBatchFields FROM sub_batches WHERE batch_id = :batch_id ORDER BY seq DESC");
+            $subStmt->execute(['batch_id' => $batch['id']]);
+            $batch['sub_batches'] = $subStmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        return $batches;
+    }
+    
+    public function getActiveBatchSubBatch()
+    {
+        $sql = "SELECT $this->batchFields FROM batches WHERE active = 1 ORDER BY id ASC";
+        $stmt = $this->pdo->query($sql);
+        $batches = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($batches as &$batch) {
+            $subStmt = $this->pdo->prepare("SELECT $this->subBatchFields FROM sub_batches WHERE batch_id = :batch_id AND active = 1 ORDER BY seq DESC");
             $subStmt->execute(['batch_id' => $batch['id']]);
             $batch['sub_batches'] = $subStmt->fetchAll(PDO::FETCH_ASSOC);
         }

@@ -7,6 +7,7 @@ use Api\Http\Response;
 
 class Controller
 {
+    protected $repository;
     protected function isAdmin(array $payload): bool
     {
         $role = $payload['role'];

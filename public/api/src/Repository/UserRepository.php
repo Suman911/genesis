@@ -46,8 +46,36 @@ final class UserRepository extends Repository
             ':ph_number' => $data['ph_number'],
             ':password' => $data['password'],
         ]);
-        $id = $this->pdo->lastInsertId();
-        return $this->getUserById($id);
+        // $id = $this->pdo->lastInsertId();
+        // return $this->getUserById($id);
+        return $this->pdo->lastInsertId();
+    }
+
+    public function createStudent(array $data)
+    {
+        // echo "\nstudent creation data: \n", json_encode($data) , "\n";
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO students (user_id, college, date_of_admission, subject) VALUES (:user_id, :college, :date_of_admission, :subject)"
+        );
+        $stmt->execute([
+            ':user_id' => $data['user_id'],
+            ':college' => $data['college'],
+            ':date_of_admission' => $data['date_of_admission'],
+            ':subject' => $data['subject'],
+        ]);
+        return $this->pdo->lastInsertId();
+    }
+
+    public function addToBatch(array $data)
+    {
+        $stmt = $this->pdo->prepare(
+            "INSERT INTO student_batches (student_id, sub_batch_id) VALUES (:student_id, :sub_batch_id)"
+        );
+        $stmt->execute([
+            ':student_id' => $data['student_id'],
+            ':sub_batch_id' => $data['sub_batch_id'],
+        ]);
+        return $this->pdo->lastInsertId();
     }
 
     public function updateUser($id, array $data)

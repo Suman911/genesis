@@ -25,10 +25,6 @@ final class Alumni extends AbstractMigration
                 'null' => false,
                 'signed' => false
             ])
-            ->addColumn('pass_out_id', 'integer', [
-                'null' => false,
-                'signed' => false
-            ])
             ->addColumn('image', 'string', [
                 'limit' => 255,
                 'null' => false,
@@ -66,10 +62,6 @@ final class Alumni extends AbstractMigration
                 'null' => false,
             ])
             ->addForeignKey('student_id', 'users', 'id', [
-                'delete' => 'CASCADE',
-                'update' => 'NO_ACTION'
-            ])
-            ->addForeignKey('pass_out_id', 'pass_outs', 'id', [
                 'delete' => 'CASCADE',
                 'update' => 'NO_ACTION'
             ])

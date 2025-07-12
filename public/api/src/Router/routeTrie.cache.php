@@ -167,6 +167,21 @@
           ),
         ),
       ),
+      'names' => 
+      array (
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\BatchController',
+            1 => 'names',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
       '_handler' => 
       array (
         'handler' => 

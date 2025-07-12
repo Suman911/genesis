@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# Usage:
-#   ./db.sh migrate
-#   ./db.sh rollback
-#   ./db.sh rollback-all
-#   ./db.sh seed
-#   ./db.sh create MigrationName
-
 PHINX_DIR="public/api"
 PHINX_BIN="$PHINX_DIR/vendor/bin/phinx"
 PHINX_CONFIG="$PHINX_DIR/db/phinx.php"
@@ -14,6 +7,9 @@ PHINX_CONFIG="$PHINX_DIR/db/phinx.php"
 case "$1" in
   (autoload)
     cd "$PHINX_DIR" && composer dump-autoload
+    ;;
+  (autoload-o)
+    cd "$PHINX_DIR" && composer dump-autoload -o
     ;;
   (migrate)
     cd "$PHINX_DIR" && php vendor/bin/phinx migrate -c db/phinx.php

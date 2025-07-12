@@ -34,7 +34,7 @@ final class StudentBatch extends AbstractMigration
                 'null' => false,
                 'default' => 'active',
             ])
-            ->addForeignKey('student_id', 'users', 'id', [
+            ->addForeignKey('student_id', 'students', 'id', [
                 'delete'=> 'CASCADE',
                 'update'=> 'NO_ACTION'
             ])
