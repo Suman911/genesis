@@ -9,12 +9,17 @@ const indexPhpPath = path.join(source, 'api', 'index.php');
 
 // Items to delete before copying
 const itemsToDelete = [
-    'api/db',
+    'api/db/Migrations',
+    'api/db/Seeds',
+    'api/db/genesis.sql',
+    'api/db/phinx.php',
     'api/composer.json',
     'api/composer.lock',
     'api/notes.md',
     'api/.env.local',
     'api/.gitignore',
+    'api/src/dev.php',
+    // 'test'
 ].map((item) => path.join(source, item));
 
 // Styled log helper

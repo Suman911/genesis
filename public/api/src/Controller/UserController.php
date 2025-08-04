@@ -112,10 +112,7 @@ final class UserController extends Controller
                 'subject' => $data['subject'],
             ]);
 
-            $batchId = $this->repository->addToBatch([
-                'student_id' => $studentId,
-                'sub_batch_id' => $data['sub_batch_id'],
-            ]);
+            $batchId = $this->repository->addToBatch($studentId, (int) $data['sub_batch_id']);
 
             if (!$batchId) {
                 throw new \Exception('Failed to create student');

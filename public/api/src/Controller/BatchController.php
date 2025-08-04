@@ -34,7 +34,7 @@ final class BatchController extends Controller
 
     public function index(Request $request, Response $response)
     {
-        // $this->Authorized($request, $response);
+        $this->Authorized($request, $response);
         $batches = $this->repository->getAllBatchesWithSubBatches();
 
         foreach ($batches as &$batch) {
@@ -46,8 +46,9 @@ final class BatchController extends Controller
 
     public function names(Request $request, Response $response)
     {
-        // $this->Authorized($request, $response);
-        $batches = $this->repository->getActiveBatchSubBatch();
+        $this->Authorized($request, $response);
+        $active = (bool) ($request->getQueryParams()['active'] ?? 0);
+        $batches = $this->repository->getBatchSubBatch($active);
 
         $response->send($batches);
     }

@@ -8,6 +8,13 @@
     --color-ash: #606060;
     --color-bg: #f2f2f2;
     --breakpoint-xs: 480px;
+
+    /* indigator colours */
+    --color-gray: #9e9e9e;
+    --color-info: #2196f3;
+    --color-danger: #ff4d4d;
+    --color-success: #4caf50;
+    --color-warning: #ff9800;
 }
 
 /* @layer utilities {

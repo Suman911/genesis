@@ -11,6 +11,7 @@ use Api\Controller\UserController;
 use Api\Controller\NoticeController;
 use Api\Controller\TestimonialController;
 use Api\Controller\BatchController;
+use Api\Controller\StudentController;
 use Api\Middleware\AuthMiddleware;
 use Api\Middleware\ErrorHandlerMiddleware;
 
@@ -70,5 +71,13 @@ $router->add('PUT', '/batches/{id}', [BatchController::class, 'update'], [AuthMi
 $router->add('DELETE', '/batches/{id}', [BatchController::class, 'delete'], [AuthMiddleware::class]);
 $router->add('DELETE', '/batches/sub/{id}', [BatchController::class, 'deleteSubBatch'], [AuthMiddleware::class]);
 
+// student routes
+$router->add('GET', '/students', [StudentController::class, 'index'], [AuthMiddleware::class]);
+$router->add('GET', '/students/{id}', [StudentController::class, 'show'], [AuthMiddleware::class]);
+$router->add('GET', '/students/unassign', [StudentController::class, 'unassigned'], [AuthMiddleware::class]);
+$router->add('PUT', '/students/{id}', [StudentController::class, 'update'], [AuthMiddleware::class]);
+$router->add('POST', '/students/assign/{id}', [StudentController::class, 'assignToBatch'], [AuthMiddleware::class]);
+$router->add('DELETE', '/students/unassign/{sid}/{sub_bid}', [StudentController::class, 'unassignStudent'], [AuthMiddleware::class]);
+$router->add('DELETE', '/students/{id}', [StudentController::class, 'delete'], [AuthMiddleware::class]);
 
 $router->dispatch();

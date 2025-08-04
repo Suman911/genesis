@@ -34,20 +34,26 @@ final class BatchRepository extends Repository
         }
         return $batches;
     }
-    
-    public function getActiveBatchSubBatch()
+
+    public function getBatchSubBatch(bool $active)
     {
-        $sql = "SELECT $this->batchFields FROM batches WHERE active = 1 ORDER BY id ASC";
+        $activeBatch = $active ? 'WHERE active = 1' : '';
+        $activeSubBatch = $active ? 'AND active = 1' : '';
+
+        $sql = "SELECT $this->batchFields FROM batches $activeBatch ORDER BY id ASC";
         $stmt = $this->pdo->query($sql);
         $batches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($batches as &$batch) {
-            $subStmt = $this->pdo->prepare("SELECT $this->subBatchFields FROM sub_batches WHERE batch_id = :batch_id AND active = 1 ORDER BY seq DESC");
+            $subStmt = $this->pdo->prepare("SELECT $this->subBatchFields FROM sub_batches WHERE batch_id = :batch_id $activeSubBatch ORDER BY seq DESC");
             $subStmt->execute(['batch_id' => $batch['id']]);
             $batch['sub_batches'] = $subStmt->fetchAll(PDO::FETCH_ASSOC);
         }
+
+        $batches = array_filter($batches, fn($b) => !empty($b['sub_batches']));
         return $batches;
     }
+
 
     // Get student count for a sub-batch
     public function getStudentCountForSubBatch($subBatchId)
@@ -102,7 +108,7 @@ final class BatchRepository extends Repository
     // Sub-batch methods
     public function getSubBatchesByBatchId($batchId)
     {
-        $stmt = $this->pdo->prepare("SELECT $this->subBatchFields FROM sub_batches WHERE batch_id = :batch_id ORDER BY seq ASC");
+        $stmt = $this->pdo->prepare("SELECT $this->subBatchFields FROM sub_batches WHERE batch_id = :batch_id ORDER BY seq DESC");
         $stmt->execute(['batch_id' => $batchId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

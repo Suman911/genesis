@@ -66,16 +66,13 @@ final class UserRepository extends Repository
         return $this->pdo->lastInsertId();
     }
 
-    public function addToBatch(array $data)
+    public function addToBatch(int $studentId, int $subBatchId): int
     {
         $stmt = $this->pdo->prepare(
-            "INSERT INTO student_batches (student_id, sub_batch_id) VALUES (:student_id, :sub_batch_id)"
+            "INSERT INTO student_batches (student_id,sub_batch_id) VALUES (:sid,:sbid)"
         );
-        $stmt->execute([
-            ':student_id' => $data['student_id'],
-            ':sub_batch_id' => $data['sub_batch_id'],
-        ]);
-        return $this->pdo->lastInsertId();
+        $stmt->execute([':sid' => $studentId, ':sbid' => $subBatchId]);
+        return (int) $this->pdo->lastInsertId();
     }
 
     public function updateUser($id, array $data)

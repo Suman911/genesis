@@ -195,6 +195,52 @@
         ),
       ),
     ),
+    'students' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\StudentController',
+          1 => 'index',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\AuthMiddleware',
+        ),
+      ),
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\StudentController',
+            1 => 'show',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+      'unassign' => 
+      array (
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\StudentController',
+            1 => 'unassigned',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
   ),
   'POST' => 
   array (
@@ -268,6 +314,28 @@
         'middlewares' => 
         array (
           0 => 'Api\\Middleware\\AuthMiddleware',
+        ),
+      ),
+    ),
+    'students' => 
+    array (
+      'assign' => 
+      array (
+        '{param}' => 
+        array (
+          '_name' => 'id',
+          '_handler' => 
+          array (
+            'handler' => 
+            array (
+              0 => 'Api\\Controller\\StudentController',
+              1 => 'assignToBatch',
+            ),
+            'middlewares' => 
+            array (
+              0 => 'Api\\Middleware\\AuthMiddleware',
+            ),
+          ),
         ),
       ),
     ),
@@ -381,6 +449,25 @@
         ),
       ),
     ),
+    'students' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\StudentController',
+            1 => 'update',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
   ),
   'DELETE' => 
   array (
@@ -475,6 +562,48 @@
             array (
               0 => 'Api\\Middleware\\AuthMiddleware',
             ),
+          ),
+        ),
+      ),
+    ),
+    'students' => 
+    array (
+      'unassign' => 
+      array (
+        '{param}' => 
+        array (
+          '_name' => 'sid',
+          '{param}' => 
+          array (
+            '_name' => 'sub_bid',
+            '_handler' => 
+            array (
+              'handler' => 
+              array (
+                0 => 'Api\\Controller\\StudentController',
+                1 => 'unassignStudent',
+              ),
+              'middlewares' => 
+              array (
+                0 => 'Api\\Middleware\\AuthMiddleware',
+              ),
+            ),
+          ),
+        ),
+      ),
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\StudentController',
+            1 => 'delete',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
           ),
         ),
       ),

@@ -10,7 +10,7 @@ const config = {
     changefreq: 'monthly',
     priority: 0.7,
     sitemapSize: 5000,
-    exclude: ['/admin', '/admin/*', '/api', '/api/*'],
+    exclude: ['/test', '/test/*', '/admin', '/admin/*', '/api', '/api/*'],
     robotsTxtOptions: {
         policies: [
             {

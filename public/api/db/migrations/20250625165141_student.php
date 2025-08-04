@@ -55,6 +55,7 @@ final class Student extends AbstractMigration
             ->addColumn('isAlumni', 'boolean', [
                 'default' => false,
             ])
+            ->addColumn('date_of_passout', 'date', [])
             ->addForeignKey('user_id', 'users', 'id', [
                 'delete' => 'CASCADE',
                 'update' => 'NO_ACTION'

@@ -1,0 +1,17 @@
+meta {
+  name: addToBatch
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://localhost/genesis/public/api/students/assign/1
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "sub_batch_id" : 4
+  }
+}

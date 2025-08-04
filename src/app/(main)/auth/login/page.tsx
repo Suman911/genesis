@@ -22,9 +22,11 @@ export default function LoginPage() {
 
       const targetRoute = data?.role === "admin" ? "/admin/" : "/";
       router.replace(targetRoute);
-    } catch (err: any) {
-      console.error("Login error:", err);
-      setError(err.message || "Something went wrong.");
+    } catch (err: unknown) {
+      const message = err instanceof Error
+        ? err.message
+        : 'Failed to create user';
+      setError(message);
     } finally {
       setLoading(false);
     }

@@ -59,3 +59,30 @@ export type Batch = {
     sub_batches: SubBatch[];
     student_count: number;
 };
+
+export type Student = {
+    id: number;
+    name: string;
+    college: string;
+    subject: string;
+    batches: string;
+    has_active: number;
+};
+
+export type OrderMapKeys = 'admission' | 'name' | 'college' | 'subject' | 'passout' | 'has_active';
+
+export type Filter = {
+    batch_id?: number;
+    sub_batch_id?: number;
+    status?: 'active' | 'completed' | 'inactive';
+    passout?: {
+        from?: number;
+        to?: number;
+    };
+    college?: string;
+    subject?: string;
+    search?: string;
+    has_active?: number;
+    order_by?: [OrderMapKeys, 1 | 0][];
+    count?: number;
+};

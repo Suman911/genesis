@@ -3,6 +3,7 @@ import { NewIcon } from "../ui/icon/newIcon";
 import { ImportantIcon } from "../ui/icon/important";
 import { NoticeType } from "@/lib/definitions";
 import Button from "../ui/util/button";
+import Link from "next/link";
 
 interface NoticeProps extends React.HTMLAttributes<HTMLDivElement> {
     notice: NoticeType;
@@ -41,16 +42,15 @@ export default function Notice({ notice, className = "", ...props }: NoticeProps
 
                 <div className="">
                     {/* Notice Link */}
-                    <span className="mb-3 mr-3">
-                        <a
+                    {notice.document_url && <span className="mb-3 mr-3">
+                        <Link
                             href={notice.document_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline font-medium"
                         >
-                            <Button className="px-3 py-1 text-xs">View Document</Button>
-                        </a>
-                    </span>
+                            <Button className="px-2" size="sm" outlined>View Document</Button>
+                        </Link>
+                    </span>}
                     {/* Tag */}
                     <span
                         className={`px-3 py-1 text-xs font-semibold rounded-full ${notice.is_urgent ? "bg-red-200 text-red-800" : "bg-blue-200 text-blue-800"

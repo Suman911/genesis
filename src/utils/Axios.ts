@@ -5,7 +5,7 @@ import axios, {
     GenericAbortSignal,
 } from "axios";
 
-type AnyAbortSignal = AbortSignal | GenericAbortSignal;
+type AnyAbortSignal = (AbortSignal | GenericAbortSignal) & { reason: string };
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     externalControllers?: AbortController[];
@@ -36,12 +36,12 @@ Axios.interceptors.request.use((cfg) => {
     const attach = (signal?: AnyAbortSignal) => {
         if (!signal) return;
         if (signal.aborted) {
-            mergedController.abort((signal as any).reason);
+            mergedController.abort(signal.reason);
             return;
         }
         // GenericAbortSignal may not expose addEventListener in older Node types, so optional‑chain
-        (signal as any).addEventListener?.("abort", () =>
-            mergedController.abort((signal as any).reason)
+        (signal as AnyAbortSignal).addEventListener?.("abort", () =>
+            mergedController.abort(signal.reason)
         );
     };
 

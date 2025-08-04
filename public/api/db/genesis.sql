@@ -97,13 +97,13 @@ CREATE TABLE IF NOT EXISTS `phinxlog` (
 CREATE TABLE IF NOT EXISTS `students` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL,
-  `photo` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_of_birth` date NOT NULL,
-  `facebook_profile` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guardian_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `guardian_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `college` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `photo` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
+  `facebook_profile` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guardian_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `guardian_number` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `college` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_of_admission` date NOT NULL,
   `subject` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `isAlumni` tinyint(1) DEFAULT '0',
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `students` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `students_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `student_batches` (
   KEY `sub_batch_id` (`sub_batch_id`),
   CONSTRAINT `student_batches_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,
   CONSTRAINT `student_batches_ibfk_2` FOREIGN KEY (`sub_batch_id`) REFERENCES `sub_batches` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Data exporting was unselected.
 

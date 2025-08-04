@@ -27,4 +27,9 @@ class Repository
     {
         $this->pdo->rollBack();
     }
+
+    protected function implode(string $table, array $list): string
+    {
+        return implode(', ', array_map(fn($f) => "$table.$f", $list));
+    }
 }

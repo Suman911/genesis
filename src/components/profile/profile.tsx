@@ -147,26 +147,24 @@ const ProfileWidget = () => {
                         {user?.name ? (
                             <div className="flex flex-col items-center gap-2">
                                 <span className="text-gray-800 font-extrabold">{user.name}</span>
-                                <Button className="opacity-90">
-                                    <Link
-                                        href="/profile/"
-                                        className="px-4 py-1"
-                                        onClick={handleLinkClick}
-                                    >
-                                        Go to Profile
-                                    </Link>
-                                </Button>
-                            </div>
-                        ) : (
-                            <Button className="opacity-90">
                                 <Link
-                                    href="/auth/login/"
-                                    className="px-4 py-1"
+                                    href="/user/profile/"
                                     onClick={handleLinkClick}
                                 >
-                                    Login
+                                    <Button className="opacity-90" size="sm" color="success">
+                                        Go to Profile
+                                    </Button>
                                 </Link>
-                            </Button>
+                            </div>
+                        ) : (
+                            <Link
+                                href="/auth/login/"
+                                onClick={handleLinkClick}
+                            >
+                                <Button className="opacity-90" size="sm"color="info">
+                                    Login
+                                </Button>
+                            </Link>
                         )}
                     </motion.div>
                 )}

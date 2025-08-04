@@ -10,7 +10,7 @@ type BatchVM = Batch & { editing: boolean };
 
 const deepClone = <T,>(o: T): T => JSON.parse(JSON.stringify(o));
 // const deepClone = <T,>(o: T): T => structuredClone(o); don't remove this, it's a better way to deep clone but not supported in all browsers yet
-const stripUiFields = ({ editing, ...payload }: BatchVM): Batch => payload as Batch;
+const stripUiFields = ({ editing: _, ...payload }: BatchVM): Batch => payload as Batch;
 
 export default function BatchesPage() {
     const [batches, setBatches] = useState<BatchVM[]>([]);
@@ -46,17 +46,17 @@ export default function BatchesPage() {
         }
     };
 
-    const updateBatchField = (idx: number, field: keyof Batch, v: any) =>
+    const updateBatchField = (idx: number, field: keyof Batch, v: Batch[keyof Batch]) =>
         setBatches((prev) => {
-            const copy = deepClone(prev);
-            (copy[idx] as any)[field] = v;
+            const copy: BatchVM[] = deepClone(prev);
+            (copy[idx][field] as Batch[keyof Batch]) = v;
             return copy;
         });
 
-    const updateSubField = (bIdx: number, sIdx: number, field: keyof SubBatch, v: any) =>
+    const updateSubField = (bIdx: number, sIdx: number, field: keyof SubBatch, v: SubBatch[keyof SubBatch]) =>
         setBatches((prev) => {
             const copy = deepClone(prev);
-            (copy[bIdx].sub_batches[sIdx] as any)[field] = v;
+            (copy[bIdx].sub_batches[sIdx][field] as SubBatch[keyof SubBatch]) = v;
             return copy;
         });
 
@@ -166,7 +166,7 @@ export default function BatchesPage() {
     return (
         <div className="flex flex-col gap-6 p-6">
             <div className="flex justify-end">
-                <Button className="px-4 py-2 mb-4" onClick={addNewBatch} disabled={savingIndex !== null}>
+                <Button size="lg" color="info" onClick={addNewBatch} disabled={savingIndex !== null}>
                     + New Batch
                 </Button>
             </div>
@@ -190,25 +190,25 @@ export default function BatchesPage() {
                                     <span className="text-ash font-bold animate-pulse">Currently Enrolled Students: {batch.student_count}</span>
                                 </div>
                                 {batch.sub_batches.length === 0 && (
-                                    <Button className="p-1" onClick={() => deleteBatch(bIdx)} disabled={savingIndex !== null}>
+                                    <Button color="danger" outlined onClick={() => deleteBatch(bIdx)} disabled={savingIndex !== null}>
                                         Delete this batch
                                     </Button>
                                 )}
                             </>
                         )}
 
-                        <Button className="p-1" onClick={() => toggleEdit(bIdx)} disabled={savingIndex !== null}><FaPen /></Button>
+                        <Button color="warning" outlined size="i" onClick={() => toggleEdit(bIdx)} disabled={savingIndex !== null}><FaPen /></Button>
                         {batch.editing && (
                             <>
-                                <Button className="p-1" onClick={() => updateBatchField(bIdx, "active", batch.active ? 0 : 1)} disabled={savingIndex !== null}>
+                                <Button color={batch.active ? "info" : "gray"} size="i" onClick={() => updateBatchField(bIdx, "active", batch.active ? 0 : 1)} disabled={savingIndex !== null}>
                                     {batch.active ? <FaEye /> : <FaEyeSlash />}
                                 </Button>
-                                <Button className="p-1" onClick={() => addSubBatch(bIdx)} disabled={savingIndex !== null}><FaPlus /></Button>
+                                <Button color="info" size="i" onClick={() => addSubBatch(bIdx)} disabled={savingIndex !== null}><FaPlus /></Button>
                                 {batch.id === 0 ?
-                                    <Button className="p-1" onClick={() => removeBatch(bIdx)} disabled={savingIndex !== null}><FaTrashAlt /></Button> :
-                                    <Button className="p-1" onClick={() => resetBatch(bIdx)} disabled={savingIndex !== null}><FaUndo /></Button>
+                                    <Button color="danger" size="i" onClick={() => removeBatch(bIdx)} disabled={savingIndex !== null}><FaTrashAlt /></Button> :
+                                    <Button color="danger" size="i" onClick={() => resetBatch(bIdx)} disabled={savingIndex !== null}><FaUndo /></Button>
                                 }
-                                <Button className="p-1" onClick={() => saveBatch(bIdx)} disabled={savingIndex === bIdx}>
+                                <Button color="success" size="i" onClick={() => saveBatch(bIdx)} disabled={savingIndex === bIdx}>
                                     {savingIndex === bIdx ? "Saving…" : <FaSave />}
                                 </Button>
                             </>
@@ -233,11 +233,11 @@ export default function BatchesPage() {
                                 )}
                                 {batch.editing && (
                                     <div className="flex justify-end gap-1 mt-1">
-                                        <Button className="p-1" onClick={() => updateSubField(bIdx, sIdx, "active", sub.active ? 0 : 1)} disabled={savingIndex !== null}>
+                                        <Button color={sub.active ? "info" : "gray"} size="i" onClick={() => updateSubField(bIdx, sIdx, "active", sub.active ? 0 : 1)} disabled={savingIndex !== null}>
                                             {sub.active ? <FaEye /> : <FaEyeSlash />}
                                         </Button>
                                         {sub.student_count === 0 && sub.id !== 0 && (
-                                            <Button className="p-1" onClick={() => deleteSubBatch(bIdx, sIdx)} disabled={savingIndex !== null}>
+                                            <Button color="danger" size="i" onClick={() => deleteSubBatch(bIdx, sIdx)} disabled={savingIndex !== null}>
                                                 <FaTrashAlt />
                                             </Button>
                                         )}
