@@ -12,8 +12,6 @@ $dbname = $_ENV['DB_DATABASE'];
 $user = $_ENV['DB_USERNAME'];
 $pass = $_ENV['DB_PASSWORD'];
 
-echo "$host $dbname $user $pass";
-
 return [
     'paths' => [
         'migrations' => 'db/Migrations',
