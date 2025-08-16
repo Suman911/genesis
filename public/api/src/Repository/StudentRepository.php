@@ -7,6 +7,7 @@ use PDO;
 final class StudentRepository extends Repository
 {
     private array $studentListFields = ['id', 'college', 'subject'];
+    private array $studentDetailFields = ['id', 'college', 'subject','photo','address','date_of_birth','facebook_profile','guardian_name','guardian_number','date_of_admission','isAlumni','date_of_passout'];
     private function orderMap(array $filterOrder): array
     {
         $map = [
@@ -15,33 +16,29 @@ final class StudentRepository extends Repository
             'name' => 'u.name',
             'college' => 's.college',
             'subject' => 's.subject',
-            'has_active' => 'has_active'
+            'active' => 'has_active'
         ];
 
         return array_map(function ($f) use ($map) {
             if (is_array($f)) {
-                $field = $map[$f[0]] ?? $f[0];
-                $dir = $f[1] === 0 ? 'DESC' : 'ASC';
+                $field = $map[$f[0]];
+                $dir = $f[1] ? 'ASC' : 'DESC';
                 return "$field $dir";
             }
             return $f;
         }, $filterOrder);
     }
-    public function list(array $filters = []): array
+
+    public function listQuery(array $filters = [])
     {
+        $params = [];
         $fields = $this->implode('s', $this->studentListFields);
         $conds = [];
-        $params = [];
 
-        $sql = "SELECT $fields, u.name,
-                        GROUP_CONCAT(DISTINCT 
-                            CONCAT(sub.name, IF(sb.status = 'active', ' (active)', ''))
-                            ORDER BY sub.seq ASC, sub.batch_id ASC SEPARATOR ', ') AS batches,
-                        MAX(sb.status = 'active') AS has_active
-                FROM students s
-                JOIN users u ON u.id = s.user_id
-                JOIN student_batches sb ON sb.student_id = s.id
-                JOIN sub_batches sub ON sub.id = sb.sub_batch_id";
+        $base_sql = "FROM students s
+                    JOIN users u ON u.id = s.user_id
+                    JOIN student_batches sb ON sb.student_id = s.id
+                    JOIN sub_batches sub ON sub.id = sb.sub_batch_id";
 
         if (isset($filters['batch_id'])) {
             $conds[] = "sub.batch_id = :batch_id";
@@ -55,7 +52,7 @@ final class StudentRepository extends Repository
             $conds[] = "sb.status = :status";
             $params[':status'] = $filters['status'];
 
-            if ($filters['status'] == 'completed') {
+            if ($filters['status'] === 'completed') {
                 if (isset($filters['passout']['from'])) {
                     $conds[] = "s.date_of_passout >= :from";
                     $params[':from'] = $filters['passout']['from'];
@@ -67,43 +64,71 @@ final class StudentRepository extends Repository
             }
         }
         if (isset($filters['search'])) {
-            $search = $filters['search'];
             $conds[] = "(u.name LIKE :search OR u.email LIKE :search)";
-            $params[':search'] = "%$search%";
+            $params[':search'] = "%" . $filters['search'] . "%";
         }
         if (isset($filters['college'])) {
-            $college = $filters['college'];
             $conds[] = "s.college LIKE :college";
-            $params[':college'] = "%$college%";
+            $params[':college'] = "%" . $filters['college'] . "%";
         }
         if (isset($filters['subject'])) {
-            $subject = $filters['subject'];
             $conds[] = "s.subject LIKE :subject";
-            $params[':subject'] = "%$subject%";
+            $params[':subject'] = "%" . $filters['subject'] . "%";
         }
 
         if ($conds) {
-            $sql .= ' WHERE ' . implode(' AND ', $conds);
+            $base_sql .= ' WHERE ' . implode(' AND ', $conds);
         }
 
-        $sql .= ' GROUP BY s.id';
+        $sql_student = "SELECT $fields, u.name,
+                        GROUP_CONCAT(DISTINCT 
+                            CONCAT(sub.name, IF(sb.status = 'active', ' (active)', ''))
+                            ORDER BY sub.seq ASC, sub.batch_id ASC SEPARATOR ', ') AS batches,
+                        MAX(sb.status = 'active') AS has_active
+                    $base_sql
+                    GROUP BY s.id";
 
         if (!empty($filters['order_by'])) {
             $order = implode(', ', $this->orderMap($filters['order_by']));
-            $sql .= " ORDER BY $order, s.id DESC";
+            $sql_student .= " ORDER BY $order, s.id DESC";
         } else {
-            $sql .= " ORDER BY s.id DESC";
+            $sql_student .= " ORDER BY s.id DESC";
         }
 
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $limit = (int) ($filters['limit'] ?? 10);
+        $page = max((int) ($filters['page'] ?? 1), 1);
+        $offset = ($page - 1) * $limit;
+
+        $sql_student .= " LIMIT $limit OFFSET $offset";
+
+        $sql_count = "SELECT COUNT(DISTINCT s.id) $base_sql";
+
+        return [$sql_student, $sql_count, $params];
     }
+
+    public function list(array $filters = []): array
+    {
+        [$sql_student, $sql_count, $params] = $this->listQuery($filters);
+
+        $stmt = $this->pdo->prepare($sql_student);
+        $stmt->execute($params);
+        $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $stmt = $this->pdo->prepare($sql_count);
+        $stmt->execute($params);
+        $totalCount = (int) $stmt->fetchColumn();
+
+        return [
+            'students' => $students,
+            'total' => $totalCount
+        ];
+    }
+
 
     public function listUnassigned(): array
     {
         $fields = $this->implode('s', $this->studentListFields);
-        $sql = "SELECT $fields, u.name, u.email
+        $sql = "SELECT $fields, u.name
                 FROM students s
                 JOIN users u ON u.id = s.user_id
                 LEFT JOIN student_batches sb ON sb.student_id = s.id
@@ -113,9 +138,9 @@ final class StudentRepository extends Repository
 
     public function find(int $id): ?array
     {
-        $fields = $this->implode('s', $this->studentListFields);
+        $fields = $this->implode('s', $this->studentDetailFields);
         $stmt = $this->pdo->prepare(
-            "SELECT $fields, u.name, u.email
+            "SELECT  $fields, u.name, u.email, u.user_name, u.ph_number
             FROM students s
             JOIN users u ON u.id = s.user_id
             WHERE s.id = :id"

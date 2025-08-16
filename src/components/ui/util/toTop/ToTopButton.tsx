@@ -1,6 +1,6 @@
 "use client";
 
-import useToTop from "./useToTop";
+import useToTop from "@/hooks/useToTop";
 import { HiChevronUp } from "react-icons/hi";
 
 export default function ToTopButton() {

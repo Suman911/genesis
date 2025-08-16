@@ -16,3 +16,11 @@ function debug(...$args)
     echo "========== END OF DEBUG ==========\n";
     echo "</pre>";
 }
+
+function interpolateQuery($query, $params) {
+    foreach ($params as $key => $value) {
+        $escaped = is_numeric($value) ? $value : "'" . addslashes($value) . "'";
+        $query = str_replace($key, $escaped, $query);
+    }
+    return $query;
+}

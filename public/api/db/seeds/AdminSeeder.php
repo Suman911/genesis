@@ -1,0 +1,48 @@
+<?php
+
+declare(strict_types=1);
+
+use Db\Seeds\Base_Seed;
+
+final class AdminSeeder extends Base_Seed
+{
+    public function getDependencies(): array
+    {
+        return ['StudentSeeder'];
+    }
+    public function countAdmins(): int
+    {
+        return (int) $this->fetchRow("SELECT COUNT(*) FROM users WHERE role = 'admin'")['COUNT(*)'];
+    }
+    public function run(): void
+    {
+        if ($this->countAdmins() > 0) {
+            return;
+        }
+        $data = [
+            [
+                'name' => 'Admin One',
+                'user_name' => 'admin1',
+                'email' => 'admin1@example.com',
+                'ph_number' => '1234567890',
+                'password' => password_hash('AdminPassword1!', PASSWORD_DEFAULT),
+                'email_verified_at' => date('Y-m-d H:i:s'),
+                'role' => 'admin',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'name' => 'Admin Two',
+                'user_name' => 'admin2',
+                'email' => 'admin2@example.com',
+                'ph_number' => '0987654321',
+                'password' => password_hash('AdminPassword2!', PASSWORD_DEFAULT),
+                'email_verified_at' => date('Y-m-d H:i:s'),
+                'role' => 'admin',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ],
+        ];
+        $this->table('users')->insert($data)->saveData();
+    }
+}

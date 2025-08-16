@@ -2,7 +2,7 @@
 import Button from "@/components/ui/util/button";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Cookies from "js-cookie";
-import { scrollToTop } from "@/components/ui/util/toTop/useToTop";
+import { scrollToTop } from "@/hooks/useToTop";
 import Link from "next/link";
 import { FiUser } from "react-icons/fi";
 import { usePathname } from "next/navigation";
@@ -161,7 +161,7 @@ const ProfileWidget = () => {
                                 href="/auth/login/"
                                 onClick={handleLinkClick}
                             >
-                                <Button className="opacity-90" size="sm"color="info">
+                                <Button className="opacity-90" color="info">
                                     Login
                                 </Button>
                             </Link>

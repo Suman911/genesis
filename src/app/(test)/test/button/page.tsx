@@ -4,7 +4,7 @@ import { FaCheck, FaSpinner, FaArrowRight, FaLink } from "react-icons/fa";
 const TestButton = () => {
   return (
     <div className="flex flex-col gap-8 p-4 bg-neutral-300">
-      
+
       {/* Size Variants */}
       <section>
         <h2 className="text-lg font-semibold mb-2">Size Variants</h2>
@@ -87,14 +87,14 @@ const TestButton = () => {
       <section>
         <h2 className="text-lg font-semibold mb-2">Icon Buttons</h2>
         <div className="flex gap-4 items-center">
-          <Button className="p-2" size="sm" round="full">
+          <Button size="i" round="full">
             <FaCheck />
           </Button>
-          <Button className="p-2" size="md" round="full">
-            <FaArrowRight />
+          <Button size="i" round="full">
+            <FaArrowRight size={24} />
           </Button>
-          <Button className="p-2" size="lg" round="full" color="danger" outlined>
-            <FaLink />
+          <Button size="i" round="full" color="danger" outlined>
+            <FaLink size={32} />
           </Button>
         </div>
       </section>

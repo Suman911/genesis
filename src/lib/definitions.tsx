@@ -1,5 +1,3 @@
-import React from "react";
-
 export type Location = {
     path: string;
     name: string;
@@ -69,20 +67,42 @@ export type Student = {
     has_active: number;
 };
 
-export type OrderMapKeys = 'admission' | 'name' | 'college' | 'subject' | 'passout' | 'has_active';
+export type OrderMapKeys = 'admission' | 'name' | 'college' | 'subject' | 'passout' | 'active';
 
-export type Filter = {
+export type Search = {
+    search?: string;
+    college?: string;
+    subject?: string;
+    limit?: number;
+};
+
+export type Filter = Search & {
     batch_id?: number;
-    sub_batch_id?: number;
-    status?: 'active' | 'completed' | 'inactive';
+    status?: 'Active' | 'Completed' | 'Dropped';
     passout?: {
         from?: number;
         to?: number;
     };
-    college?: string;
-    subject?: string;
-    search?: string;
     has_active?: number;
-    order_by?: [OrderMapKeys, 1 | 0][];
-    count?: number;
+    order_by: [OrderMapKeys, 1 | 0][];
+    page?: number;
+};
+
+export type StudentInfo = {
+    id: number;
+    college: string;
+    subject: string;
+    photo: string | null;
+    address: string | null;
+    date_of_birth: string | null;
+    facebook_profile: string | null;
+    guardian_name: string | null;
+    guardian_number: string | null;
+    date_of_admission: string | null;
+    isAlumni: number;
+    date_of_passout: string | null;
+    name: string;
+    email: string;
+    user_name: string;
+    ph_number: string;
 };

@@ -25,13 +25,19 @@ final class StudentController extends Controller
     public function index(Request $request, Response $response): void
     {
         $params = $request->getQueryParams();
-        $students = $this->repository->list($params);
-        $response->send($students);
+        $result = $this->repository->list($params);
+
+        $response->send([
+            'students' => $result['students'],
+            'total' => $result['total']
+        ]);
     }
 
-    public function show(Request $request, Response $response, array $args): void
+    public function show(Request $request, Response $response): void
     {
-        $student = $this->repository->find((int) $args['id']);
+        $id = (int) $request->getParams()['id'];
+        $this->validateId($response, $id);
+        $student = $this->repository->find($id);
         if (!$student) {
             $response->error(404, 'Student not found');
             return;
@@ -69,7 +75,8 @@ final class StudentController extends Controller
         $response->send(['message' => 'Student assigned successfully']);
     }
 
-    public function unassignStudent(Request $request, Response $response): void{
+    public function unassignStudent(Request $request, Response $response): void
+    {
         $this->Authorized($request, $response);
 
         $params = $request->getParams();

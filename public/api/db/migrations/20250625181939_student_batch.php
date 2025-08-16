@@ -30,7 +30,7 @@ final class StudentBatch extends AbstractMigration
                 'signed' => false
             ])
             ->addColumn('status', 'enum', [
-                'values' => ['active', 'completed', 'dropped'],
+                'values' => ['Active', 'Completed', 'Dropped'],
                 'null' => false,
                 'default' => 'active',
             ])
