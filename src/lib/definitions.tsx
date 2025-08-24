@@ -73,11 +73,11 @@ export type Search = {
     search?: string;
     college?: string;
     subject?: string;
-    limit?: number;
 };
 
-export type Filter = Search & {
+export type Filter = {
     batch_id?: number;
+    sub_batch_id?: number;
     status?: 'Active' | 'Completed' | 'Dropped';
     passout?: {
         from?: number;
@@ -85,7 +85,16 @@ export type Filter = Search & {
     };
     has_active?: number;
     order_by: [OrderMapKeys, 1 | 0][];
-    page?: number;
+    limit: number;
+};
+
+export type Query = Search & Filter & { page?: number };
+
+export type StudentBatch = {
+    sub_batch_id: number;
+    batch_id: number;
+    sub_batch_name: string;
+    status: string;
 };
 
 export type StudentInfo = {
@@ -105,4 +114,5 @@ export type StudentInfo = {
     email: string;
     user_name: string;
     ph_number: string;
+    batches: StudentBatch[];
 };

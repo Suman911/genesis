@@ -2,6 +2,10 @@ const path = require('path');
 const fse = require('fs-extra');
 const fs = require('fs');
 
+// args
+const args = process.argv.slice(2);
+const test = args.includes("-t");
+
 // Paths
 const source = path.join(__dirname, '../out');
 const destination = path.join(__dirname, '../../genesis_production');
@@ -24,11 +28,19 @@ const itemsToDelete = [
 
 // Styled log helper
 const log = {
-    info: (msg) => console.log(`\x1b[36m[INFO]\x1b[0m ${msg}`),
-    success: (msg) => console.log(`\x1b[32m[SUCCESS]\x1b[0m ${msg}`),
-    warn: (msg) => console.log(`\x1b[33m[WARN]\x1b[0m ${msg}`),
-    error: (msg) => console.error(`\x1b[31m[ERROR]\x1b[0m ${msg}`),
+    info: (msg) => console.log(`\n\x1b[1m\x1b[44m INFO \x1b[0m \x1b[36m${msg}\x1b[0m`),
+    success: (msg) => console.log(`\x1b[1m\x1b[42m SUCCESS \x1b[0m \x1b[32m${msg}\x1b[0m`),
+    warn: (msg) => console.warn(`\x1b[1m\x1b[43m WARN \x1b[0m \x1b[33m${msg}\x1b[0m`),
+    error: (msg) => console.error(`\x1b[1m\x1b[41m ERROR \x1b[0m \x1b[31m${msg}\x1b[0m`),
+    process: (msg) => {
+        console.log(
+            `\n\x1b[1m\x1b[45m TEST \x1b[0m \x1b[95m${msg}\x1b[0m\n` +
+            `\x1b[95m---------------------------------------\x1b[0m`
+        );
+    }
 };
+
+if (test) log.process("Preparing test build");
 
 try {
     // 1. Modify index.php to comment out lines
@@ -39,8 +51,11 @@ try {
 
         const linesToComment = [
             "require_once __DIR__ . '/src/dev.php';",
-            // "sleep(3);"
-        ];
+            !test && "require_once __DIR__ . '/src/agent.php';",
+            !test && "require_once __DIR__ . '/src/log.php';",
+        ].filter(Boolean);
+
+
         const updatedLines = lines.map((line) => {
             const trimmed = line.trim();
             for (const target of linesToComment) {

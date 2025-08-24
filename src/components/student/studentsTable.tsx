@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import StudentDetails from "./studentDetails";
 import { Student } from "@/lib/definitions";
 
@@ -6,10 +6,11 @@ interface StudentsTableProps {
     students: Student[];
     loading: boolean;
     limit?: number;
+    onDelete: () => void;
 }
 
-const StudentsTable = ({ students, loading, limit = 10 }: StudentsTableProps) => {
-    const [id, setId] = React.useState<number | null>(null);
+const StudentsTable = ({ students, loading, limit = 10, onDelete }: StudentsTableProps) => {
+    const [id, setId] = useState<number | null>(null);
     return (
         <div className="bg-neutral-200 m-4 mt-0">
             {loading ? (
@@ -77,7 +78,7 @@ const StudentsTable = ({ students, loading, limit = 10 }: StudentsTableProps) =>
                     </tbody>
                 </table>
             )}
-            <StudentDetails id={id} onClose={() => setId(null)} />
+            <StudentDetails id={id} onClose={() => setId(null)} onDelete={onDelete} />
         </div>
     );
 };
