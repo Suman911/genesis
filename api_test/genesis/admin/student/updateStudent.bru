@@ -1,0 +1,30 @@
+meta {
+  name: updateStudent
+  type: http
+  seq: 5
+}
+
+put {
+  url: https://localhost/genesis/public/api/students/{{id}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+     "college":"Global a",
+     "email":"ronald_smith@example.com",
+     "name":"Ronald s",
+     "ph_number":"9876570514",
+     "subject":"Mathematics",
+     "user_name":"ronald_smith"
+  }
+}
+
+vars:pre-request {
+  id: 47
+}
+
+settings {
+  encodeUrl: true
+}

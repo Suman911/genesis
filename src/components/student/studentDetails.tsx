@@ -1,35 +1,43 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { FiUser } from "react-icons/fi";
+import { FiUser, FiFacebook, FiMail, FiPhone } from "react-icons/fi";
+import { FaPen, FaTrashAlt } from "react-icons/fa";
+import { CgClose } from "react-icons/cg";
 import Axios from "@/utils/Axios";
-import { StudentInfo } from "@/lib/definitions";
+import { StudentInfo, StudentBatch } from "@/lib/definitions";
+import UpdateStudent from "./updateStudent";
 
-type StudentDetailsProps = { id: number | null; onClose: () => void };
+type StudentDetailsProps = { id: number | null; onClose: () => void; onDelete: () => void; };
 
-function StudentDetails({ id, onClose }: StudentDetailsProps) {
+function StudentDetails({ id, onClose, onDelete }: StudentDetailsProps) {
     const [student, setStudent] = useState<StudentInfo | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showUpdate, setShowUpdate] = useState(false);
+
+    const fetchStudent = async (studentId: number) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const res: StudentInfo = await Axios.get(`/students/${studentId}`);
+
+            // sort batches: active + highest batch_id first
+            res.batches.sort((a, b) => {
+                if (a.status === "Active" && b.status !== "Active") return -1;
+                if (a.status !== "Active" && b.status === "Active") return 1;
+                return b.batch_id - a.batch_id;
+            });
+
+            setStudent(res);
+        } catch {
+            setError("Failed to load student details");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        if (!id) return;
-
-        const fetchStudent = async () => {
-            setLoading(true);
-            setError(null);
-            setStudent(null);
-
-            try {
-                const res: StudentInfo = await Axios.get(`/students/${id}`);
-                setStudent(res);
-            } catch (err) {
-                setError("Failed to load student details");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchStudent();
+        if (id) fetchStudent(id);
     }, [id]);
 
     useEffect(() => {
@@ -38,89 +46,242 @@ function StudentDetails({ id, onClose }: StudentDetailsProps) {
         return () => document.removeEventListener("keydown", esc);
     }, [onClose]);
 
+    const deleteStudent = async () => {
+        if (!id) return;
+        if (confirm("Are you sure you want to delete this student?")) {
+            try {
+                await Axios.delete(`/students/${id}`);
+                onDelete();
+                onClose();
+            } catch {
+                setError("Failed to delete student");
+            }
+        }
+    };
+
     if (!id) return null;
 
     return createPortal(
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-            onClick={onClose}
-        >
+        <>
             <div
-                className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 relative animate-fadeIn"
-                onClick={(e) => e.stopPropagation()}
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                onClick={onClose}
             >
-                {/* Close Button */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl"
+                <div
+                    className="bg-white rounded-xl shadow-xl max-w-3xl w-full mx-4 overflow-hidden animate-fadeIn text-sm"
+                    onClick={(e) => e.stopPropagation()}
                 >
-                    &times;
-                </button>
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 relative">
+                        <div className="absolute top-1.5 right-3 flex gap-3">
+                            <button
+                                onClick={() => setShowUpdate(true)}
+                                className="text-white/80 hover:text-warning cursor-pointer"
+                                title="Edit"
+                            >
+                                <FaPen size={16} />
+                            </button>
+                            <button
+                                onClick={deleteStudent}
+                                className="text-white/80 hover:text-white cursor-pointer"
+                                title="Delete"
+                            >
+                                <FaTrashAlt size={16} />
+                            </button>
+                            <button
+                                onClick={onClose}
+                                className="text-white/80 hover:text-danger cursor-pointer"
+                                title="Close"
+                            >
+                                <CgClose size={22} />
+                            </button>
+                        </div>
 
-                {/* Loading / Error States */}
-                {loading && <p className="text-gray-500 text-center">Loading...</p>}
-                {error && <p className="text-red-500 text-center">{error}</p>}
+                        {student && !loading && (
+                            <div className="flex items-center gap-4">
+                                {student.photo ? (
+                                    <img
+                                        src={student.photo}
+                                        alt={student.name}
+                                        className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md"
+                                    />
+                                ) : (
+                                    <div className="w-16 h-16 flex items-center justify-center rounded-full bg-white/20 border-2 border-white shadow-md">
+                                        <FiUser className="text-white text-2xl" />
+                                    </div>
+                                )}
+                                <div>
+                                    <h2 className="text-base font-semibold text-white">{student.name}</h2>
+                                    <div
+                                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium mt-1 ${student.isAlumni
+                                            ? "bg-green-100 text-green-800"
+                                            : "bg-blue-100 text-blue-800"
+                                            }`}
+                                    >
+                                        {student.isAlumni
+                                            ? "Alumni"
+                                            : "Current"}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
-                {/* Student Info */}
-                {student && (
-                    <div className="space-y-4">
-                        {/* Profile Picture */}
-                        <div className="flex flex-col items-center">
-                            {student.photo ? (
-                                <img
-                                    src={student.photo}
-                                    alt={student.name}
-                                    className="w-32 h-32 rounded-full object-cover border shadow-md"
-                                />
-                            ) : (
-                                <div className="w-32 h-32 flex items-center justify-center rounded-full bg-gray-100 border shadow-md">
-                                    <FiUser className="text-gray-400 text-6xl" />
+                    {/* Loader / Error */}
+                    {loading && (
+                        <div className="p-6 flex justify-center">
+                            <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-500"></div>
+                        </div>
+                    )}
+                    {error && <div className="p-3 bg-red-50 text-red-600 text-center text-sm">{error}</div>}
+
+                    {/* Student Info */}
+                    {student && !loading && (
+                        <>
+                            <div className="p-6 grid grid-cols-2 gap-6">
+                                {/* Left column */}
+                                <div className="space-y-4">
+                                    {/* Contact */}
+                                    <section className="space-y-1.5">
+                                        <h3 className="text-xs font-semibold text-gray-500 uppercase">Contact</h3>
+                                        <div className="flex items-center gap-2">
+                                            <FiMail className="text-gray-400" />
+                                            <a href={`mailto:${student.email}`} className="text-blue-600 hover:underline truncate">
+                                                {student.email}
+                                            </a>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <FiPhone className="text-gray-400" />
+                                            <a href={`tel:${student.ph_number}`}>{student.ph_number}</a>
+                                        </div>
+                                        {student.facebook_profile && (
+                                            <div className="flex items-center gap-2">
+                                                <FiFacebook className="text-gray-400" />
+                                                <a
+                                                    href={student.facebook_profile}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-blue-600 hover:underline"
+                                                >
+                                                    Facebook
+                                                </a>
+                                            </div>
+                                        )}
+                                    </section>
+
+                                    {/* Guardian */}
+                                    <section className="space-y-1.5">
+                                        <h3 className="text-xs font-semibold text-gray-500 uppercase">Guardian</h3>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <p className="text-[11px] text-gray-500">Name</p>
+                                                <p>{student.guardian_name || "—"}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-[11px] text-gray-500">Contact</p>
+                                                <a href={`tel:${student.guardian_number}`}>
+                                                    {student.guardian_number || "—"}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    {/* Address */}
+                                    <section className="space-y-1.5">
+                                        <h3 className="text-xs font-semibold text-gray-500 uppercase">Address</h3>
+                                        <p>{student.address || "— —"}</p>
+                                    </section>
+                                </div>
+
+                                {/* Right column */}
+                                <div className="space-y-4">
+                                    {/* Academic */}
+                                    <section className="space-y-1.5">
+                                        <h3 className="text-xs font-semibold text-gray-500 uppercase">Academic</h3>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <p className="text-[11px] text-gray-500">College</p>
+                                                <p>{student.college}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-[11px] text-gray-500">Subject</p>
+                                                <p>{student.subject}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-[11px] text-gray-500">Batch</p>
+                                                <p>{student.batches[0]?.sub_batch_name || "—"}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-[11px] text-gray-500">Status</p>
+                                                <p>{student.batches[0]?.status || "—"}</p>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    {/* Personal */}
+                                    <section className="space-y-1.5">
+                                        <h3 className="text-xs font-semibold text-gray-500 uppercase">Personal</h3>
+                                        <div className="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <p className="text-[11px] text-gray-500">DOB</p>
+                                                <p>{student.date_of_birth || "—"}</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-[11px] text-gray-500">Admission</p>
+                                                <p>{student.date_of_admission || "—"}</p>
+                                            </div>
+                                            {student.date_of_passout && (
+                                                <div>
+                                                    <p className="text-[11px] text-gray-500">Passout</p>
+                                                    <p>{student.date_of_passout}</p>
+                                                </div>
+                                            )}
+                                            <div>
+                                                <p className="text-[11px] text-gray-500">Username</p>
+                                                <p>{student.user_name}</p>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                            {/* All Batches - moved to bottom */}
+                            {student.batches.length > 0 && (
+                                <div className="px-6 pb-6">
+                                    <h3 className="text-xs font-semibold text-gray-500 uppercase mb-2">Batches</h3>
+                                    <div className="flex gap-5 flex-wrap">
+                                        {student.batches.map((batch: StudentBatch) => (
+                                            <div
+                                                key={batch.sub_batch_id}
+                                                className="flex gap-5 items-center border rounded-md px-3 py-2 text-sm"
+                                            >
+                                                <span>{batch.sub_batch_name}</span>
+                                                <span
+                                                    className={`px-2 py-0.5 rounded-full text-xs ${batch.status === "Active"
+                                                        ? "bg-green-100 text-green-800"
+                                                        : batch.status === "Dropped"
+                                                            ? "bg-red-100 text-red-800"
+                                                            : "bg-gray-100 text-gray-800"
+                                                        }`}
+                                                >
+                                                    {batch.status}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             )}
-                            <h2 className="text-2xl font-bold text-gray-800 mt-3">{student.name}</h2>
-                            <p className="text-gray-600">{student.email}</p>
-                            <p className="text-gray-600">{student.ph_number}</p>
-                        </div>
-
-                        {/* Details Section */}
-                        <div className="border-t pt-4 space-y-2 text-sm text-gray-700">
-                            <p><span className="font-semibold">College:</span> {student.college}</p>
-                            <p><span className="font-semibold">Subject:</span> {student.subject}</p>
-                            <p><span className="font-semibold">Username:</span> {student.user_name}</p>
-                            <p><span className="font-semibold">Address:</span> {student.address ?? "—"}</p>
-                            <p><span className="font-semibold">Date of Birth:</span> {student.date_of_birth ?? "—"}</p>
-                            <p><span className="font-semibold">Admission Date:</span> {student.date_of_admission ?? "—"}</p>
-                            {student.date_of_passout && (
-                                <p><span className="font-semibold">Passout Date:</span> {student.date_of_passout}</p>
-                            )}
-                            <p>
-                                <span className="font-semibold">Guardian:</span> {student.guardian_name ?? "—"} ({student.guardian_number ?? "—"})
-                            </p>
-
-                            {student.facebook_profile && (
-                                <p>
-                                    <span className="font-semibold">Facebook:</span>{" "}
-                                    <a
-                                        href={student.facebook_profile}
-                                        className="text-blue-600 underline"
-                                        target="_blank"
-                                    >
-                                        Profile
-                                    </a>
-                                </p>
-                            )}
-
-                            <p
-                                className={`font-semibold ${student.isAlumni ? "text-green-600" : "text-blue-600"
-                                    }`}
-                            >
-                                {student.isAlumni ? "Alumni" : "Active Student"}
-                            </p>
-                        </div>
-                    </div>
-                )}
+                        </>
+                    )}
+                </div>
             </div>
-        </div>,
+
+            <UpdateStudent
+                open={showUpdate}
+                onClose={() => setShowUpdate(false)}
+                onSave={() => id && fetchStudent(id)}
+                student={student}
+            />
+        </>,
         document.body
     );
 }

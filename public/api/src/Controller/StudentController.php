@@ -21,6 +21,14 @@ final class StudentController extends Controller
             }
         }
     }
+    private function validateStudentUpdateData(Response $response, array $data)
+    {
+        foreach (['college', 'email', 'name', 'ph_number', 'subject', 'user_name'] as $field) {
+            if (empty($data[$field])) {
+                $response->error(400, "$field is required.");
+            }
+        }
+    }
 
     public function index(Request $request, Response $response): void
     {
@@ -97,12 +105,13 @@ final class StudentController extends Controller
         $response->send(['message' => 'Student unassigned successfully']);
     }
 
-    public function update(Request $request, Response $response, array $args): void
+    public function update(Request $request, Response $response): void
     {
         $this->Authorized($request, $response);
-
-        $id = (int) $args['id'];
+        $id = (int) $request->getParams()['id'];
+        $this->validateId($response, $id);
         $data = $request->getBody();
+        $this->validateStudentUpdateData($response, $data);
         $ok = $this->repository->updateStudent($id, $data);
 
         if (!$ok) {
@@ -110,14 +119,14 @@ final class StudentController extends Controller
             return;
         }
 
-        $response->send($this->repository->find($id));
+        $response->send(['message' => 'Student updated successfully']);
     }
 
-    public function delete(Request $request, Response $response, array $args): void
+    public function delete(Request $request, Response $response): void
     {
         $this->Authorized($request, $response);
-
-        $id = (int) $args['id'];
+        $id = (int) $request->getParams()['id'];
+        $this->validateId($response, $id);
         $ok = $this->repository->deleteStudent($id);
 
         if (!$ok) {

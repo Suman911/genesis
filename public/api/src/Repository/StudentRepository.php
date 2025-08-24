@@ -7,7 +7,7 @@ use PDO;
 final class StudentRepository extends Repository
 {
     private array $studentListFields = ['id', 'college', 'subject'];
-    private array $studentDetailFields = ['id', 'college', 'subject','photo','address','date_of_birth','facebook_profile','guardian_name','guardian_number','date_of_admission','isAlumni','date_of_passout'];
+    private array $studentDetailFields = ['id', 'college', 'subject', 'photo', 'address', 'date_of_birth', 'facebook_profile', 'guardian_name', 'guardian_number', 'date_of_admission', 'isAlumni', 'date_of_passout'];
     private function orderMap(array $filterOrder): array
     {
         $map = [
@@ -95,14 +95,14 @@ final class StudentRepository extends Repository
             $sql_student .= " ORDER BY s.id DESC";
         }
 
-        $limit = (int) ($filters['limit'] ?? 10);
-        $page = max((int) ($filters['page'] ?? 1), 1);
-        $offset = ($page - 1) * $limit;
-
-        $sql_student .= " LIMIT $limit OFFSET $offset";
+        if (isset($filters['limit'])) {
+            $limit = (int) $filters['limit'];
+            $page = max((int) ($filters['page'] ?? 1), 1);
+            $offset = ($page - 1) * $limit;
+            $sql_student .= " LIMIT $limit OFFSET $offset";
+        }
 
         $sql_count = "SELECT COUNT(DISTINCT s.id) $base_sql";
-
         return [$sql_student, $sql_count, $params];
     }
 
@@ -124,7 +124,6 @@ final class StudentRepository extends Repository
         ];
     }
 
-
     public function listUnassigned(): array
     {
         $fields = $this->implode('s', $this->studentListFields);
@@ -139,15 +138,27 @@ final class StudentRepository extends Repository
     public function find(int $id): ?array
     {
         $fields = $this->implode('s', $this->studentDetailFields);
-        $stmt = $this->pdo->prepare(
-            "SELECT  $fields, u.name, u.email, u.user_name, u.ph_number
+        $sql = "SELECT $fields,
+                u.name, u.email, u.user_name, u.ph_number
             FROM students s
             JOIN users u ON u.id = s.user_id
-            WHERE s.id = :id"
-        );
-        $stmt->execute([':id' => $id]);
-        $r = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $r ?: null;
+            WHERE s.id = :id;
+
+            SELECT 
+                sb.sub_batch_id, sub.batch_id, sub.name AS sub_batch_name, sb.status
+            FROM student_batches sb
+            JOIN sub_batches sub ON sub.id = sb.sub_batch_id
+            WHERE sb.student_id = :id;
+        ";
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $student = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $stmt->nextRowset();
+        $student['batches'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $student ?: null;
     }
 
     public function addToBatch(int $studentId, int $subBatchId): int
@@ -167,20 +178,21 @@ final class StudentRepository extends Repository
         return $stmt->execute([':sid' => $studentId, ':sbid' => $subBatchId]);
     }
 
-    public function updateStudent(int $id, array $d): bool
+    public function updateStudent(int $id, array $data): bool
     {
-        $fields = [];
+        $S_fields = [];
         $params = [':id' => $id];
-        foreach (['college', 'subject', 'isAlumni'] as $k) {
-            if (array_key_exists($k, $d)) {
-                $fields[] = "$k = :$k";
-                $params[":$k"] = $d[$k];
-            }
+        foreach (['college', 'subject'] as $k) {
+            $S_fields[] = "$k = :$k";
+            $params[":$k"] = $data[$k];
         }
-        if (!$fields) {
-            return false;
+        $U_fields = [];
+        foreach (['email', 'name', 'user_name', 'ph_number'] as $k) {
+            $U_fields[] = "$k = :$k";
+            $params[":$k"] = $data[$k];
         }
-        $sql = "UPDATE students SET " . implode(', ', $fields) . " WHERE id = :id";
+        $sql = "UPDATE students SET " . implode(', ', $S_fields) . " WHERE id = :id;
+                UPDATE users SET " . implode(', ', $U_fields) . " WHERE id = (SELECT user_id FROM students WHERE id = :id)";
         return $this->pdo->prepare($sql)->execute($params);
     }
 

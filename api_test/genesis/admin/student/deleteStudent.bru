@@ -1,17 +1,17 @@
 meta {
-  name: fetchStudent
+  name: deleteStudent
   type: http
-  seq: 2
+  seq: 7
 }
 
-get {
+delete {
   url: https://localhost/genesis/public/api/students/{{id}}
   body: none
   auth: inherit
 }
 
 vars:pre-request {
-  id: 47
+  id: 1
 }
 
 settings {

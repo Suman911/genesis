@@ -6,8 +6,11 @@
     "dev": "env-cmd -f .env.local next dev",
     "sitemap": "env-cmd -f .env next-sitemap",
     "build": "env-cmd -f .env next build && npm run sitemap",
+    "test-build": "env-cmd -f .env.test next build",
     "post-build": "node scripts/post-build.js",
+    "test-post-build": "node scripts/post-build.js -t",
     "out": "npm run build && npm run post-build",
+    "test-out": "npm run test-build && npm run post-build -- -t",
     "start": "next start",
     "lint": "next lint"
   },
