@@ -34,10 +34,6 @@ const IsAdmin = ({ children }: { children: React.ReactNode }) => {
         }
     }, [isAdmin]);
 
-    useEffect(() => {
-        console.log("Render");
-    });
-
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen bg-gray-50">

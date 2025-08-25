@@ -49,3 +49,5 @@ laragon.lnk
 .vs
 # sql
 *.sql
+
+public/api/logs/*.log

@@ -1,6 +1,14 @@
+import { useEffect } from "react";
 import { IoCloseCircleOutline } from "react-icons/io5";
 
 const ErrorAlert = ({ message, onClose }: { message: string, onClose: () => void }) => {
+
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(onClose, 5000);
+    return () => clearTimeout(timer);
+  }, [message, onclose]);
+
   if (!message) return null;
 
   return (

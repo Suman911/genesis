@@ -165,7 +165,11 @@ export default function BatchesPage() {
 
     return (
         <div className="flex flex-col gap-6 p-6">
-            <div className="flex justify-end">
+            
+            <div className="flex justify-between">
+                <Button size="lg" color="primary" onClick={addNewBatch} disabled={savingIndex !== null}>
+                    Unassigned Students
+                </Button>
                 <Button size="lg" color="info" onClick={addNewBatch} disabled={savingIndex !== null}>
                     + New Batch
                 </Button>

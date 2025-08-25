@@ -55,6 +55,7 @@ export default function StudentPage() {
     const fetchStudents = async (query: Query) => {
         setLoading(true);
         try {
+            throw new Error("wtf");
             const queryString = qs.stringify(query, { addQueryPrefix: true });
             const res: studentResponse = await axios.get(`/students${queryString}`);
             setStudents(res.students);
@@ -88,12 +89,6 @@ export default function StudentPage() {
         }
         fetchStudents({ ...filters, ...dSearch });
     }, [dSearch, page])
-
-    useEffect(() => {
-        if (!error) return;
-        const timer = setTimeout(() => setError(""), 5000);
-        return () => clearTimeout(timer);
-    }, [error]);
 
     return (
         <>
