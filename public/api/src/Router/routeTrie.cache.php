@@ -150,7 +150,7 @@
         ),
       ),
     ),
-    'batches' => 
+    'courses' => 
     array (
       'counts' => 
       array (
@@ -158,7 +158,7 @@
         array (
           'handler' => 
           array (
-            0 => 'Api\\Controller\\BatchController',
+            0 => 'Api\\Controller\\CourseController',
             1 => 'counts',
           ),
           'middlewares' => 
@@ -173,7 +173,7 @@
         array (
           'handler' => 
           array (
-            0 => 'Api\\Controller\\BatchController',
+            0 => 'Api\\Controller\\CourseController',
             1 => 'names',
           ),
           'middlewares' => 
@@ -186,7 +186,7 @@
       array (
         'handler' => 
         array (
-          0 => 'Api\\Controller\\BatchController',
+          0 => 'Api\\Controller\\CourseController',
           1 => 'index',
         ),
         'middlewares' => 
@@ -329,7 +329,7 @@
             'handler' => 
             array (
               0 => 'Api\\Controller\\StudentController',
-              1 => 'assignToBatch',
+              1 => 'assignToCourse',
             ),
             'middlewares' => 
             array (
@@ -430,7 +430,7 @@
         ),
       ),
     ),
-    'batches' => 
+    'courses' => 
     array (
       '{param}' => 
       array (
@@ -439,7 +439,7 @@
         array (
           'handler' => 
           array (
-            0 => 'Api\\Controller\\BatchController',
+            0 => 'Api\\Controller\\CourseController',
             1 => 'update',
           ),
           'middlewares' => 
@@ -528,7 +528,7 @@
         ),
       ),
     ),
-    'batches' => 
+    'courses' => 
     array (
       '{param}' => 
       array (
@@ -537,7 +537,7 @@
         array (
           'handler' => 
           array (
-            0 => 'Api\\Controller\\BatchController',
+            0 => 'Api\\Controller\\CourseController',
             1 => 'delete',
           ),
           'middlewares' => 
@@ -546,7 +546,7 @@
           ),
         ),
       ),
-      'sub' => 
+      'batch' => 
       array (
         '{param}' => 
         array (
@@ -555,8 +555,8 @@
           array (
             'handler' => 
             array (
-              0 => 'Api\\Controller\\BatchController',
-              1 => 'deleteSubBatch',
+              0 => 'Api\\Controller\\CourseController',
+              1 => 'deleteBatch',
             ),
             'middlewares' => 
             array (

@@ -23,7 +23,7 @@ final class UserController extends Controller
     }
     private function validateStudentData(Response $response, array $data)
     {
-        foreach (['college', 'subject', 'sub_batch_id', 'batch_id'] as $field) {
+        foreach (['college', 'subject', 'batch_id', 'course_id'] as $field) {
             if (empty($data[$field])) {
                 $response->error(400, "$field is required.");
             }
@@ -112,7 +112,7 @@ final class UserController extends Controller
                 'subject' => $data['subject'],
             ]);
 
-            $batchId = $this->repository->addToBatch($studentId, (int) $data['sub_batch_id']);
+            $batchId = $this->repository->addToBatch($studentId, (int) $data['batch_id']);
 
             if (!$batchId) {
                 throw new \Exception('Failed to create student');
@@ -121,8 +121,8 @@ final class UserController extends Controller
 
             $response->setStatusCode(201)->send([
                 'student_id' => (int) $studentId,
+                'course_id' => $data['course_id'],
                 'batch_id' => $data['batch_id'],
-                'sub_batch_id' => $data['sub_batch_id'],
             ]);
         } catch (\Throwable $e) {
             $this->repository->rollbackTransaction();

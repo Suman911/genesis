@@ -1,11 +1,11 @@
 meta {
-  name: updateBatch
+  name: updateCourse
   type: http
   seq: 4
 }
 
 put {
-  url: https://localhost/genesis/public/api/batches/3
+  url: https://localhost/genesis/public/api/courses/3
   body: json
   auth: inherit
 }
@@ -15,10 +15,10 @@ body:json {
     "id": 3,
     "name": "H Secondary",
     "active": 1,
-    "sub_batches": [
+    "sub_courses": [
       {
         "id": 7,
-        "batch_id": 3,
+        "course_id": 3,
         "seq": 1,
         "name": "HS 1th",
         "active": 1,
@@ -26,7 +26,7 @@ body:json {
       },
       {
         "id": 8,
-        "batch_id": 3,
+        "course_id": 3,
         "seq": 2,
         "name": " 12th",
         "active": 1,
@@ -34,7 +34,7 @@ body:json {
       },
       {
         "id": 9,
-        "batch_id": 3,
+        "course_id": 3,
         "seq": 4,
         "name": "HS 12th",
         "active": 1,

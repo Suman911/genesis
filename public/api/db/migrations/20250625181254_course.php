@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Phinx\Migration\AbstractMigration;
 
-final class SubBatch extends AbstractMigration
+final class Course extends AbstractMigration
 {
     /**
      * Change Method.
@@ -19,16 +19,8 @@ final class SubBatch extends AbstractMigration
      */
     public function change(): void
     {
-        $table = $this->table('sub_batches');
+        $table = $this->table('courses');
         $table
-            ->addColumn('batch_id', 'integer', [
-                'null' => false,
-                'signed' => false,
-            ])
-            ->addColumn('seq', 'integer', [
-                'null' => false,
-                'signed' => false,
-            ])
             ->addColumn('name', 'string', [
                 'limit' => 100,
                 'null' => false,
@@ -36,13 +28,7 @@ final class SubBatch extends AbstractMigration
             ->addColumn('active', 'boolean', [
                 'default' => true,
             ])
-            ->addForeignKey('batch_id', 'batches', 'id', [
-                'delete' => 'CASCADE',
-                'update' => 'NO_ACTION',
-            ])
-            ->addIndex(['batch_id', 'seq'], ['unique' => true, 'name' => 'idx_batch'])
             ->addTimestamps()
             ->create();
     }
-
 }

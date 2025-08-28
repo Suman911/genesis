@@ -27,7 +27,7 @@ final class StudentSeeder extends Base_Seed
                 'college' => 'ABC College of Science',
                 'date_of_admission' => '2024-01-15',
                 'subject' => 'Physics',
-                'sub_batch_id' => 2,
+                'batch_id' => 2,
             ],
         ];
 
@@ -57,7 +57,7 @@ final class StudentSeeder extends Base_Seed
 
             $this->table('student_batches')->insert([
                 'student_id' => $studentId,
-                'sub_batch_id' => $student['sub_batch_id'],
+                'batch_id' => $student['batch_id'],
                 'created_at' => $now,
                 'updated_at' => $now
             ])->saveData();

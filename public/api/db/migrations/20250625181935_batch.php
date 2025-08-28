@@ -21,6 +21,14 @@ final class Batch extends AbstractMigration
     {
         $table = $this->table('batches');
         $table
+            ->addColumn('course_id', 'integer', [
+                'null' => false,
+                'signed' => false,
+            ])
+            ->addColumn('seq', 'integer', [
+                'null' => false,
+                'signed' => false,
+            ])
             ->addColumn('name', 'string', [
                 'limit' => 100,
                 'null' => false,
@@ -28,7 +36,13 @@ final class Batch extends AbstractMigration
             ->addColumn('active', 'boolean', [
                 'default' => true,
             ])
+            ->addForeignKey('course_id', 'courses', 'id', [
+                'delete' => 'CASCADE',
+                'update' => 'NO_ACTION',
+            ])
+            ->addIndex(['course_id', 'seq'], ['unique' => true, 'name' => 'idx_course'])
             ->addTimestamps()
             ->create();
     }
+
 }

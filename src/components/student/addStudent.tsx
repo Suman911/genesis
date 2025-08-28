@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Axios from '@/utils/Axios';
 import Button from '@/components/ui/util/button';
-import { Batch } from '@/lib/definitions';
+import { Course, Batch } from '@/lib/definitions';
 import FloatingInput from '@/components/ui/form/floatingInput';
 
-type AddStudentProps = { batches: Batch[], open: boolean, onClose: () => void, onSave: () => void };
+type AddStudentProps = { courses: Course[], open: boolean, onClose: () => void, onSave: () => void };
 
-export default function AddStudent({ batches, open, onClose, onSave }: AddStudentProps) {
-    const activeBatches = batches.filter(b => b.active === 1).map(b => ({
-        ...b,
-        sub_batches: b.sub_batches.filter(sb => sb.active === 1)
+export default function AddStudent({ courses, open, onClose, onSave }: AddStudentProps) {
+    const activeCourses = courses.filter(c => c.active === 1).map(c => ({
+        ...c,
+        batches: c.batches.filter(b => b.active === 1)
     }));
-    const [subList, setSubList] = useState<Batch['sub_batches']>([]);
+    const [batchList, setBatchList] = useState<Batch[]>([]);
     const [form, setForm] = useState({
         name: '',
         user_name: '',
@@ -21,22 +21,26 @@ export default function AddStudent({ batches, open, onClose, onSave }: AddStuden
         password: '',
         college: '',
         subject: '',
+        course_id: 0,
         batch_id: 0,
-        sub_batch_id: 0,
     });
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
 
     useEffect(() => {
-        if (activeBatches.length) {
-            setForm(f => ({ ...f, batch_id: activeBatches[0].id, sub_batch_id: activeBatches[0].sub_batches[0]?.id }));
-            setSubList(activeBatches[0].sub_batches);
+        if (activeCourses.length) {
+            setForm(f => ({
+                ...f,
+                course_id: activeCourses[0].id,
+                batch_id: activeCourses[0].batches[0]?.id ?? 0
+            }));
+            setBatchList(activeCourses[0].batches);
             setError('');
         }
         else {
-            setError('No active batch available');
+            setError('No active course available');
         }
-    }, [batches]);
+    }, [courses]);
 
     useEffect(() => {
         const esc = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -49,14 +53,14 @@ export default function AddStudent({ batches, open, onClose, onSave }: AddStuden
     const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
         setForm({ ...form, [e.target.name]: e.target.value });
 
-    const changeBatch = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const bId = Number(e.target.value);
-        const sel = activeBatches.find(b => b.id === bId);
-        setSubList(sel?.sub_batches ?? []);
+    const changeCourse = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const cId = Number(e.target.value);
+        const sel = activeCourses.find(c => c.id === cId);
+        setBatchList(sel?.batches ?? []);
         setForm(f => ({
             ...f,
-            batch_id: bId,
-            sub_batch_id: sel?.sub_batches[0]?.id ?? 0,
+            course_id: cId,
+            batch_id: sel?.batches[0]?.id ?? 0,
         }));
     };
 
@@ -75,8 +79,8 @@ export default function AddStudent({ batches, open, onClose, onSave }: AddStuden
                 password: '',
                 college: '',
                 subject: '',
+                course_id: 0,
                 batch_id: 0,
-                sub_batch_id: 0,
             });
         } catch (err: unknown) {
             const message = err instanceof Error
@@ -147,28 +151,28 @@ export default function AddStudent({ batches, open, onClose, onSave }: AddStuden
 
                     <FloatingInput
                         as="select"
-                        label="Batch"
-                        name="batch_id"
-                        value={form.batch_id}
-                        onChange={changeBatch}
+                        label="Course"
+                        name="course_id"
+                        value={form.course_id}
+                        onChange={changeCourse}
                     >
-                        {activeBatches.map((b) => (
-                            <option key={b.id} value={b.id}>
-                                {b.name}
+                        {activeCourses.map((c) => (
+                            <option key={c.id} value={c.id}>
+                                {c.name}
                             </option>
                         ))}
                     </FloatingInput>
 
                     <FloatingInput
                         as="select"
-                        label="Sub Batch"
-                        name="sub_batch_id"
-                        value={form.sub_batch_id}
+                        label="Batch"
+                        name="batch_id"
+                        value={form.batch_id}
                         onChange={handle}
                     >
-                        {subList.map((s) => (
-                            <option key={s.id} value={s.id}>
-                                {s.name}
+                        {batchList.map((b) => (
+                            <option key={b.id} value={b.id}>
+                                {b.name}
                             </option>
                         ))}
                     </FloatingInput>

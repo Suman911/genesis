@@ -41,20 +41,20 @@ export type User = {
     role: "user" | "alumni" | "admin";
 };
 
-export type SubBatch = {
+export type Batch = {
     id: number;
-    batch_id: number;
+    course_id: number;
     seq: number | null;
     name: string;
     active: number;
     student_count: number;
 };
 
-export type Batch = {
+export type Course = {
     id: number;
     name: string;
     active: number;
-    sub_batches: SubBatch[];
+    batches: Batch[];
     student_count: number;
 };
 
@@ -76,8 +76,8 @@ export type Search = {
 };
 
 export type Filter = {
+    course_id?: number;
     batch_id?: number;
-    sub_batch_id?: number;
     status?: 'Active' | 'Completed' | 'Dropped';
     passout?: {
         from?: number;
@@ -91,9 +91,9 @@ export type Filter = {
 export type Query = Search & Filter & { page?: number };
 
 export type StudentBatch = {
-    sub_batch_id: number;
+    course_id: number;
     batch_id: number;
-    sub_batch_name: string;
+    batch_name: string;
     status: string;
 };
 

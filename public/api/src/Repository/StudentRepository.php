@@ -7,22 +7,27 @@ use PDO;
 final class StudentRepository extends Repository
 {
     private array $studentListFields = ['id', 'college', 'subject'];
-    private array $studentDetailFields = ['id', 'college', 'subject', 'photo', 'address', 'date_of_birth', 'facebook_profile', 'guardian_name', 'guardian_number', 'date_of_admission', 'isAlumni', 'date_of_passout'];
+    private array $studentDetailFields = [
+        'id', 'college', 'subject', 'photo', 'address', 'date_of_birth',
+        'facebook_profile', 'guardian_name', 'guardian_number',
+        'date_of_admission', 'isAlumni', 'date_of_passout'
+    ];
+
     private function orderMap(array $filterOrder): array
     {
         $map = [
             'admission' => 's.date_of_admission',
-            'passout' => 's.date_of_passout',
-            'name' => 'u.name',
-            'college' => 's.college',
-            'subject' => 's.subject',
-            'active' => 'has_active'
+            'passout'   => 's.date_of_passout',
+            'name'      => 'u.name',
+            'college'   => 's.college',
+            'subject'   => 's.subject',
+            'active'    => 'has_active'
         ];
 
         return array_map(function ($f) use ($map) {
             if (is_array($f)) {
                 $field = $map[$f[0]];
-                $dir = $f[1] ? 'ASC' : 'DESC';
+                $dir   = $f[1] ? 'ASC' : 'DESC';
                 return "$field $dir";
             }
             return $f;
@@ -33,20 +38,20 @@ final class StudentRepository extends Repository
     {
         $params = [];
         $fields = $this->implode('s', $this->studentListFields);
-        $conds = [];
+        $conds  = [];
 
         $base_sql = "FROM students s
                     JOIN users u ON u.id = s.user_id
                     JOIN student_batches sb ON sb.student_id = s.id
-                    JOIN sub_batches sub ON sub.id = sb.sub_batch_id";
+                    JOIN batches b ON b.id = sb.batch_id";
 
-        if (isset($filters['batch_id'])) {
-            $conds[] = "sub.batch_id = :batch_id";
-            $params[':batch_id'] = (int) $filters['batch_id'];
+        if (isset($filters['course_id'])) {
+            $conds[] = "b.course_id = :course_id";
+            $params[':course_id'] = (int) $filters['course_id'];
         }
-        if (isset($filters['sub_batch_id'])) {
-            $conds[] = "sub.id = :sub_batch_id";
-            $params[':sub_batch_id'] = (int) $filters['sub_batch_id'];
+        if (isset($filters['batch_id'])) {
+            $conds[] = "b.id = :batch_id";
+            $params[':batch_id'] = (int) $filters['batch_id'];
         }
         if (isset($filters['status'])) {
             $conds[] = "sb.status = :status";
@@ -82,8 +87,8 @@ final class StudentRepository extends Repository
 
         $sql_student = "SELECT $fields, u.name,
                         GROUP_CONCAT(DISTINCT 
-                            CONCAT(sub.name, IF(sb.status = 'active', ' (active)', ''))
-                            ORDER BY sub.seq ASC, sub.batch_id ASC SEPARATOR ', ') AS batches,
+                            CONCAT(b.name, IF(sb.status = 'active', ' (active)', ''))
+                            ORDER BY b.seq ASC, b.course_id ASC SEPARATOR ', ') AS batches,
                         MAX(sb.status = 'active') AS has_active
                     $base_sql
                     GROUP BY s.id";
@@ -97,7 +102,7 @@ final class StudentRepository extends Repository
 
         if (isset($filters['limit'])) {
             $limit = (int) $filters['limit'];
-            $page = max((int) ($filters['page'] ?? 1), 1);
+            $page  = max((int) ($filters['page'] ?? 1), 1);
             $offset = ($page - 1) * $limit;
             $sql_student .= " LIMIT $limit OFFSET $offset";
         }
@@ -120,7 +125,7 @@ final class StudentRepository extends Repository
 
         return [
             'students' => $students,
-            'total' => $totalCount
+            'total'    => $totalCount
         ];
     }
 
@@ -145,9 +150,9 @@ final class StudentRepository extends Repository
             WHERE s.id = :id;
 
             SELECT 
-                sb.sub_batch_id, sub.batch_id, sub.name AS sub_batch_name, sb.status
+                sb.batch_id, b.course_id, b.name AS batch_name, sb.status
             FROM student_batches sb
-            JOIN sub_batches sub ON sub.id = sb.sub_batch_id
+            JOIN batches b ON b.id = sb.batch_id
             WHERE sb.student_id = :id;
         ";
 
@@ -161,21 +166,21 @@ final class StudentRepository extends Repository
         return $student ?: null;
     }
 
-    public function addToBatch(int $studentId, int $subBatchId): int
+    public function addToBatch(int $studentId, int $batchId): int
     {
         $stmt = $this->pdo->prepare(
-            "INSERT INTO student_batches (student_id,sub_batch_id) VALUES (:sid,:sbid)"
+            "INSERT INTO student_batches (student_id, batch_id) VALUES (:sid,:bid)"
         );
-        $stmt->execute([':sid' => $studentId, ':sbid' => $subBatchId]);
+        $stmt->execute([':sid' => $studentId, ':bid' => $batchId]);
         return (int) $this->pdo->lastInsertId();
     }
 
-    public function unassign(int $studentId, int $subBatchId)
+    public function unassign(int $studentId, int $batchId)
     {
         $stmt = $this->pdo->prepare(
-            "DELETE FROM student_batches WHERE student_id = :sid AND sub_batch_id = :sbid"
+            "DELETE FROM student_batches WHERE student_id = :sid AND batch_id = :bid"
         );
-        return $stmt->execute([':sid' => $studentId, ':sbid' => $subBatchId]);
+        return $stmt->execute([':sid' => $studentId, ':bid' => $batchId]);
     }
 
     public function updateStudent(int $id, array $data): bool

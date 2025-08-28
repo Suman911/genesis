@@ -7,7 +7,7 @@ import StudentsTable from "@/components/student/studentsTable";
 import FloatingInput from "@/components/ui/form/floatingInput";
 import axios from "@/utils/Axios";
 import qs from "qs";
-import { Student, Search, Filter, Query, Batch, OrderMapKeys } from "@/lib/definitions";
+import { Student, Search, Filter, Query, Course, OrderMapKeys } from "@/lib/definitions";
 import { FaSpinner, FaSortAlphaDown, FaSortAlphaUpAlt, FaSortNumericDown, FaSortNumericUp } from "react-icons/fa";
 import { TbArrowsSort } from "react-icons/tb";
 import { IoCloseCircleOutline, IoArrowDown, IoArrowUp } from "react-icons/io5";
@@ -42,7 +42,7 @@ export default function StudentPage() {
     const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState<Filter>({ order_by: [], limit: 10 });
-    const [batches, setBatches] = useState<Batch[]>([]);
+    const [courses, setCourses] = useState<Course[]>([]);
     const [sortOpen, setSortOpen] = useState(false);
     const [orderBy, setOrderBy] = useState<OrderByVM[]>(initialOrder);
     const [search, setSearch] = useState<Search>({});
@@ -55,30 +55,30 @@ export default function StudentPage() {
     const fetchStudents = async (query: Query) => {
         setLoading(true);
         try {
-            throw new Error("wtf");
             const queryString = qs.stringify(query, { addQueryPrefix: true });
             const res: studentResponse = await axios.get(`/students${queryString}`);
             setStudents(res.students);
             setTotal(res.total);
         } catch (error) {
-            setError(`Failed to fetch students: ${error}`);
+            setStudents([]);
+            setError(`Failed to fetch students: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
         finally {
             setLoading(false);
         }
     };
 
-    const fetchbatches = async () => {
+    const fetchCourses = async () => {
         try {
-            const res: Batch[] = await axios.get('/batches/names');
-            setBatches(res);
+            const res: Course[] = await axios.get('/courses/names');
+            setCourses(res);
         } catch (error) {
-            setError(`Failed to fetch batches: ${error}`);
+            setError(`Failed to fetch courses: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }
 
     useEffect(() => {
-        fetchbatches();
+        fetchCourses();
     }, []);
 
     useEffect(() => {
@@ -88,7 +88,7 @@ export default function StudentPage() {
             return;
         }
         fetchStudents({ ...filters, ...dSearch });
-    }, [dSearch, page])
+    }, [dSearch, page]);
 
     return (
         <>
@@ -103,7 +103,7 @@ export default function StudentPage() {
                     </div>
                 </div>
 
-                <AddStudent batches={batches} open={showModal}
+                <AddStudent courses={courses} open={showModal}
                     onSave={() => {
                         setShowModal(false);
                         fetchStudents({ ...filters, ...dSearch, page: page });
@@ -119,38 +119,39 @@ export default function StudentPage() {
                         <div className="flex gap-4 rounded">
                             <div className="flex gap-4 items-center bg-white p-2 rounded">
                                 <FloatingInput
-                                    name="batch"
+                                    name="course"
                                     label="Course"
                                     as="select"
-                                    value={filters.batch_id ?? ''}
+                                    value={filters.course_id ?? ''}
                                     onChange={(e) =>
                                         setFilters(f => ({
-                                            ...f, sub_batch_id: undefined,
-                                            batch_id: e.target.value ? Number(e.target.value) : undefined
+                                            ...f, batch_id: undefined,
+                                            course_id: e.target.value ? Number(e.target.value) : undefined
                                         }))
                                     }
                                 >
-                                    <option value="">All Course</option>
-                                    {batches.map(b => (
-                                        <option key={b.id} value={b.id}>{b.name}</option>
+                                    <option value="">All Courses</option>
+                                    {courses.map(c => (
+                                        <option key={c.id} value={c.id}>{c.name}</option>
                                     ))}
                                 </FloatingInput>
-                                {filters.batch_id && (
+                                {filters.course_id && (
                                     <FloatingInput
-                                        name="sub_batch"
+                                        name="batch"
                                         label="Batch"
                                         as="select"
-                                        value={filters.sub_batch_id ?? ''}
+                                        value={filters.batch_id ?? ''}
                                         onChange={(e) =>
                                             setFilters(f => ({
-                                                ...f, sub_batch_id: e.target.value ? Number(e.target.value) : undefined
+                                                ...f,
+                                                batch_id: e.target.value ? Number(e.target.value) : undefined
                                             }))
                                         }
                                     >
-                                        <option value="">All Batch</option>
-                                        {batches.find(b => b.id === filters.batch_id)
-                                            ?.sub_batches.map(sb => (
-                                                <option key={sb.id} value={sb.id}>{sb.name}</option>
+                                        <option value="">All Batches</option>
+                                        {courses.find(c => c.id === filters.course_id)
+                                            ?.batches.map(b => (
+                                                <option key={b.id} value={b.id}>{b.name}</option>
                                             ))}
                                     </FloatingInput>
                                 )}

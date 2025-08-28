@@ -61,7 +61,7 @@ const StudentsTable = ({ students, loading, limit = 10, onDelete }: StudentsTabl
                     </thead>
                     <tbody className="divide-y divide-gray-300 text-gray-800">
                         {students.map((student, i) => (
-                            <tr key={i} className="bg-neutral-100 hover:bg-neutral-300 cursor-pointer" onClick={() => setId(student.id)}>
+                            <tr key={i} className="bg-neutral-100 hover:bg-neutral-300 cursor-pointer" title={`View ${student.name} details`} onClick={() => setId(student.id)}>
                                 <td className="px-4 py-2">{i + 1}. {student.name}</td>
                                 <td className="px-4 py-2">{student.college}</td>
                                 <td className="px-4 py-2">{student.subject}</td>

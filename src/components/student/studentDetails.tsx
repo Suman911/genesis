@@ -76,14 +76,14 @@ function StudentDetails({ id, onClose, onDelete }: StudentDetailsProps) {
                         <div className="absolute top-1.5 right-3 flex gap-3">
                             <button
                                 onClick={() => setShowUpdate(true)}
-                                className="text-white/80 hover:text-warning cursor-pointer"
+                                className="text-white/80 hover:text-white cursor-pointer"
                                 title="Edit"
                             >
                                 <FaPen size={16} />
                             </button>
                             <button
                                 onClick={deleteStudent}
-                                className="text-white/80 hover:text-white cursor-pointer"
+                                className="text-white/80 hover:text-warning cursor-pointer"
                                 title="Delete"
                             >
                                 <FaTrashAlt size={16} />
@@ -209,7 +209,7 @@ function StudentDetails({ id, onClose, onDelete }: StudentDetailsProps) {
                                             </div>
                                             <div>
                                                 <p className="text-[11px] text-gray-500">Batch</p>
-                                                <p>{student.batches[0]?.sub_batch_name || "—"}</p>
+                                                <p>{student.batches[0]?.batch_name || "—"}</p>
                                             </div>
                                             <div>
                                                 <p className="text-[11px] text-gray-500">Status</p>
@@ -251,10 +251,10 @@ function StudentDetails({ id, onClose, onDelete }: StudentDetailsProps) {
                                     <div className="flex gap-5 flex-wrap">
                                         {student.batches.map((batch: StudentBatch) => (
                                             <div
-                                                key={batch.sub_batch_id}
+                                                key={batch.batch_id}
                                                 className="flex gap-5 items-center border rounded-md px-3 py-2 text-sm"
                                             >
-                                                <span>{batch.sub_batch_name}</span>
+                                                <span>{batch.batch_name}</span>
                                                 <span
                                                     className={`px-2 py-0.5 rounded-full text-xs ${batch.status === "Active"
                                                         ? "bg-green-100 text-green-800"

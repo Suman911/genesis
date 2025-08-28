@@ -12,7 +12,7 @@ use Api\Controller\Controller;
 use Api\Controller\UserController;
 use Api\Controller\NoticeController;
 use Api\Controller\TestimonialController;
-use Api\Controller\BatchController;
+use Api\Controller\CourseController;
 use Api\Controller\StudentController;
 use Api\Middleware\AuthMiddleware;
 use Api\Middleware\ErrorHandlerMiddleware;
@@ -65,20 +65,20 @@ $router->add('POST', '/testimonials', [TestimonialController::class, 'create'], 
 $router->add('PUT', '/testimonials/{id}', [TestimonialController::class, 'update'], [AuthMiddleware::class]);
 $router->add('DELETE', '/testimonials/{id}', [TestimonialController::class, 'delete'], [AuthMiddleware::class]);
 
-// batch routes
-$router->add('GET', '/batches/counts', [BatchController::class, 'counts'], [AuthMiddleware::class]);
-$router->add('GET', '/batches/names', [BatchController::class, 'names'], [AuthMiddleware::class]);
-$router->add('GET', '/batches', [BatchController::class, 'index'], [AuthMiddleware::class]);
-$router->add('PUT', '/batches/{id}', [BatchController::class, 'update'], [AuthMiddleware::class]);
-$router->add('DELETE', '/batches/{id}', [BatchController::class, 'delete'], [AuthMiddleware::class]);
-$router->add('DELETE', '/batches/sub/{id}', [BatchController::class, 'deleteSubBatch'], [AuthMiddleware::class]);
+// course routes
+$router->add('GET', '/courses/counts', [CourseController::class, 'counts'], [AuthMiddleware::class]);
+$router->add('GET', '/courses/names', [CourseController::class, 'names'], [AuthMiddleware::class]);
+$router->add('GET', '/courses', [CourseController::class, 'index'], [AuthMiddleware::class]);
+$router->add('PUT', '/courses/{id}', [CourseController::class, 'update'], [AuthMiddleware::class]);
+$router->add('DELETE', '/courses/{id}', [CourseController::class, 'delete'], [AuthMiddleware::class]);
+$router->add('DELETE', '/courses/batch/{id}', [CourseController::class, 'deleteBatch'], [AuthMiddleware::class]);
 
 // student routes
 $router->add('GET', '/students', [StudentController::class, 'index'], [AuthMiddleware::class]);
 $router->add('GET', '/students/{id}', [StudentController::class, 'show'], [AuthMiddleware::class]);
 $router->add('GET', '/students/unassign', [StudentController::class, 'unassigned'], [AuthMiddleware::class]);
 $router->add('PUT', '/students/{id}', [StudentController::class, 'update'], [AuthMiddleware::class]);
-$router->add('POST', '/students/assign/{id}', [StudentController::class, 'assignToBatch'], [AuthMiddleware::class]);
+$router->add('POST', '/students/assign/{id}', [StudentController::class, 'assignToCourse'], [AuthMiddleware::class]);
 $router->add('DELETE', '/students/unassign/{sid}/{sub_bid}', [StudentController::class, 'unassignStudent'], [AuthMiddleware::class]);
 $router->add('DELETE', '/students/{id}', [StudentController::class, 'delete'], [AuthMiddleware::class]);
 
