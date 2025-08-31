@@ -8,26 +8,35 @@ final class StudentRepository extends Repository
 {
     private array $studentListFields = ['id', 'college', 'subject'];
     private array $studentDetailFields = [
-        'id', 'college', 'subject', 'photo', 'address', 'date_of_birth',
-        'facebook_profile', 'guardian_name', 'guardian_number',
-        'date_of_admission', 'isAlumni', 'date_of_passout'
+        'id',
+        'college',
+        'subject',
+        'photo',
+        'address',
+        'date_of_birth',
+        'facebook_profile',
+        'guardian_name',
+        'guardian_number',
+        'date_of_admission',
+        'isAlumni',
+        'date_of_passout'
     ];
 
     private function orderMap(array $filterOrder): array
     {
         $map = [
             'admission' => 's.date_of_admission',
-            'passout'   => 's.date_of_passout',
-            'name'      => 'u.name',
-            'college'   => 's.college',
-            'subject'   => 's.subject',
-            'active'    => 'has_active'
+            'passout' => 's.date_of_passout',
+            'name' => 'u.name',
+            'college' => 's.college',
+            'subject' => 's.subject',
+            'active' => 'has_active'
         ];
 
         return array_map(function ($f) use ($map) {
             if (is_array($f)) {
                 $field = $map[$f[0]];
-                $dir   = $f[1] ? 'ASC' : 'DESC';
+                $dir = $f[1] ? 'ASC' : 'DESC';
                 return "$field $dir";
             }
             return $f;
@@ -38,7 +47,7 @@ final class StudentRepository extends Repository
     {
         $params = [];
         $fields = $this->implode('s', $this->studentListFields);
-        $conds  = [];
+        $conds = [];
 
         $base_sql = "FROM students s
                     JOIN users u ON u.id = s.user_id
@@ -102,7 +111,7 @@ final class StudentRepository extends Repository
 
         if (isset($filters['limit'])) {
             $limit = (int) $filters['limit'];
-            $page  = max((int) ($filters['page'] ?? 1), 1);
+            $page = max((int) ($filters['page'] ?? 1), 1);
             $offset = ($page - 1) * $limit;
             $sql_student .= " LIMIT $limit OFFSET $offset";
         }
@@ -125,7 +134,7 @@ final class StudentRepository extends Repository
 
         return [
             'students' => $students,
-            'total'    => $totalCount
+            'total' => $totalCount
         ];
     }
 
@@ -166,13 +175,24 @@ final class StudentRepository extends Repository
         return $student ?: null;
     }
 
-    public function addToBatch(int $studentId, int $batchId): int
+    public function addToBatches(int $studentId, array $batchIds): bool
     {
-        $stmt = $this->pdo->prepare(
-            "INSERT INTO student_batches (student_id, batch_id) VALUES (:sid,:bid)"
-        );
-        $stmt->execute([':sid' => $studentId, ':bid' => $batchId]);
-        return (int) $this->pdo->lastInsertId();
+        if (empty($batchIds)) {
+            return false;
+        }
+
+        $placeholders = [];
+        $params = [':sid' => $studentId];
+
+        foreach ($batchIds as $i => $batchId) {
+            $ph = ":bid{$i}";
+            $placeholders[] = "(:sid, $ph)";
+            $params[$ph] = (int) $batchId;
+        }
+
+        $sql = "INSERT INTO student_batches (student_id, batch_id) VALUES " . implode(',', $placeholders);
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($params);
     }
 
     public function unassign(int $studentId, int $batchId)

@@ -59,21 +59,26 @@ final class StudentController extends Controller
         $body = $request->getBody();
 
         $studentId = isset($params['id']) ? (int) $params['id'] : null;
-        $batchId   = isset($body['batch_id']) ? (int) $body['batch_id'] : null;
+        $batchIds = $body['batch_ids'] ?? null;
 
         $this->validateId($response, $studentId);
-        if (!$batchId) {
-            $response->error(400, 'Batch ID is required');
+
+        if (!is_array($batchIds) || empty($batchIds)) {
+            $response->error(400, 'Batch IDs are required');
             return;
         }
 
-        $ok = $this->repository->addToBatch($studentId, $batchId);
-        if (!$ok) {
-            $response->error(400, 'Failed to assign student to batch');
-            return;
-        }
+        try {
+            $result = $this->repository->addToBatches($studentId, $batchIds);
+            if (!$result) {
+                $response->error(400, 'Failed to assign student to batches');
+                return;
+            }
 
-        $response->send(['message' => 'Student assigned successfully']);
+            $response->send(['message' => 'Student assigned successfully', 'assigned' => $batchIds]);
+        } catch (\Exception $e) {
+            $response->error(500, 'Error: ' . $e->getMessage());
+        }
     }
 
     public function unassignStudent(Request $request, Response $response): void

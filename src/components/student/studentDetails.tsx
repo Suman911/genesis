@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import Portal from '@/components/ui/util/portal';
 import { FiUser, FiFacebook, FiMail, FiPhone } from "react-icons/fi";
 import { FaPen, FaTrashAlt } from "react-icons/fa";
 import { CgClose } from "react-icons/cg";
@@ -21,15 +21,14 @@ function StudentDetails({ id, onClose, onDelete }: StudentDetailsProps) {
         try {
             const res: StudentInfo = await Axios.get(`/students/${studentId}`);
 
-            // sort batches: active + highest batch_id first
             res.batches.sort((a, b) => {
                 if (a.status === "Active" && b.status !== "Active") return -1;
                 if (a.status !== "Active" && b.status === "Active") return 1;
                 return b.batch_id - a.batch_id;
             });
-
             setStudent(res);
         } catch {
+            setStudent(null);
             setError("Failed to load student details");
         } finally {
             setLoading(false);
@@ -59,10 +58,8 @@ function StudentDetails({ id, onClose, onDelete }: StudentDetailsProps) {
         }
     };
 
-    if (!id) return null;
-
-    return createPortal(
-        <>
+    return (
+        <Portal open={Boolean(id)}>
             <div
                 className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
                 onClick={onClose}
@@ -281,8 +278,7 @@ function StudentDetails({ id, onClose, onDelete }: StudentDetailsProps) {
                 onSave={() => id && fetchStudent(id)}
                 student={student}
             />
-        </>,
-        document.body
+        </Portal>
     );
 }
 

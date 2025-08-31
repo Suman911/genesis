@@ -329,7 +329,7 @@
             'handler' => 
             array (
               0 => 'Api\\Controller\\StudentController',
-              1 => 'assignToCourse',
+              1 => 'assignToBatch',
             ),
             'middlewares' => 
             array (
@@ -575,7 +575,7 @@
           '_name' => 'sid',
           '{param}' => 
           array (
-            '_name' => 'sub_bid',
+            '_name' => 'bid',
             '_handler' => 
             array (
               'handler' => 

@@ -45,7 +45,7 @@ class Router
             return call_user_func($this->errorHandler, $e, $this->request, $this->response);
         }
 
-        $this->response->setStatusCode(500)->send(['message' => 'Internal Server Error', 'error' => $e->getMessage()]);
+        $this->response->error(500, 'Error: ' . $e->getMessage());
     }
 
     /**
@@ -116,10 +116,7 @@ class Router
                 return call_user_func($this->notFoundHandler, $this->request, $this->response);
             }
 
-            $this->response->setStatusCode(404)->send([
-                'message' => "404 Not Found",
-                'error' => "No route matches the request for {$method} {$uri}"
-            ]);
+            $this->response->error(404, 'Error: 404 Not Found: No route matches');
         } catch (Exception $e) {
             $this->handleError($e);
         }

@@ -5,13 +5,17 @@ meta {
 }
 
 post {
-  url: https://localhost/genesis/public/api/students/assign/51
+  url: https://localhost/genesis/public/api/students/assign/{{sid}}
   body: json
   auth: inherit
 }
 
 body:json {
   {
-    "batch_id" : 4
+    "batch_ids" : [3]
   }
+}
+
+vars:pre-request {
+  sid: 50
 }

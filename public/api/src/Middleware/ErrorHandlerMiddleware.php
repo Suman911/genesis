@@ -16,7 +16,6 @@ function log_error($error, $logFile = __DIR__ . '/../../logs/error.log')
         'message' => $error->getMessage(),
         'file' => $error->getFile(),
         'line' => $error->getLine(),
-        'trace' => $error->getTraceAsString(),
     ];
     $logDir = dirname($logFile);
     if (!is_dir($logDir)) {

@@ -78,8 +78,8 @@ $router->add('GET', '/students', [StudentController::class, 'index'], [AuthMiddl
 $router->add('GET', '/students/{id}', [StudentController::class, 'show'], [AuthMiddleware::class]);
 $router->add('GET', '/students/unassign', [StudentController::class, 'unassigned'], [AuthMiddleware::class]);
 $router->add('PUT', '/students/{id}', [StudentController::class, 'update'], [AuthMiddleware::class]);
-$router->add('POST', '/students/assign/{id}', [StudentController::class, 'assignToCourse'], [AuthMiddleware::class]);
-$router->add('DELETE', '/students/unassign/{sid}/{sub_bid}', [StudentController::class, 'unassignStudent'], [AuthMiddleware::class]);
+$router->add('POST', '/students/assign/{id}', [StudentController::class, 'assignToBatch'], [AuthMiddleware::class]);
+$router->add('DELETE', '/students/unassign/{sid}/{bid}', [StudentController::class, 'unassignStudent'], [AuthMiddleware::class]);
 $router->add('DELETE', '/students/{id}', [StudentController::class, 'delete'], [AuthMiddleware::class]);
 
 $router->dispatch();

@@ -5,7 +5,7 @@ import Button from "@/components/ui/util/button";
 import AddStudent from "@/components/student/addStudent";
 import StudentsTable from "@/components/student/studentsTable";
 import FloatingInput from "@/components/ui/form/floatingInput";
-import axios from "@/utils/Axios";
+import Axios from "@/utils/Axios";
 import qs from "qs";
 import { Student, Search, Filter, Query, Course, OrderMapKeys } from "@/lib/definitions";
 import { FaSpinner, FaSortAlphaDown, FaSortAlphaUpAlt, FaSortNumericDown, FaSortNumericUp } from "react-icons/fa";
@@ -56,7 +56,7 @@ export default function StudentPage() {
         setLoading(true);
         try {
             const queryString = qs.stringify(query, { addQueryPrefix: true });
-            const res: studentResponse = await axios.get(`/students${queryString}`);
+            const res: studentResponse = await Axios.get(`/students${queryString}`);
             setStudents(res.students);
             setTotal(res.total);
         } catch (error) {
@@ -68,16 +68,15 @@ export default function StudentPage() {
         }
     };
 
-    const fetchCourses = async () => {
-        try {
-            const res: Course[] = await axios.get('/courses/names');
-            setCourses(res);
-        } catch (error) {
-            setError(`Failed to fetch courses: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        }
-    }
-
     useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const res: Course[] = await Axios.get('/courses/names');
+                setCourses(res);
+            } catch (error) {
+                setError(`Failed to fetch courses: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            }
+        }
         fetchCourses();
     }, []);
 
@@ -317,88 +316,91 @@ export default function StudentPage() {
                 </div>
 
                 <div className="bg-white shadow rounded-lg">
-                    <div className="flex gap-4 p-4 m-4 pb-0 mb-0 items-center justify-between rounded rounded-b-none bg-neutral-200">
-                        <span>Search</span>
-                        <FloatingInput
-                            type="text"
-                            name="Search by name or email"
-                            label="Search by name or email"
-                            value={search.search ?? ''}
-                            onChange={(e) => setSearch(s => ({ ...s, search: e.target.value || undefined }))}
-                            className="bg-white w-60"
-                        />
-                        <FloatingInput
-                            type="text"
-                            name="College"
-                            label="College"
-                            value={search.college ?? ''}
-                            onChange={(e) => setSearch(s => ({ ...s, college: e.target.value || undefined }))}
-                            className="bg-white"
-                        />
-                        <FloatingInput
-                            type="text"
-                            name="Subject"
-                            label="Subject"
-                            value={search.subject ?? ''}
-                            onChange={(e) => setSearch(s => ({ ...s, subject: e.target.value || undefined }))}
-                            className="bg-white"
-                        />
-                        <FloatingInput
-                            name="limit"
-                            label="Rows"
-                            as="select"
-                            value={filters.limit}
-                            disabled={loading}
-                            onChange={(e) => fetchStudents({ ...filters, limit: Number(e.target.value) })}
-                            className="bg-white"
-                        >
-                            <option value={10}>10</option>
-                            <option value={25}>25</option>
-                            <option value={50}>50</option>
-                        </FloatingInput>
-                    </div>
-                    <StudentsTable students={students} loading={loading} limit={filters.limit}
-                        onDelete={() => fetchStudents({ ...filters, ...dSearch, page: page })} />
-                    {pageCount > 1 && (
-                        <div className="flex justify-center items-center gap-6 p-4">
-                            <button
-                                className="px-4 py-2 bg-gray-200 rounded-lg shadow-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                                disabled={page === 1 || loading}
-                                onClick={() => setPage((p) => p - 1)}
+                    <div className="flex gap-4 p-4 m-4 pb-2 mb-0 items-center justify-between rounded rounded-b-none bg-neutral-200">
+                            <span>Search</span>
+                            <FloatingInput
+                                type="text"
+                                name="Search by name or email"
+                                label="Search by name or email"
+                                value={search.search ?? ''}
+                                onChange={(e) => setSearch(s => ({ ...s, search: e.target.value || undefined }))}
+                                className="bg-white w-60"
+                            />
+                            <FloatingInput
+                                type="text"
+                                name="College"
+                                label="College"
+                                value={search.college ?? ''}
+                                onChange={(e) => setSearch(s => ({ ...s, college: e.target.value || undefined }))}
+                                className="bg-white"
+                            />
+                            <FloatingInput
+                                type="text"
+                                name="Subject"
+                                label="Subject"
+                                value={search.subject ?? ''}
+                                onChange={(e) => setSearch(s => ({ ...s, subject: e.target.value || undefined }))}
+                                className="bg-white"
+                            />
+                            <FloatingInput
+                                name="limit"
+                                label="Rows"
+                                as="select"
+                                value={filters.limit}
+                                disabled={loading}
+                                onChange={(e) => {
+                                    setFilters({ ...filters, limit: Number(e.target.value) });
+                                    fetchStudents({ ...filters, limit: Number(e.target.value) })
+                                }}
+                                className="bg-white"
                             >
-                                Previous
-                            </button>
-
-                            <span className="flex items-center gap-2 text-sm text-gray-700">
-                                <input
-                                    id="page"
-                                    name="page"
-                                    className="w-16 px-2 py-1 border border-gray-300 rounded-lg text-center focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                                    type="number"
-                                    min={1}
-                                    max={pageCount}
-                                    placeholder={page.toString()}
-                                    value={prevPage.current}
-                                    onChange={(e) => prevPage.current = e.target.value ? Number(e.target.value) : undefined}
-                                    onFocus={(e) => e.target.value = ""}
-                                    onBlur={(e) => {
-                                        let val = e.target.value ? Number(e.target.value) : page;
-                                        val = val > pageCount ? pageCount : val < 1 ? 1 : val;
-                                        if (val === page) prevPage.current = val; else setPage(val);
-                                    }}
-                                />
-                                <span className="text-gray-500">of {pageCount}</span>
-                            </span>
-
-                            <button
-                                className="px-4 py-2 bg-gray-200 rounded-lg shadow-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                                disabled={page === pageCount || loading}
-                                onClick={() => setPage((p) => p + 1)}
-                            >
-                                Next
-                            </button>
+                                <option value={10}>10</option>
+                                <option value={25}>25</option>
+                                <option value={50}>50</option>
+                            </FloatingInput>
                         </div>
-                    )}
+                        <div className="overflow-y-scroll max-h-80 scrollbar-none">
+                            <StudentsTable students={students} loading={loading} limit={filters.limit}
+                                onDelete={() => fetchStudents({ ...filters, ...dSearch, page: page })} />
+                        </div>
+                        {pageCount > 1 && (
+                            <div className="flex justify-center items-center gap-6 py-2">
+                                <button
+                                    className="px-4 py-2 bg-gray-200 rounded-lg shadow-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={page === 1 || loading}
+                                    onClick={() => setPage((p) => p - 1)}
+                                >
+                                    Previous
+                                </button>
+                                <span className="flex items-center gap-2 text-sm text-gray-700">
+                                    <input
+                                        id="page"
+                                        name="page"
+                                        className="w-16 px-2 py-1 border border-gray-300 rounded-lg text-center focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                                        type="number"
+                                        min={1}
+                                        max={pageCount}
+                                        placeholder={page.toString()}
+                                        value={prevPage.current}
+                                        onChange={(e) => prevPage.current = e.target.value ? Number(e.target.value) : undefined}
+                                        onFocus={(e) => e.target.value = ""}
+                                        onBlur={(e) => {
+                                            let val = e.target.value ? Number(e.target.value) : page;
+                                            val = val > pageCount ? pageCount : val < 1 ? 1 : val;
+                                            if (val === page) prevPage.current = val; else setPage(val);
+                                        }}
+                                    />
+                                    <span className="text-gray-500">of {pageCount}</span>
+                                </span>
+                                <button
+                                    className="px-4 py-2 bg-gray-200 rounded-lg shadow-sm hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={page === pageCount || loading}
+                                    onClick={() => setPage((p) => p + 1)}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
 
                 </div>
             </div >

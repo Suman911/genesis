@@ -5,6 +5,7 @@ import Button from "@/components/ui/util/button";
 import { FaPen, FaSave, FaPlus, FaUndo, FaEye, FaEyeSlash, FaTrashAlt } from "react-icons/fa";
 import { Course, Batch } from "@/lib/definitions";
 import UnassignedStudents from "@/components/student/unassignedStudents"
+import StudentsInBatch from "@/components/student/studentsInBatch";
 import ErrorAlert from "@/components/ui/util/errorAlert";
 
 type CourseVM = Course & { editing: boolean };
@@ -20,16 +21,25 @@ export default function BatchesPage() {
     const [savingIndex, setSavingIndex] = useState<number | null>(null);
     const [showUnassigned, setShowUnassigned] = useState(false);
     const [editing, setEditing] = useState(false);
+    const [openBatch, setOpenBatch] = useState<number | null>(null);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        const fetchCourses = async () => {
+    const fetchCourses = async () => {
+        try {
+            setLoading(true);
             const data: Course[] = await Axios.get("/courses/");
             const withUi = data.map((c) => ({ ...c, editing: false })) as CourseVM[];
             setCourses(withUi);
             setBackup(deepClone(withUi));
+        } catch (error) {
+            setError(`Failed to unassign: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            setCourses([]);
+        } finally {
             setLoading(false);
-        };
+        }
+    };
+
+    useEffect(() => {
         fetchCourses();
     }, []);
 
@@ -188,6 +198,7 @@ export default function BatchesPage() {
         <>
             <ErrorAlert message={error} onClose={() => setError("")} />
             <UnassignedStudents open={showUnassigned} onClose={() => setShowUnassigned(false)} setError={setError} />
+            <StudentsInBatch open={openBatch} onClose={() => setOpenBatch(null)} onDelete={fetchCourses} setError={setError} />
             <div className="flex flex-col gap-6 p-6">
                 <div className="flex justify-between">
                     <Button size="lg" color="primary" onClick={() => setShowUnassigned(true)} disabled={savingIndex !== null || editing}>
@@ -200,9 +211,8 @@ export default function BatchesPage() {
                 {courses.map((course, cIdx) => (
                     <div
                         key={course.id === 0 ? `new-${cIdx}` : course.id}
-                        className={`w-full border rounded-lg shadow p-4 transition-colors duration-300 ${
-                            course.active ? "bg-white" : "bg-gray-100"
-                        }`}
+                        className={`w-full border rounded-lg shadow p-4 transition-colors duration-300 ${course.active ? "bg-white" : "bg-gray-100"
+                            }`}
                     >
                         <div className="flex items-center gap-4">
                             {course.editing ? (
@@ -235,10 +245,7 @@ export default function BatchesPage() {
                                 </>
                             )}
 
-                            <Button color="warning" outlined size="i" disabled={savingIndex !== null} onClick={() => toggleEdit(cIdx)}>
-                                <FaPen />
-                            </Button>
-                            {course.editing && (
+                            {course.editing ?
                                 <>
                                     <Button
                                         color={course.active ? "info" : "gray"}
@@ -264,29 +271,25 @@ export default function BatchesPage() {
                                         {savingIndex === cIdx ? "Saving…" : <FaSave />}
                                     </Button>
                                 </>
-                            )}
+                                :
+                                <Button color="warning" outlined size="i" disabled={savingIndex !== null} onClick={() => toggleEdit(cIdx)}>
+                                    <FaPen />
+                                </Button>}
                         </div>
 
                         <div className="flex flex-wrap gap-4 mt-4">
                             {course.batches.map((batch, bIdx) => (
-                                <div
-                                    key={bIdx}
-                                    className={`px-6 py-4 rounded-xl shadow-sm ${batch.active ? "bg-green-100" : "bg-gray-200"}`}
-                                >
-                                    {course.editing ? (
+                                course.editing ? (
+                                    <div
+                                        key={bIdx}
+                                        className={`px-3.5 py-2 rounded-xl shadow-sm ${batch.active ? "bg-green-100" : "bg-gray-200"}`}
+                                    >
                                         <input
                                             value={batch.name}
                                             onChange={(e) => updateBatchField(cIdx, bIdx, "name", e.target.value)}
                                             className="border px-2 py-1 rounded w-full"
                                             disabled={savingIndex === cIdx}
                                         />
-                                    ) : (
-                                        <>
-                                            <h3>{batch.name}</h3>
-                                            <span className="text-sm text-gray-500">Students: {batch.student_count}</span>
-                                        </>
-                                    )}
-                                    {course.editing && (
                                         <div className="flex justify-end gap-1 mt-1">
                                             <Button
                                                 color={batch.active ? "info" : "gray"}
@@ -307,9 +310,22 @@ export default function BatchesPage() {
                                                 </Button>
                                             )}
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
+                                ) : (
+                                    <button
+                                        key={bIdx}
+                                        disabled={editing}
+                                        onClick={() => setOpenBatch(batch.id)}
+                                        className={`px-6 py-4 rounded-xl shadow-sm 
+                                            ${batch.active ? "bg-green-100" : "bg-gray-200"}
+                                            ${editing ? "opacity-75 cursor-not-allowed" : "cursor-pointer"}`}
+                                    >
+                                        <h3>{batch.name}</h3>
+                                        <span className="text-sm text-gray-500">Students: {batch.student_count}</span>
+                                    </button>
+                                )
                             ))}
+
                         </div>
                     </div>
                 ))}

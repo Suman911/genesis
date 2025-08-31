@@ -5,7 +5,12 @@ meta {
 }
 
 delete {
-  url: https://localhost/genesis/public/api/students/unassign/1/2
+  url: https://localhost/genesis/public/api/students/unassign/{{sid}}/{{bid}}
   body: none
   auth: inherit
+}
+
+vars:pre-request {
+  sid: 51
+  bid: 2
 }

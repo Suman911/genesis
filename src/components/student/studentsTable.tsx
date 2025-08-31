@@ -7,9 +7,10 @@ interface StudentsTableProps {
     loading: boolean;
     limit?: number;
     onDelete: () => void;
+    modButton?: (sid: number) => React.ReactNode;
 }
 
-const StudentsTable = ({ students, loading, limit = 10, onDelete }: StudentsTableProps) => {
+const StudentsTable = ({ students, loading, limit = 10, onDelete, modButton }: StudentsTableProps) => {
     const [id, setId] = useState<number | null>(null);
     return (
         <div className="bg-neutral-200 m-4 mt-0">
@@ -57,6 +58,7 @@ const StudentsTable = ({ students, loading, limit = 10, onDelete }: StudentsTabl
                             <th className="px-4 py-2 text-left">Subject</th>
                             <th className="px-4 py-2 text-left">Batches</th>
                             <th className="px-4 py-2 text-left">Status</th>
+                            {modButton && <th className="px-4 py-2 text-left"></th>}
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-300 text-gray-800">
@@ -73,6 +75,7 @@ const StudentsTable = ({ students, loading, limit = 10, onDelete }: StudentsTabl
                                         <span className="text-gray-500">Inactive</span>
                                     )}
                                 </td>
+                                <td className="px-4 py-2">{modButton && modButton(student.id)}</td>
                             </tr>
                         ))}
                     </tbody>

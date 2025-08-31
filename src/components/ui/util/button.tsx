@@ -72,9 +72,10 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     bordered?: boolean;
     round?: keyof typeof roundMap;
     size?: SizeVariant;
+    disabled?: boolean;
 }
 
-export default function Button({ children, className = "", color = "primary", outlined = false, bordered = false, round = "full", size = "md", ...props }: ButtonProps) {
+export default function Button({ children, className = "", color = "primary", outlined = false, bordered = false, round = "full", size = "md", disabled = false, ...props }: ButtonProps) {
 
     bordered = outlined || bordered;
 
@@ -85,18 +86,19 @@ export default function Button({ children, className = "", color = "primary", ou
         ? `border-3 ${selected.border}`
         : "border-0";
 
-    const baseClasses = "group relative overflow-hidden font-bold transition-all duration-300 ease-in-out select-none cursor-pointer";
+    const baseClasses = "group relative overflow-hidden font-bold transition-all duration-300 ease-in-out select-none";
     const bgClass = outlined && bordered
         ? `bg-transparent ${selected.hoverBg}`
         : `${selected.bg} group-hover:bg-transparent hover:bg-transparent`;
     const variantClasses = outlined
         ? `${selected.text} group-hover:text-white hover:text-white`
         : `text-white ${selected.hoverText}`;
+    const disabledClass = disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
 
     const roundClass = roundMap[round] || "rounded-full";
 
     return (
-        <button className={clsx(baseClasses, bgClass, borderClass, sizeClass, variantClasses, roundClass, className)} {...props} >
+        <button className={clsx(baseClasses, bgClass, borderClass, sizeClass, variantClasses, roundClass, disabledClass, className)} disabled={disabled} {...props} >
             <span className={clsx(
                 "absolute inset-0 w-0 transition-all duration-300 ease-in-out group-hover:w-full",
                 roundClass,

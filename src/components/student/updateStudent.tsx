@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import Portal from '@/components/ui/util/portal';
 import Axios from "@/utils/Axios";
 import Button from "@/components/ui/util/button";
 import { StudentInfo } from "@/lib/definitions";
@@ -69,8 +69,6 @@ export default function UpdateStudent({
         return () => document.removeEventListener("keydown", esc);
     }, [onClose]);
 
-    if (!open || !form) return null;
-
     const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
         setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -92,78 +90,77 @@ export default function UpdateStudent({
         }
     };
 
-    return createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow max-h-120 overflow-y-scroll">
-                <h2 className="mb-4 text-xl font-semibold">Update Student</h2>
-
-                <form onSubmit={submit} className="flex flex-col gap-3">
-                    <FloatingInput
-                        label="Name"
-                        name="name"
-                        value={form.name}
-                        onChange={handle}
-                        required
-                    />
-                    <FloatingInput
-                        label="Username"
-                        name="user_name"
-                        value={form.user_name}
-                        onChange={handle}
-                    />
-                    <FloatingInput
-                        label="Email"
-                        type="email"
-                        name="email"
-                        value={form.email}
-                        onChange={handle}
-                        required
-                    />
-                    <FloatingInput
-                        label="Phone"
-                        name="ph_number"
-                        value={form.ph_number}
-                        onChange={handle}
-                        required
-                    />
-                    <FloatingInput
-                        label="College"
-                        name="college"
-                        value={form.college}
-                        onChange={handle}
-                        required
-                    />
-                    <FloatingInput
-                        label="Subject"
-                        name="subject"
-                        value={form.subject}
-                        onChange={handle}
-                        required
-                    />
-                    {error && <p className="text-sm text-red-600">{error}</p>}
-
-                    <div className="flex justify-end gap-2">
-                        <Button
-                            round="xl"
-                            color="danger"
-                            type="button"
-                            onClick={onClose}
-                            disabled={saving}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            round="xl"
-                            color="success"
-                            type="submit"
-                            disabled={saving}
-                        >
-                            {saving ? "Updating…" : "Update"}
-                        </Button>
-                    </div>
-                </form>
+    return (
+        <Portal open={Boolean(open)}>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow max-h-120 overflow-y-scroll">
+                    <h2 className="mb-4 text-xl font-semibold">Update Student</h2>
+                    <form onSubmit={submit} className="flex flex-col gap-3">
+                        <FloatingInput
+                            label="Name"
+                            name="name"
+                            value={form.name}
+                            onChange={handle}
+                            required
+                        />
+                        <FloatingInput
+                            label="Username"
+                            name="user_name"
+                            value={form.user_name}
+                            onChange={handle}
+                        />
+                        <FloatingInput
+                            label="Email"
+                            type="email"
+                            name="email"
+                            value={form.email}
+                            onChange={handle}
+                            required
+                        />
+                        <FloatingInput
+                            label="Phone"
+                            name="ph_number"
+                            value={form.ph_number}
+                            onChange={handle}
+                            required
+                        />
+                        <FloatingInput
+                            label="College"
+                            name="college"
+                            value={form.college}
+                            onChange={handle}
+                            required
+                        />
+                        <FloatingInput
+                            label="Subject"
+                            name="subject"
+                            value={form.subject}
+                            onChange={handle}
+                            required
+                        />
+                        {error && <p className="text-sm text-red-600">{error}</p>}
+                        <div className="flex justify-end gap-2">
+                            <Button
+                                round="xl"
+                                color="danger"
+                                type="button"
+                                onClick={onClose}
+                                disabled={saving}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                round="xl"
+                                color="success"
+                                type="submit"
+                                disabled={saving}
+                            >
+                                {saving ? "Updating…" : "Update"}
+                            </Button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>,
-        document.body
+        </Portal>
     );
 }
