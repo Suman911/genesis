@@ -1,0 +1,27 @@
+meta {
+  name: updateStatus
+  type: http
+  seq: 8
+}
+
+put {
+  url: https://localhost/genesis/public/api/students/status
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+     "sid":50,
+     "bid":1,
+     "status":"completed"
+  }
+}
+
+vars:pre-request {
+  id: 47
+}
+
+settings {
+  encodeUrl: true
+}

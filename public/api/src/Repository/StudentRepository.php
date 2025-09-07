@@ -227,4 +227,18 @@ final class StudentRepository extends Repository
             ->prepare("DELETE FROM students WHERE id = :id")
             ->execute([':id' => $id]);
     }
+
+    public function statusUpdate(array $data): bool
+    {
+        $sql = "UPDATE student_batches 
+            SET status = :status 
+            WHERE student_id = :sid AND batch_id = :bid";
+
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([
+            ':status' => $data['status'],
+            ':sid' => $data['sid'],
+            ':bid' => $data['bid']
+        ]);
+    }
 }

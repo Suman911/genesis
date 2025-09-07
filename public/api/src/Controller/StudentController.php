@@ -13,6 +13,15 @@ final class StudentController extends Controller
         $this->repository = new StudentRepository();
     }
 
+    private function validateBatchData(Response $response, array $data)
+    {
+        foreach (['sid', 'bid', 'status'] as $field) {
+            if (empty($data[$field])) {
+                $response->error(400, "$field is required.");
+            }
+        }
+    }
+
     private function validateStudentUpdateData(Response $response, array $data)
     {
         foreach (['college', 'email', 'name', 'ph_number', 'subject', 'user_name'] as $field) {
@@ -133,5 +142,21 @@ final class StudentController extends Controller
         }
 
         $response->setStatusCode(204)->send(['message' => 'Student deleted successfully']);
+    }
+
+    public function updateStatus(Request $request, Response $response)
+    {
+        $this->Authorized($request, $response);
+        $data = $request->getBody();
+        $this->validateBatchData($response, $data);
+
+        $ok = $this->repository->statusUpdate($data);
+
+        if (!$ok) {
+            $response->error(400, 'Failed to Change');
+            return;
+        }
+
+        $response->send(['message' => 'Status updated successfully']);
     }
 }
