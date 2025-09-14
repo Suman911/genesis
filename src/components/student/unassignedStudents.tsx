@@ -40,9 +40,12 @@ const UnassignedStudents = ({ open, onClose, setError }: Props) => {
             try {
                 const res: Student[] = await Axios.get("/students/unassign");
                 setStudents(res);
-            } catch (err: any) {
+            } catch (err: unknown) {
+                const message = err instanceof Error
+                    ? err.message
+                    : 'Failed to load unassigned students.';
                 setStudents([]);
-                setError("Failed to load unassigned students.");
+                setError(message);
             } finally {
                 setLoading(false);
             }

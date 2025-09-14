@@ -3,7 +3,7 @@ import Portal from '@/components/ui/util/portal';
 import Axios from "@/utils/Axios";
 import Button from "@/components/ui/util/button";
 import { StudentInfo } from "@/lib/definitions";
-import FloatingInput from "@/components/ui/form/floatingInput";
+import FloatingInput from "@/components/ui/form/input/floatingInput";
 
 type UpdateStudentProps = {
     student: StudentInfo | null;

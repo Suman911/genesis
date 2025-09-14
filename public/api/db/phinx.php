@@ -4,7 +4,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Dotenv\Dotenv;
 
 // Load the .env.local file
-$localDotenv = Dotenv::createImmutable(__DIR__, '/../.env.local');
+$localDotenv = Dotenv::createImmutable(__DIR__, '/../../../.env.local');
 $localDotenv->load();
 
 $host = $_ENV['DB_HOST'];

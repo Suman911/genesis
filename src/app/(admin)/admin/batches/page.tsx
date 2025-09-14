@@ -168,6 +168,14 @@ export default function BatchesPage() {
 
     const deleteBatch = async (cIdx: number, bIdx: number) => {
         const batch = courses[cIdx].batches[bIdx];
+        if (batch.id === 0) {
+            setCourses((prev) => {
+                const copy = deepClone(prev);
+                copy[cIdx].batches.splice(bIdx, 1);
+                return copy;
+            });
+            return;
+        }
         if (batch.student_count > 0) {
             alert("Cannot delete batch with enrolled students.");
             return;
@@ -274,7 +282,8 @@ export default function BatchesPage() {
                                 :
                                 <Button color="warning" outlined size="i" disabled={savingIndex !== null} onClick={() => toggleEdit(cIdx)}>
                                     <FaPen />
-                                </Button>}
+                                </Button>
+                            }
                         </div>
 
                         <div className="flex flex-wrap gap-4 mt-4">
@@ -299,7 +308,7 @@ export default function BatchesPage() {
                                             >
                                                 {batch.active ? <FaEye /> : <FaEyeSlash />}
                                             </Button>
-                                            {batch.student_count === 0 && batch.id !== 0 && (
+                                            {batch.student_count === 0 && (
                                                 <Button
                                                     color="danger"
                                                     size="i"

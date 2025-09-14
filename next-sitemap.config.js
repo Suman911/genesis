@@ -24,7 +24,7 @@ const config = {
         console.log('Path:', path);
         const custom = {
             '/': { priority: 1.0 },
-            '/auth/login': { priority: 0.3 },
+            '/auth/login': { priority: 0.0 },
             '/story': { priority: 0.9 },
             '/gallery': { priority: 0.8 },
         };

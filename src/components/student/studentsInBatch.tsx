@@ -3,7 +3,8 @@ import Portal from '@/components/ui/util/portal';
 import useDebounce from "@/hooks/useDebounce";
 import Button from "@/components/ui/util/button";
 import StudentsTable from "@/components/student/studentsTable";
-import FloatingInput from "@/components/ui/form/floatingInput";
+import FloatingInput from "@/components/ui/form/input/floatingInput";
+import FloatingSelect from "@/components/ui/form/input/floatingSelect";
 import Axios from "@/utils/Axios";
 import qs from "qs";
 import { Student, Search, Filter, Query } from "@/lib/definitions";
@@ -16,7 +17,7 @@ type studentResponse = {
 };
 
 type Props = {
-    open: null | Number;
+    open: null | number;
     onClose: () => void;
     onDelete: () => void;
     setError: (m: string) => void;
@@ -99,7 +100,6 @@ export default function StudentsInBatch({ open, onClose, onDelete, setError }: P
         );
     };
 
-
     return (
         <Portal open={Boolean(open)}>
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
@@ -117,7 +117,10 @@ export default function StudentsInBatch({ open, onClose, onDelete, setError }: P
                         <Button
                             color="danger"
                             size="i"
-                            onClick={() => { onClose(); deleted && onDelete(); }}
+                            onClick={() => {
+                                onClose();
+                                if (deleted) onDelete();
+                            }}
                             disabled={loading}
                         >
                             <FaTimes size={20} />
@@ -150,10 +153,9 @@ export default function StudentsInBatch({ open, onClose, onDelete, setError }: P
                                 onChange={(e) => setSearch(s => ({ ...s, subject: e.target.value || undefined }))}
                                 className="bg-white"
                             />
-                            <FloatingInput
+                            <FloatingSelect
                                 name="limit"
                                 label="Rows"
-                                as="select"
                                 value={filters.limit}
                                 disabled={loading}
                                 onChange={(e) => {
@@ -165,7 +167,7 @@ export default function StudentsInBatch({ open, onClose, onDelete, setError }: P
                                 <option value={10}>10</option>
                                 <option value={25}>25</option>
                                 <option value={50}>50</option>
-                            </FloatingInput>
+                            </FloatingSelect>
                         </div>
                         <div className="overflow-y-scroll max-h-80 scrollbar-none">
                             <StudentsTable students={students} loading={loading} limit={filters.limit}

@@ -1,17 +1,18 @@
 import { useState } from "react";
 import Axios from "@/utils/Axios";
 import Button from "@/components/ui/util/button";
-import FloatingInput from "@/components/ui/form/floatingInput";
+import FloatingSelect from "@/components/ui/form/input/floatingSelect";
+import { Course } from "@/lib/definitions";
 
 type AssignBatchProps = {
-    open: number | null; // studentId
+    open: number | null;
     onClose: () => void;
     onSave: () => void;
-    courses: any[];
+    courses: Course[];
     setError: (m: string) => void;
 };
 
-export default function AssignBatch({ open: studentId, onClose, onSave, courses, setError }: AssignBatchProps) {
+const AssignBatch = ({ open: studentId, onClose, onSave, courses, setError }: AssignBatchProps) => {
     const [selected, setSelected] = useState<Record<number, number>>({});
     const [loading, setLoading] = useState(false);
 
@@ -52,20 +53,19 @@ export default function AssignBatch({ open: studentId, onClose, onSave, courses,
                     {courses.map(course => (
                         <div key={course.id} className="space-y-2">
                             <h4 className="font-semibold text-gray-700">{course.name}</h4>
-                            <FloatingInput
-                                as="select"
+                            <FloatingSelect
                                 label="Batch"
                                 name={`batch-${course.id}`}
                                 value={selected[course.id] || ""}
                                 onChange={(e) => handleSelect(course.id, e.target.value)}
                             >
                                 <option value="">Select a batch</option>
-                                {course.batches.map((batch: any) => (
+                                {course.batches.map((batch) => (
                                     <option key={batch.id} value={batch.id}>
                                         {batch.name}
                                     </option>
                                 ))}
-                            </FloatingInput>
+                            </FloatingSelect>
                         </div>
                     ))}
                 </div>
@@ -92,3 +92,4 @@ export default function AssignBatch({ open: studentId, onClose, onSave, courses,
         </div>
     );
 }
+export default AssignBatch;

@@ -3,7 +3,8 @@ import Portal from '@/components/ui/util/portal';
 import Axios from '@/utils/Axios';
 import Button from '@/components/ui/util/button';
 import { Course, Batch } from '@/lib/definitions';
-import FloatingInput from '@/components/ui/form/floatingInput';
+import FloatingInput from '@/components/ui/form/input/floatingInput';
+import FloatingSelect from '@/components/ui/form/input/floatingSelect';
 
 type AddStudentProps = { courses: Course[], open: boolean, onClose: () => void, onSave: () => void };
 
@@ -146,8 +147,7 @@ export default function AddStudent({ courses, open, onClose, onSave }: AddStuden
                             onChange={handle}
                             required
                         />
-                        <FloatingInput
-                            as="select"
+                        <FloatingSelect
                             label="Course"
                             name="course_id"
                             value={form.course_id}
@@ -158,9 +158,8 @@ export default function AddStudent({ courses, open, onClose, onSave }: AddStuden
                                     {c.name}
                                 </option>
                             ))}
-                        </FloatingInput>
-                        <FloatingInput
-                            as="select"
+                        </FloatingSelect>
+                        <FloatingSelect
                             label="Batch"
                             name="batch_id"
                             value={form.batch_id}
@@ -171,7 +170,7 @@ export default function AddStudent({ courses, open, onClose, onSave }: AddStuden
                                     {b.name}
                                 </option>
                             ))}
-                        </FloatingInput>
+                        </FloatingSelect>
                         {error && <p className="text-sm text-red-600">{error}</p>}
                         <div className="flex justify-end gap-2">
                             <Button round="xl" color="danger" type="button" onClick={onClose} disabled={saving}>

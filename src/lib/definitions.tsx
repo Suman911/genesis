@@ -15,12 +15,12 @@ export type NoticeType = {
     id: number;
     title: string;
     description: string;
-    document_url: string;
+    document_url?: string;
     target_timestamp: string;
     expiry_date: string;
     type: string;
     is_urgent: boolean;
-    tag: string;
+    tag?: string;
 };
 
 export type TestimonialType = {

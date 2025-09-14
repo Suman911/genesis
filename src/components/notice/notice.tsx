@@ -33,13 +33,6 @@ export default function Notice({ notice, className = "", ...props }: NoticeProps
                 </h2>
                 <p className="text-gray-600 mb-2">{notice.description}</p>
 
-                {/* Metadata */}
-                {/* <div className="text-sm text-gray-500 mt-2">
-                    <p>Posted on: {new Date(notice.posted_date).toLocaleDateString()}</p>
-                    <p>Event Date: {new Date(notice.target_timestamp).toLocaleString()}</p>
-                    <p>Expires on: {new Date(notice.expiry_date).toLocaleDateString()}</p>
-                </div> */}
-
                 <div className="">
                     {/* Notice Link */}
                     {notice.document_url && <span className="mb-3 mr-3">

@@ -8,7 +8,7 @@ const test = args.includes("-t");
 
 // Paths
 const source = path.join(__dirname, '../out');
-const destination = path.join(__dirname, '../../genesis_production');
+const destination = path.join(__dirname, test ? '../../genesis_production' : '../../htdocs');
 const indexPhpPath = path.join(source, 'api', 'index.php');
 
 // Items to delete before copying
