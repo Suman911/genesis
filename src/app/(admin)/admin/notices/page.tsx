@@ -8,8 +8,10 @@ import FloatingTextarea from "@/components/ui/form/input/floatingTextarea";
 import { FaTrashAlt, FaPen, FaPlus, FaSave, FaTimes } from "react-icons/fa";
 import { NoticeType } from "@/lib/definitions";
 import clsx from "clsx";
+import { getDateTime } from "@/components/ui/util/date";
 
 const emptyNotice: Partial<NoticeType> = {
+    id: 0,
     title: "",
     description: "",
     document_url: "",
@@ -38,12 +40,17 @@ export default function NoticesPage() {
     const [editingId, setEditingId] = useState<number | null>(null);
     const [editForm, setEditForm] = useState<Partial<NoticeType>>(emptyNotice);
     const [creating, setCreating] = useState(false);
-    const [createForm, setCreateForm] = useState<Partial<NoticeType>>(emptyNotice);
+    const [createForm, setCreateForm] = useState<Partial<NoticeType>>({
+        ...emptyNotice,
+        target_timestamp: getDateTime(),
+        expiry_date: getDateTime({ months: 1 }),
+    });
+
 
     const fetchNotices = async () => {
         setLoading(true);
         try {
-            const data: NoticeType[] = await Axios.get("/notices");
+            const data: NoticeType[] = await Axios.get("/notices?all=true");
             setNotices(data);
         } catch (err: unknown) {
             const message = err instanceof Error
@@ -59,14 +66,24 @@ export default function NoticesPage() {
         fetchNotices();
     }, []);
 
+
+    useEffect(() => {
+        console.log("Create Form Updated:");
+        console.log(getDateTime({ days: 1 }));
+        console.log(createForm.target_timestamp);
+    }, [createForm]);
+
     // Delete
     const handleDelete = async (id: number) => {
         if (!confirm("Are you sure you want to delete this notice?")) return;
         try {
             await Axios.delete(`/notices/${id}`);
             setNotices(notices => notices.filter(n => n.id !== id));
-        } catch {
-            setError("Failed to delete notice.");
+        } catch (err: unknown) {
+            const message = err instanceof Error
+                ? err.message
+                : "Failed to delete notice.";
+            setError(message);
         }
     };
 
@@ -81,46 +98,42 @@ export default function NoticesPage() {
         setEditForm(emptyNotice);
     };
 
-    const handleEditChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        const { name, value, type } = e.target;
-        setEditForm(f => ({
-            ...f,
-            [name]: type === "checkbox" && e.target instanceof HTMLInputElement ? e.target.checked : value,
-        }));
+    const handleCreatChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setCreateForm(f => ({ ...f, [name]: value }));
+    };
+
+    const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setEditForm(f => ({ ...f, [name]: value }));
     };
 
     const saveEdit = async () => {
         if (!editingId) return;
         try {
-            const { data: updated } = await Axios.put(`/notices/${editingId}`, editForm);
+            const updated: NoticeType = await Axios.put(`/notices/${editingId}`, editForm);
             setNotices(n => n.map(notice => notice.id === editingId ? updated : notice));
+            console.log(updated);
             cancelEdit();
-        } catch {
-            setError("Failed to update notice.");
+        } catch (err: unknown) {
+            const message = err instanceof Error
+                ? err.message
+                : "Failed to update notice.";
+            setError(message);
         }
-    };
-
-    // Create
-    const handleCreateChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        const { name, value, type } = e.target;
-        setCreateForm(f => ({
-            ...f,
-            [name]: type === "checkbox" && e.target instanceof HTMLInputElement ? e.target.checked : value,
-        }));
     };
 
     const saveCreate = async () => {
         try {
-            const { data: created } = await Axios.post("/notices", createForm);
+            const created: NoticeType = await Axios.post("/notices", createForm);
             setNotices(n => [created, ...n]);
             setCreating(false);
             setCreateForm(emptyNotice);
-        } catch {
-            setError("Failed to create notice.");
+        } catch (err: unknown) {
+            const message = err instanceof Error
+                ? err.message
+                : "Failed to create notice.";
+            setError(message);
         }
     };
 
@@ -139,17 +152,19 @@ export default function NoticesPage() {
                 <div className="bg-white rounded-lg shadow p-4 mb-4">
                     <h2 className="text-lg font-semibold mb-2">Create Notice</h2>
                     <div className="grid grid-cols-2 gap-4">
-                        <FloatingInput label="Title" name="title" value={createForm.title ?? ""} onChange={handleCreateChange} required />
-                        <FloatingInput label="Type" name="type" value={createForm.type ?? ""} onChange={handleCreateChange} required />
-                        <FloatingInput label="Tag" name="tag" value={createForm.tag ?? ""} onChange={handleCreateChange} />
-                        <FloatingInput label="Document URL" name="document_url" value={createForm.document_url ?? ""} onChange={handleCreateChange} />
-                        <FloatingInput label="Target Date" name="target_timestamp" type="datetime-local" value={createForm.target_timestamp ?? ""} onChange={handleCreateChange} required />
-                        <FloatingInput label="Expiry Date" name="expiry_date" type="datetime-local" value={createForm.expiry_date ?? ""} onChange={handleCreateChange} required />
+                        <FloatingInput label="Title" name="title" value={createForm.title ?? ""} onChange={handleCreatChange} required />
+                        <FloatingInput label="Type" name="type" value={createForm.type ?? ""} onChange={handleCreatChange} required />
+                        <FloatingInput label="Tag" name="tag" value={createForm.tag ?? ""} onChange={handleCreatChange} />
+                        <FloatingInput disabled label="Document" name="document_url" value={createForm.document_url ?? ""} onChange={handleCreatChange} />
+                        <FloatingInput label="Target Date" name="target_timestamp" type="datetime-local" value={createForm.target_timestamp ?? ''} onChange={handleCreatChange} required />
+                        <FloatingInput label="Expiry Date" name="expiry_date" type="datetime-local" value={createForm.expiry_date ?? ''} onChange={handleCreatChange} required />
                         <div className="col-span-2">
-                            <FloatingTextarea label="Description" name="description" value={createForm.description ?? ""} onChange={handleCreateChange} required />
+                            <FloatingTextarea label="Description" name="description" value={createForm.description ?? ""} onChange={handleCreatChange} required />
                         </div>
                         <div className="flex items-center gap-2">
-                            <input type="checkbox" name="is_urgent" checked={!!createForm.is_urgent} onChange={handleCreateChange} id="is_urgent_create" />
+                            <input type="checkbox" name="is_urgent" checked={createForm.is_urgent} onChange={
+                                e => setCreateForm(f => ({ ...f, is_urgent: e.target.checked }))
+                            } id="is_urgent_create" />
                             <label htmlFor="is_urgent_create">Urgent</label>
                         </div>
                     </div>
@@ -182,48 +197,125 @@ export default function NoticesPage() {
                                 <SkeletonRow />
                                 <SkeletonRow />
                                 <SkeletonRow />
+                                <SkeletonRow />
+                                <SkeletonRow />
                             </>
                         ) : notices.length > 0 ? (
-                            notices.map(notice =>
-                                editingId === notice.id ? (
-                                    <tr key={notice.id} className="bg-yellow-50">
-                                        {/* ...edit cells as you already have... */}
-                                    </tr>
-                                ) : (
-                                    <tr
-                                        key={notice.id}
-                                        className={clsx("border-b", notice.is_urgent && "bg-red-50")}
-                                    >
-                                        <td className="p-2 font-semibold">{notice.title}</td>
-                                        <td className="p-2">{notice.type}</td>
-                                        <td className="p-2">{notice.tag}</td>
-                                        <td className="p-2 text-center">
-                                            {notice.is_urgent ? "Yes" : "No"}
-                                        </td>
-                                        <td className="p-2">
-                                            {new Date(notice.target_timestamp).toLocaleString()}
-                                        </td>
-                                        <td className="p-2">
-                                            {new Date(notice.expiry_date).toLocaleString()}
-                                        </td>
-                                        <td className="p-2 flex gap-2">
-                                            <Button
-                                                color="warning"
-                                                size="i"
-                                                onClick={() => startEdit(notice)}
-                                            >
-                                                <FaPen />
-                                            </Button>
-                                            <Button
-                                                color="danger"
-                                                size="i"
-                                                onClick={() => handleDelete(notice.id)}
-                                            >
-                                                <FaTrashAlt />
-                                            </Button>
-                                        </td>
-                                    </tr>
-                                )
+                            notices.map(notice => editingId === notice.id ? (
+                                <tr key={notice.id} className="bg-yellow-50">
+                                    <td colSpan={7} className="p-4">
+                                        <form
+                                            className="grid grid-cols-2 gap-6"
+                                            onSubmit={e => {
+                                                e.preventDefault();
+                                                saveEdit();
+                                            }}
+                                        >
+                                            <div className="flex flex-col gap-2">
+                                                <FloatingInput
+                                                    label="Title"
+                                                    name="title"
+                                                    value={editForm.title ?? ""}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <FloatingInput
+                                                    label="Type"
+                                                    name="type"
+                                                    value={editForm.type ?? ""}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <FloatingInput
+                                                    label="Tag"
+                                                    name="tag"
+                                                    value={editForm.tag ?? ""}
+                                                    onChange={handleEditChange}
+                                                />
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <input
+                                                    type="checkbox"
+                                                    name="is_urgent"
+                                                    checked={editForm.is_urgent}
+                                                    onChange={
+                                                        e => setEditForm(f => ({ ...f, is_urgent: e.target.checked }))
+                                                    }
+                                                    id="is_urgent_edit"
+                                                    className="w-5 h-5"
+                                                />
+                                                <label htmlFor="is_urgent_edit" className="text-sm">Urgent</label>
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <FloatingInput
+                                                    label="Target Date"
+                                                    name="target_timestamp"
+                                                    type="datetime-local"
+                                                    value={editForm.target_timestamp ?? ""}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="flex flex-col gap-2">
+                                                <FloatingInput
+                                                    label="Expiry Date"
+                                                    name="expiry_date"
+                                                    type="datetime-local"
+                                                    value={editForm.expiry_date ?? ""}
+                                                    onChange={handleEditChange}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className="col-span-2 flex gap-3 mt-2">
+                                                <Button color="success" size="sm" type="submit">
+                                                    <FaSave /> Save
+                                                </Button>
+                                                <Button color="danger" size="sm" type="button" onClick={cancelEdit}>
+                                                    <FaTimes /> Cancel
+                                                </Button>
+                                            </div>
+                                        </form>
+                                    </td>
+                                </tr>
+                            ) : (
+                                <tr
+                                    key={notice.id}
+                                    className={clsx("border-b", notice.is_urgent && "bg-red-50")}
+                                >
+                                    <td className="p-2 font-semibold">{notice.title}</td>
+                                    <td className="p-2">{notice.type}</td>
+                                    <td className="p-2">{notice.tag}</td>
+                                    <td className="p-2 text-center">
+                                        {notice.is_urgent ? "Yes" : "No"}
+                                    </td>
+                                    <td className="p-2">
+                                        {new Date(notice.target_timestamp).toLocaleString()}
+                                    </td>
+                                    <td className="p-2">
+                                        {new Date(notice.expiry_date).toLocaleString()}
+                                    </td>
+                                    <td className="p-2 flex gap-2">
+                                        <Button
+                                            color="warning"
+                                            size="i"
+                                            onClick={() => startEdit(notice)}
+                                        >
+                                            <FaPen />
+                                        </Button>
+                                        <Button
+                                            color="danger"
+                                            size="i"
+                                            onClick={() => handleDelete(notice.id)}
+                                        >
+                                            <FaTrashAlt />
+                                        </Button>
+                                    </td>
+                                </tr>
+                            )
                             )
                         ) : (
                             <tr>
@@ -233,7 +325,6 @@ export default function NoticesPage() {
                             </tr>
                         )}
                     </tbody>
-
                 </table>
             </div>
         </div >

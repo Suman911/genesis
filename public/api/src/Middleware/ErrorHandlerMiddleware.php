@@ -6,6 +6,7 @@ use Api\Http\Response;
 use PDOException;
 use Exception;
 use Error;
+use Throwable;
 
 // Add this function to log errors
 function log_error($error, $logFile = __DIR__ . '/../../logs/error.log')
@@ -35,12 +36,15 @@ class ErrorHandlerMiddleware
         } catch (PDOException $e) {
             log_error($e); // Log error
             $response->error(500, $isDev ? $e->getMessage() : 'A database error occurred.');
-        } catch (Exception $e) {
-            log_error($e); // Log error
-            $response->error(500, $isDev ? $e->getMessage() : 'Something went wrong.');
         } catch (Error $e) {
             log_error($e); // Log error
             $response->error(500, $isDev ? $e->getMessage() : 'A fatal error occurred.');
+        } catch (Exception $e) {
+            log_error($e); // Log error
+            $response->error(500, $isDev ? $e->getMessage() : 'Something went wrong.');
+        } catch (Throwable $e) {
+            log_error($e); // Log error
+            $response->error(500, $isDev ? $e->getMessage() : 'An unknown error occurred.');
         }
     }
 }

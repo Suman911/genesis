@@ -18,7 +18,7 @@ export type NoticeType = {
     document_url?: string;
     target_timestamp: string;
     expiry_date: string;
-    type: string;
+    type?: string;
     is_urgent: boolean;
     tag?: string;
 };

@@ -190,13 +190,13 @@ export default function StudentsInBatch({ open, onClose, onDelete, setError }: P
                                         type="number"
                                         min={1}
                                         max={pageCount}
-                                        placeholder={page.toString()}
-                                        value={prevPage.current}
-                                        onChange={(e) => prevPage.current = e.target.value ? Number(e.target.value) : undefined}
+                                        placeholder={prevPage.current?.toString() || '1'}
+                                        defaultValue={prevPage.current}
                                         onFocus={(e) => e.target.value = ""}
                                         onBlur={(e) => {
                                             let val = e.target.value ? Number(e.target.value) : page;
                                             val = val > pageCount ? pageCount : val < 1 ? 1 : val;
+                                            e.target.value = val.toString();
                                             if (val === page) prevPage.current = val; else setPage(val);
                                         }}
                                     />

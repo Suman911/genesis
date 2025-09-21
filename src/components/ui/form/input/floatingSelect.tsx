@@ -36,10 +36,8 @@ const FloatingSelect = ({
             </select>
             <label
                 htmlFor={name}
-                className={`absolute left-2 transition-all duration-200 bg-white px-1 rounded-4xl select-none
-                ${focused || value
-                        ? "-top-2.5 text-xs text-blue-600"
-                        : "top-1 text-gray-400"}`}
+                className="absolute left-2 transition-all duration-200 bg-white px-1 rounded-4xl select-none 
+                    -top-2.5 text-xs text-blue-600"
             >
                 {label}
             </label>

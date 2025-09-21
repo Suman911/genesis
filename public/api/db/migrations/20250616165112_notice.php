@@ -40,7 +40,7 @@ final class Notice extends AbstractMigration
             ])
             ->addColumn('type', 'string', [
                 'limit' => 50,
-                'null' => true,
+                'null' => false,
             ])
             ->addColumn('is_urgent', 'boolean', [
                 'default' => false,

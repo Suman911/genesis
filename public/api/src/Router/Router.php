@@ -3,6 +3,7 @@ namespace Api\Router;
 
 use Api\Http\Request;
 use Api\Http\Response;
+use Error;
 use Exception;
 
 class Router
@@ -39,12 +40,11 @@ class Router
     /**
      * Handle any errors during route dispatching.
      */
-    private function handleError(Exception $e)
+    private function handleError(Error $e)
     {
         if ($this->errorHandler) {
             return call_user_func($this->errorHandler, $e, $this->request, $this->response);
         }
-
         $this->response->error(500, 'Error: ' . $e->getMessage());
     }
 
@@ -117,7 +117,7 @@ class Router
             }
 
             $this->response->error(404, 'Error: 404 Not Found: No route matches');
-        } catch (Exception $e) {
+        } catch (Error $e) {
             $this->handleError($e);
         }
     }
@@ -231,7 +231,7 @@ class Router
             }
 
             throw new Exception('Invalid route handler');
-        } catch (Exception $e) {
+        } catch (Error $e) {
             return $this->handleError($e);
         }
     }
@@ -252,7 +252,7 @@ class Router
         if (file_exists($this->cacheFile)) {
             $this->routeTrie = require $this->cacheFile;
         } else {
-            throw new Exception("Route cache file not found in production environment");
+            throw new Error("Route cache file not found in production environment");
         }
     }
 }

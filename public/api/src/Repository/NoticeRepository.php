@@ -8,7 +8,14 @@ final class NoticeRepository extends Repository
 {
     public function getAllNotices()
     {
-        $stmt = $this->pdo->query("SELECT * FROM notices ORDER BY created_at DESC");
+        $stmt = $this->pdo->query("SELECT * FROM notices ORDER BY id DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getNotices()
+    {
+        $currentDate = date('Y-m-d H:i:s');
+        $stmt = $this->pdo->prepare("SELECT * FROM notices WHERE expiry_date >= :currentDate ORDER BY id DESC");
+        $stmt->execute(['currentDate' => $currentDate]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -32,7 +39,7 @@ final class NoticeRepository extends Repository
             ':target_timestamp' => $data['target_timestamp'],
             ':expiry_date' => $data['expiry_date'],
             ':type' => $data['type'],
-            ':is_urgent' => $data['is_urgent'] ?? false,
+            ':is_urgent' => $data['is_urgent'] ? 1 : 0,
             ':tag' => $data['tag'] ?? null,
         ]);
         $id = $this->pdo->lastInsertId();
@@ -43,6 +50,9 @@ final class NoticeRepository extends Repository
     {
         $fields = [];
         $params = [':id' => $id];
+        if(isset($data['is_urgent'])) {
+            $data['is_urgent'] = $data['is_urgent'] ? 1 : 0;
+        }
         foreach ($data as $key => $value) {
             $fields[] = "$key = :$key";
             $params[":$key"] = $value;

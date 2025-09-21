@@ -14,8 +14,8 @@ final class NoticeController extends Controller
     }
     private function validateNoticeData(Response $response, array $data)
     {
-        foreach (['title', 'description', 'target_timestamp', 'expiry_date', 'type'] as $field) {
-            if (empty($data[$field])) {
+        foreach (['title', 'description', 'target_timestamp', 'expiry_date', 'type', 'is_urgent'] as $field) {
+            if (!isset($data[$field])) {
                 $response->error(400, "$field is required.");
             }
         }
@@ -23,9 +23,9 @@ final class NoticeController extends Controller
 
     public function index(Request $request, Response $response)
     {
-        // $this->Authorized($request, $response);
+        $all = $request->getQueryParams()['all'] ?? false;
+        $notices = $all ? $this->repository->getAllNotices() : $this->repository->getNotices();
 
-        $notices = $this->repository->getAllNotices();
         $response->send(data: $notices);
     }
 

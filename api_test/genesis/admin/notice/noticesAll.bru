@@ -1,0 +1,15 @@
+meta {
+  name: noticesAll
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://localhost/genesis/public/api/notices?all=true
+  body: none
+  auth: inherit
+}
+
+params:query {
+  all: true
+}

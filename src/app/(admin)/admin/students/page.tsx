@@ -226,7 +226,7 @@ export default function StudentPage() {
                                     </span>
                                 }
                                 {sortOpen &&
-                                    <div className="absolute top-full left-0 mt-2 p-4 rounded-xl bg-primary-fade">
+                                    <div className="absolute top-full left-0 mt-2 p-4 rounded-xl bg-primary-fade z-5">
                                         <IoCloseCircleOutline className="absolute -top-2 -right-2 text-danger bg-white rounded-full" size={24}
                                             onClick={() => setSortOpen(false)} />
                                         {orderBy.map((order, index) => (
@@ -377,13 +377,13 @@ export default function StudentPage() {
                                     type="number"
                                     min={1}
                                     max={pageCount}
-                                    placeholder={page.toString()}
-                                    value={prevPage.current}
-                                    onChange={(e) => prevPage.current = e.target.value ? Number(e.target.value) : undefined}
+                                    placeholder={prevPage.current?.toString() || '1'}
+                                    defaultValue={prevPage.current}
                                     onFocus={(e) => e.target.value = ""}
                                     onBlur={(e) => {
                                         let val = e.target.value ? Number(e.target.value) : page;
                                         val = val > pageCount ? pageCount : val < 1 ? 1 : val;
+                                        e.target.value = val.toString();
                                         if (val === page) prevPage.current = val; else setPage(val);
                                     }}
                                 />
