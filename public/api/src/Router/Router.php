@@ -40,7 +40,7 @@ class Router
     /**
      * Handle any errors during route dispatching.
      */
-    private function handleError(Error $e)
+    private function handleError(Exception $e)
     {
         if ($this->errorHandler) {
             return call_user_func($this->errorHandler, $e, $this->request, $this->response);
@@ -117,7 +117,7 @@ class Router
             }
 
             $this->response->error(404, 'Error: 404 Not Found: No route matches');
-        } catch (Error $e) {
+        } catch (Exception $e) {
             $this->handleError($e);
         }
     }
@@ -231,7 +231,7 @@ class Router
             }
 
             throw new Exception('Invalid route handler');
-        } catch (Error $e) {
+        } catch (Exception $e) {
             return $this->handleError($e);
         }
     }

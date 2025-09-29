@@ -4,22 +4,26 @@ meta {
   seq: 4
 }
 
-put {
-  url: https://localhost/genesis/public/api/notices/3
-  body: json
+post {
+  url: https://localhost/genesis/public/api/notices/44
+  body: multipartForm
   auth: inherit
 }
 
 body:json {
-  {
-    "description": "efwweeefdds",
-    "document_url": "",
-    "expiry_date": "2025-09-27T18:46",
-    "is_urgent": true,
-    "tag": "ewfwefew",
-    "target_timestamp": "2025-09-20T18:46",
-    "title": "bvcgweewrvbhdf",
-    "type": "wefewfew"
-  }
   
+  
+}
+
+body:multipart-form {
+  title: bvcgweewrvbhdf
+  description: efwweeefdds
+  document_url: 
+  target_timestamp: 2025-09-20 18:46:00
+  expiry_date: 2025-09-27 18:46:00
+  type: 
+  is_urgent: false
+  tag: ewfwefew
+  document: @file(C:\Users\smond\Downloads\5_6141036010387020182.docx)
+  remove: false
 }

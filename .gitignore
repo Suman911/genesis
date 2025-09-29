@@ -51,3 +51,4 @@ laragon.lnk
 *.sql
 
 public/api/logs/*.log
+public/uploads/

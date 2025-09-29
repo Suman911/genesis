@@ -10,6 +10,7 @@ class Request
     private string $method;
     private string $uri;
     private array $params;
+    private array $files;
     private ?array $jwtPayload; // Added property for JWT payload
 
     public function __construct()
@@ -20,6 +21,7 @@ class Request
         $this->method = $_SERVER['REQUEST_METHOD'];
         $this->uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $this->params = [];
+        $this->files = $_FILES;
         $this->jwtPayload = null; // Initialize JWT payload as null
     }
 
@@ -74,5 +76,10 @@ class Request
     public function setParams(array $params): void
     {
         $this->params = $params;
+    }
+
+    public function getFiles(): array
+    {
+        return $this->files;
     }
 }

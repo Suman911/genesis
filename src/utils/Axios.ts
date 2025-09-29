@@ -88,6 +88,8 @@ Axios.interceptors.response.use(
         } else {
             message = error.message;
         }
+
+        console.error("Axios error:", error.response.data || error.message || error);
         return Promise.reject(new Error(message));
     }
 );

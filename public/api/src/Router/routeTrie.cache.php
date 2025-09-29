@@ -301,6 +301,22 @@
           0 => 'Api\\Middleware\\AuthMiddleware',
         ),
       ),
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\NoticeController',
+            1 => 'update',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
     ),
     'testimonials' => 
     array (
@@ -384,25 +400,6 @@
           array (
             0 => 'Api\\Controller\\UserController',
             1 => 'updatePassword',
-          ),
-          'middlewares' => 
-          array (
-            0 => 'Api\\Middleware\\AuthMiddleware',
-          ),
-        ),
-      ),
-    ),
-    'notices' => 
-    array (
-      '{param}' => 
-      array (
-        '_name' => 'id',
-        '_handler' => 
-        array (
-          'handler' => 
-          array (
-            0 => 'Api\\Controller\\NoticeController',
-            1 => 'update',
           ),
           'middlewares' => 
           array (

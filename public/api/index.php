@@ -15,7 +15,7 @@ use Api\Controller\TestimonialController;
 use Api\Controller\CourseController;
 use Api\Controller\StudentController;
 use Api\Middleware\AuthMiddleware;
-use Api\Middleware\ErrorHandlerMiddleware;
+use Api\Utils\ErrorHandler;
 
 // Load the main .env file
 $dotenv = Dotenv::createImmutable(__DIR__, '/../../.env');
@@ -23,7 +23,7 @@ $dotenv->load();
 
 $router = new Router();
 
-$router->addGlobalMiddleware(ErrorHandlerMiddleware::class);
+$router->setErrorHandler(new ErrorHandler());
 
 // Define routes with route-specific middlewares
 // $router->add('GET', '/', function ($request, $response) {
@@ -55,7 +55,7 @@ $router->add('PUT', '/users/password', [UserController::class, 'updatePassword']
 $router->add('GET', '/notices', [NoticeController::class, 'index']);
 $router->add('GET', '/notices/{id}', [NoticeController::class, 'fetch'], [AuthMiddleware::class]);
 $router->add('POST', '/notices', [NoticeController::class, 'create'], [AuthMiddleware::class]);
-$router->add('PUT', '/notices/{id}', [NoticeController::class, 'update'], [AuthMiddleware::class]);
+$router->add('POST', '/notices/{id}', [NoticeController::class, 'update'], [AuthMiddleware::class]);
 $router->add('DELETE', '/notices/{id}', [NoticeController::class, 'delete'], [AuthMiddleware::class]);
 
 // testimonial routes

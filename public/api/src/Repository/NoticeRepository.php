@@ -32,6 +32,7 @@ final class NoticeRepository extends Repository
             "INSERT INTO notices (title, description, document_url, target_timestamp, expiry_date, type, is_urgent, tag) 
             VALUES (:title, :description, :document_url, :target_timestamp, :expiry_date, :type, :is_urgent, :tag)"
         );
+
         $stmt->execute([
             ':title' => $data['title'],
             ':description' => $data['description'],
@@ -39,7 +40,7 @@ final class NoticeRepository extends Repository
             ':target_timestamp' => $data['target_timestamp'],
             ':expiry_date' => $data['expiry_date'],
             ':type' => $data['type'],
-            ':is_urgent' => $data['is_urgent'] ? 1 : 0,
+            ':is_urgent' => $data['is_urgent'] ?? 0,
             ':tag' => $data['tag'] ?? null,
         ]);
         $id = $this->pdo->lastInsertId();
@@ -50,9 +51,6 @@ final class NoticeRepository extends Repository
     {
         $fields = [];
         $params = [':id' => $id];
-        if(isset($data['is_urgent'])) {
-            $data['is_urgent'] = $data['is_urgent'] ? 1 : 0;
-        }
         foreach ($data as $key => $value) {
             $fields[] = "$key = :$key";
             $params[":$key"] = $value;
