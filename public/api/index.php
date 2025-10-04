@@ -18,7 +18,7 @@ use Api\Middleware\AuthMiddleware;
 use Api\Utils\ErrorHandler;
 
 // Load the main .env file
-$dotenv = Dotenv::createImmutable(__DIR__, '/../../.env');
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 $router = new Router();

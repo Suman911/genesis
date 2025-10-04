@@ -3,7 +3,7 @@
 use Dotenv\Dotenv;
 
 // Load the .env.local file
-$localDotenv = Dotenv::createImmutable(__DIR__, '/../../../.env.local');
+$localDotenv = Dotenv::createImmutable(__DIR__, '/../.env.local');
 $localDotenv->load();
 
 $frontend_url = $_ENV['FRONTEND_URL'];
@@ -18,4 +18,9 @@ header('Access-Control-Allow-Credentials: true'); // Allow cookies with the requ
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     header('Access-Control-Max-Age: 86400');  // Cache preflight response for 24 hours
     exit(0);
+}
+
+// Remove base path /api from the URI if it exists
+if (strpos($_SERVER['REQUEST_URI'], '/api') === 0) {
+    $_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], strlen('/api'));
 }
