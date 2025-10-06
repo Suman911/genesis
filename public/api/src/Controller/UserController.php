@@ -13,6 +13,18 @@ final class UserController extends Controller
     {
         $this->repository = new UserRepository();
     }
+
+    private function getCookieOptions(bool $httpOnly, int $expires = null): array
+    {
+        return [
+            'expires' => $expires ?? time() + 86400,
+            'path' => '/',
+            'secure' => true,
+            'httponly' => $httpOnly,
+            'samesite' => $_ENV['APP_ENV'] === 'PROD' ? 'Strict' : 'None',
+        ];
+    }
+
     private function validateUserData(Response $response, array $data)
     {
         foreach (['name', 'user_name', 'email', 'ph_number'] as $field) {
@@ -21,6 +33,7 @@ final class UserController extends Controller
             }
         }
     }
+
     private function validateStudentData(Response $response, array $data)
     {
         foreach (['college', 'subject', 'batch_id', 'course_id'] as $field) {
@@ -29,32 +42,33 @@ final class UserController extends Controller
             }
         }
     }
+
     private function isPasswordSet(Response $response, array $data)
     {
         if (empty($data['password'])) {
             $response->error(400, "password is required.");
         }
     }
+
     private function validatePassword(Response $response, string $password)
     {
         // if (strlen($password) < 8) {
-        //     $response->setStatusCode(400)->send(['error' => 'Password must be at least 8 characters long.']);
+        //     $response->error(400, 'Password must be at least 8 characters long.');
         // }
         // if (!preg_match('/[A-Z]/', $password)) {
-        //     $response->setStatusCode(400)->send(['error' => 'Password must contain at least one uppercase letter.']);
+        //     $response->error(400, 'Password must contain at least one uppercase letter.');
         // }
         // if (!preg_match('/[a-z]/', $password)) {
-        //     $response->setStatusCode(400)->send(['error' => 'Password must contain at least one lowercase letter.']);
+        //     $response->error(400, 'Password must contain at least one lowercase letter.');
         // }
         // if (!preg_match('/[0-9]/', $password)) {
-        //     $response->setStatusCode(400)->send(['error' => 'Password must contain at least one number.']);
+        //     $response->error(400, 'Password must contain at least one number.');
         // }
     }
 
     public function index(Request $request, Response $response)
     {
         $this->Authorized($request, $response);
-
         $users = $this->repository->getAllUsers();
         $response->send(['users' => $users]);
     }
@@ -62,38 +76,29 @@ final class UserController extends Controller
     public function fetch(Request $request, Response $response)
     {
         $this->Authorized($request, $response);
-
         $id = $request->getParams()['id'];
         $this->validateId($response, $id);
 
         $user = $this->repository->getUserById($id);
-
-        if ($user) {
-            $response->send(['user' => $user]);
-        } else {
-            $response->error(404, 'User not found');
-        }
+        $user ? $response->send(['user' => $user]) : $response->error(404, 'User not found');
     }
 
     public function create(Request $request, Response $response)
     {
         $this->Authorized($request, $response);
-
-        $data = $request->getBody(); // Get JSON data from the request body
+        $data = $request->getBody();
 
         $this->validateUserData($response, $data);
         $this->validateStudentData($response, $data);
         $this->isPasswordSet($response, $data);
         $this->validatePassword($response, $data['password']);
 
-        // Hash the password
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
         try {
             $this->repository->startTransaction();
 
-            $user = $this->repository->getUserByEmail($data['email']);
-            if ($user) {
+            if ($this->repository->getUserByEmail($data['email'])) {
                 throw new \Exception('Email already exists');
             }
 
@@ -112,11 +117,10 @@ final class UserController extends Controller
                 'subject' => $data['subject'],
             ]);
 
-            $batchId = $this->repository->addToBatch($studentId, (int) $data['batch_id']);
-
-            if (!$batchId) {
+            if (!$this->repository->addToBatch($studentId, (int) $data['batch_id'])) {
                 throw new \Exception('Failed to create student');
             }
+
             $this->repository->commitTransaction();
 
             $response->setStatusCode(201)->send([
@@ -127,22 +131,18 @@ final class UserController extends Controller
         } catch (\Throwable $e) {
             $this->repository->rollbackTransaction();
             $response->error(500, 'Failed to create user: ' . $e->getMessage());
-            return;
         }
     }
 
     public function update(Request $request, Response $response)
     {
         $this->Authorized($request, $response);
-
-        $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
+        $id = $request->getParams()['id'] ?? null;
         $this->validateId($response, $id);
 
-        $data = $request->getBody(); // Get JSON data from the request body
-
+        $data = $request->getBody();
         $this->validateUserData($response, $data);
 
-        // Insert user
         $user = $this->repository->updateUser($id, [
             'name' => $data['name'],
             'user_name' => $data['user_name'],
@@ -150,51 +150,29 @@ final class UserController extends Controller
             'ph_number' => $data['ph_number']
         ]);
 
-        if (!$user) {
-            $response->error(500, 'Failed to update user');
-            return;
-        }
-
-        $response->send($user);
+        $user ? $response->send($user) : $response->error(500, 'Failed to update user');
     }
 
     private function updatePassword(Request $request, Response $response)
     {
         $payload = $request->getJwtPayload();
-
-        if ($this->isAdmin($payload)) {
-            $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
-        } else {
-            $id = $payload['id'] ?? null; // Fetch user ID from JWT payload
-        }
-
+        $id = $this->isAdmin($payload) ? $request->getParams()['id'] ?? null : ($payload['id'] ?? null);
         $this->validateId($response, $id);
 
-        $data = $request->getBody(); // Get JSON data from the request body
+        $data = $request->getBody();
         $this->isPasswordSet($response, $data);
         $this->validatePassword($response, $data['password']);
 
-        // Hash the password
         $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+        $user = $this->repository->updateUser($id, ['password' => $hashedPassword]);
 
-        $user = $this->repository->updateUser($id, [
-            'password' => $hashedPassword,
-        ]);
-
-        if (!$user) {
-            $response->error(500, 'Failed to update user password');
-            return;
-        }
-
-        $response->send($user);
+        $user ? $response->send($user) : $response->error(500, 'Failed to update user password');
     }
 
     public function delete(Request $request, Response $response)
     {
         $this->Authorized($request, $response);
-
-        $id = $request->getParams()['id'] ?? null; // Fetch `id` from request parameters
-
+        $id = $request->getParams()['id'] ?? null;
         $this->validateId($response, $id);
 
         $this->repository->deleteUser($id);
@@ -223,36 +201,17 @@ final class UserController extends Controller
         $token = JWT::encode($payload);
         $payloadString = json_encode($payload, JSON_UNESCAPED_SLASHES);
 
-        setcookie('jwt_token', $token, [
-            'expires' => time() + 86400,
-            'path' => '/',
-            'secure' => true,
-            'httponly' => true,
-            'samesite' => 'None',
-            // 'samesite' => 'Strict', // Uncomment for stricter cookie policy in production
-        ]);
-
-        setcookie('genesis_user', $payloadString, [
-            'expires' => time() + 86400,
-            'path' => '/',
-            'secure' => true,
-            'httponly' => false,
-            'samesite' => 'None',
-            // 'samesite' => 'Strict', // Uncomment for stricter cookie policy in production
-        ]);
+        setcookie('jwt_token', $token, $this->getCookieOptions(true));
+        setcookie('genesis_user', $payloadString, $this->getCookieOptions(false));
 
         return $response->send($payload);
     }
 
-    public function logout($request, $response)
+    public function logout(Request $request, Response $response)
     {
-        setcookie('jwt_token', '', [
-            'expires' => time() - 3600,
-        ]);
-
-        setcookie('genesis_user', '', [
-            'expires' => time() - 3600,
-        ]);
+        $expiredTime = time() - 3600;
+        setcookie('jwt_token', '', $this->getCookieOptions(true, $expiredTime));
+        setcookie('genesis_user', '', $this->getCookieOptions(false, $expiredTime));
 
         return $response->send(['message' => 'Logged out successfully']);
     }
@@ -260,39 +219,27 @@ final class UserController extends Controller
     public function getAdmins(Request $request, Response $response)
     {
         $this->Authorized($request, $response);
-
-        $admins = $this->repository->getAdmins();
-        $response->send($admins);
+        $response->send($this->repository->getAdmins());
     }
 
-    // user profile
     public function me(Request $request, Response $response)
     {
-        $id = $request->getJwtPayload()['id'] ?? null; // Fetch user ID from JWT payload
-
+        $id = $request->getJwtPayload()['id'] ?? null;
         $user = $this->repository->getUserById($id);
-        if ($user) {
-            $response->send(['user' => $user]);
-        } else {
-            $response->error(404, 'User not found');
-        }
+
+        $user ? $response->send(['user' => $user]) : $response->error(404, 'User not found');
     }
 
     public function meAdmin(Request $request, Response $response)
     {
         $payload = $request->getJwtPayload();
         if (!$this->isAdmin($payload)) {
-            $response->error(403, 'Forbidden: You do not have permission to access this resource');
-            return;
+            return $response->error(403, 'Forbidden: You do not have permission to access this resource');
         }
 
         $id = $payload['id'] ?? null;
-
         $user = $this->repository->getUserById($id);
-        if ($user) {
-            $response->send($user);
-        } else {
-            $response->error(404, 'User not found');
-        }
+
+        $user ? $response->send($user) : $response->error(404, 'User not found');
     }
 }
