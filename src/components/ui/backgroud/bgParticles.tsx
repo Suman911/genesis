@@ -2,7 +2,7 @@
 import { useEffect, useState, useMemo, memo } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
-import type { Engine } from "@tsparticles/engine";
+import type { Engine, ISourceOptions } from "@tsparticles/engine";
 
 const BgParticles = () => {
     const [init, setInit] = useState(false);
@@ -15,11 +15,11 @@ const BgParticles = () => {
         }
     }, [init]);
 
-    const options: any = useMemo(() => ({
+    const options: ISourceOptions = useMemo(() => ({
         background: { color: { value: "transparent" } },
         fpsLimit: 60,
         interactivity: {
-            events: { onHover: { enable: true, mode: "connect" }, resize: true },
+            events: { onHover: { enable: true, mode: "connect" }, resize: { enable: true } },
             modes: { connect: { distance: 200, radius: 150, opacity: 0.2 } }
         },
         particles: {
