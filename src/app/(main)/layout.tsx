@@ -16,34 +16,34 @@ const isDev = env.NEXT_PUBLIC_ENV === 'dev';
 export const metadata = MetaData;
 
 const poppins = Poppins({
-  subsets: ['latin'],
-  weight: "400",
+    subsets: ['latin'],
+    weight: "400",
 });
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
-  return (
-    <html lang="en">
-      <body className={`${poppins.className}`}>
-        <Preloader/>
-        <main>
-          <div className="select-none">
-            <NavbarPc />
-            <NavbarMobile />
-            <ProfileWidget />
-            <Hero />
-          </div>
-          <div className="bg-bg overflow-x-hidden">
-            <div className="container m-auto lg:py-20 py-10">
-              {children}
-            </div>
-          </div>
-          <div className="select-none">
-            <Footer />
-            <ToTopButton />
-          </div>
-        </main>
-        {isDev && <ScreenSize />}
-      </body>
-    </html >
-  );
+    return (
+        <html lang="en">
+            <body className={`${poppins.className}`}>
+                <Preloader/>
+                <main>
+                    <div className="select-none">
+                        <NavbarPc />
+                        <NavbarMobile />
+                        <ProfileWidget />
+                        <Hero />
+                    </div>
+                    <div className="bg-bg overflow-x-hidden">
+                        <div className="container m-auto lg:py-20 py-10">
+                            {children}
+                        </div>
+                    </div>
+                    <div className="select-none">
+                        <Footer />
+                        <ToTopButton />
+                    </div>
+                </main>
+                {isDev && <ScreenSize />}
+            </body>
+        </html >
+    );
 }

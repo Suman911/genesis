@@ -1,4 +1,3 @@
-import { useState } from "react"
 import { BaseProps } from "@/lib/inputTypes"
 
 export type FloatingSelectProps = BaseProps & {
@@ -16,14 +15,11 @@ const FloatingSelect = ({
     onChange,
     children
 }: FloatingSelectProps) => {
-    const [focused, setFocused] = useState(false)
 
     const sharedProps = {
         id: name,
         name,
         required,
-        onFocus: () => setFocused(true),
-        onBlur: () => setFocused(false),
         className:
             "peer w-full rounded border px-2 py-1 text-sm focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none bg-transparent",
         disabled,

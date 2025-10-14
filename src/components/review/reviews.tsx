@@ -40,22 +40,22 @@ const reviewsData = [
 ];
 
 const ReviewText = ({ text }: { text: string }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const truncated = text.length > 200 ? text.slice(0, 200) + "..." : text;
+    const [isExpanded, setIsExpanded] = useState(false);
+    const truncated = text.length > 200 ? text.slice(0, 200) + "..." : text;
 
-  return (
-    <>
-      {isExpanded ? text : truncated}
-      {text.length > 200 && (
-        <button
-          className="font-semibold text-ash group-hover:text-white ml-1"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          {isExpanded ? "Show Less" : "Show More"}
-        </button>
-      )}
-    </>
-  );
+    return (
+        <>
+            {isExpanded ? text : truncated}
+            {text.length > 200 && (
+                <button
+                    className="font-semibold text-ash group-hover:text-white ml-1"
+                    onClick={() => setIsExpanded(!isExpanded)}
+                >
+                    {isExpanded ? "Show Less" : "Show More"}
+                </button>
+            )}
+        </>
+    );
 };
 
 export default function Reviews() {

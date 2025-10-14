@@ -23,6 +23,7 @@ const itemsToDelete = [
     'api/.env.local',
     'api/.gitignore',
     'api/src/dev.php',
+    'uploads',
     // 'test'
 ].map((item) => path.join(source, item));
 

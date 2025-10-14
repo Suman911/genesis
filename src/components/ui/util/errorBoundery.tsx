@@ -1,11 +1,11 @@
 "use client";
 import { Component, ReactNode, ErrorInfo } from "react";
 
-interface ErrorBoundaryProps {
+interface ErrorBoundaryProps<T = unknown> {
     children: ReactNode;
     fallback?: ReactNode;
     onError?: (error: Error, errorInfo: ErrorInfo) => void;
-    resetOnChangeKey?: any;
+    resetOnChangeKey?: T;
 }
 
 interface ErrorBoundaryState {
@@ -16,8 +16,8 @@ interface ErrorBoundaryState {
     retryCount: number;
 }
 
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-    constructor(props: ErrorBoundaryProps) {
+class ErrorBoundary<T = unknown> extends Component<ErrorBoundaryProps<T>, ErrorBoundaryState> {
+    constructor(props: ErrorBoundaryProps<T>) {
         super(props);
         this.state = {
             hasError: false,
@@ -40,13 +40,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         this.setState({ errorInfo });
-        if (this.props.onError) {
-            this.props.onError(error, errorInfo);
-        }
+        this.props.onError?.(error, errorInfo);
         console.error("ErrorBoundary caught:", error, errorInfo);
     }
 
-    componentDidUpdate(prevProps: ErrorBoundaryProps) {
+    componentDidUpdate(prevProps: ErrorBoundaryProps<T>) {
         if (
             this.props.resetOnChangeKey !== prevProps.resetOnChangeKey &&
             this.state.hasError
@@ -91,18 +89,19 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
     render() {
         if (this.state.hasError) {
-            if (this.props.fallback) {
-                return this.props.fallback;
-            }
+            if (this.props.fallback) return this.props.fallback;
+
             return (
-                <div style={{
-                    padding: "2rem",
-                    background: "#fff3f3",
-                    border: "1px solid #f5c2c7",
-                    borderRadius: "8px",
-                    color: "#842029",
-                    textAlign: "center"
-                }}>
+                <div
+                    style={{
+                        padding: "2rem",
+                        background: "#fff3f3",
+                        border: "1px solid #f5c2c7",
+                        borderRadius: "8px",
+                        color: "#842029",
+                        textAlign: "center",
+                    }}
+                >
                     <h2>Oops, something went wrong.</h2>
                     <p>
                         Please try reloading the page or going back. If the problem persists, contact support.
@@ -121,7 +120,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                             <div>
                                 <strong>{this.state.error.name}:</strong> {this.state.error.message}
                                 {this.state.error?.stack && (
-                                    <pre style={{ marginTop: "0.5rem", fontSize: "0.9em", color: "#6c757d" }}>
+                                    <pre
+                                        style={{
+                                            marginTop: "0.5rem",
+                                            fontSize: "0.9em",
+                                            color: "#6c757d",
+                                        }}
+                                    >
                                         {this.state.error.stack}
                                     </pre>
                                 )}
@@ -134,7 +139,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                                     color: "#fff",
                                     border: "none",
                                     borderRadius: "4px",
-                                    cursor: "pointer"
+                                    cursor: "pointer",
                                 }}
                                 onClick={this.handleCopyDetails}
                             >
@@ -142,7 +147,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                             </button>
                         </details>
                     )}
-                    <div style={{ marginTop: "1.5rem", display: "flex", gap: "1rem", justifyContent: "center" }}>
+                    <div
+                        style={{
+                            marginTop: "1.5rem",
+                            display: "flex",
+                            gap: "1rem",
+                            justifyContent: "center",
+                        }}
+                    >
                         <button
                             style={{
                                 padding: "0.5rem 1.5rem",
@@ -150,7 +162,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                                 color: "#fff",
                                 border: "none",
                                 borderRadius: "4px",
-                                cursor: "pointer"
+                                cursor: "pointer",
                             }}
                             onClick={this.handleReload}
                         >
@@ -163,7 +175,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                                 color: "#fff",
                                 border: "none",
                                 borderRadius: "4px",
-                                cursor: "pointer"
+                                cursor: "pointer",
                             }}
                             onClick={this.handleGoBack}
                         >
@@ -176,7 +188,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                                 color: "#fff",
                                 border: "none",
                                 borderRadius: "4px",
-                                cursor: "pointer"
+                                cursor: "pointer",
                             }}
                             onClick={this.handleRetry}
                         >
@@ -189,6 +201,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
                 </div>
             );
         }
+
         return this.props.children;
     }
 }

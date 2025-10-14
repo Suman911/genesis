@@ -46,8 +46,8 @@ export default function Notice({ notice, className = "", ...props }: NoticeProps
                     </span>}
                     {/* Tag */}
                     <span
-                        className={`px-3 py-1 text-xs font-semibold rounded-full ${notice.is_urgent ? "bg-red-200 text-red-800" : "bg-blue-200 text-blue-800"
-                            }`}
+                        className={`px-3 py-1 text-xs font-semibold rounded-full 
+                            ${notice.is_urgent ? "bg-red-200 text-red-800" : "bg-blue-200 text-blue-800"}`}
                     >
                         {notice.tag}
                     </span>
