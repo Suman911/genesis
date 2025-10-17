@@ -53,7 +53,7 @@ const LoginPage = () => {
             <ErrorAlert message={error} onClose={() => setError("")} />
             <form
                 onSubmit={handleSubmit}
-                className="bg-black/30 relative border border-white/50 rounded-2xl max-w-md backdrop-blur-md p-10 z-10 shadow-md w-full overflow-hidden"
+                className="bg-primary-dark/20 relative border border-white/50 rounded-2xl max-w-md backdrop-blur-sm p-10 z-10 shadow-md w-full overflow-hidden"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onMouseMove={handleMouseMove}

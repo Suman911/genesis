@@ -252,30 +252,29 @@ const AnimatedBg = ({ children }: Readonly<{ children: React.ReactNode }>) => {
     return (
         <section
             id="hero"
-            className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-background to-primary"
+            className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary-dark"
         >
-            {/* Particles Background */}
-            <BgParticles />
-
-            {/* Random Tech/UFO Shapes */}
-            {shapes.map(renderShape)}
-
-            {/* Background Elements */}
-            <div
-                ref={bgRef}
-                className="absolute w-full h-full top-0 left-0 right-0 bottom-0 pointer-events-none"
-            >
-                <div className="absolute top-[10%] left-[10%] w-64 h-64 rounded-full bg-[#D946EF] opacity-10 blur-3xl"></div>
-                <div className="absolute bottom-[10%] right-[10%] w-96 h-96 rounded-full bg-[#8B5CF6] opacity-10 blur-3xl"></div>
-            </div>
-
-            {/* Festival Content */}
-            <div
-                ref={parallaxRef}
-                className="container mx-auto px-6 z-10 parallax text-center space-y-6 mt-16"
-            >
-                <motion.ul animate={{ rotate: 360 }} />
-                {children}
+            <div className="w-full h-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-background/50 to-black/70">
+                {/* Particles Background */}
+                <BgParticles />
+                {/* Random Shapes */}
+                {shapes.map(renderShape)}
+                {/* Background Elements */}
+                <div
+                    ref={bgRef}
+                    className="absolute w-full h-full top-0 left-0 right-0 bottom-0 pointer-events-none"
+                >
+                    <div className="absolute top-[10%] left-[10%] w-64 h-64 rounded-full bg-[#D946EF] opacity-10 blur-3xl"></div>
+                    <div className="absolute bottom-[10%] right-[10%] w-96 h-96 rounded-full bg-[#8B5CF6] opacity-10 blur-3xl"></div>
+                </div>
+                {/* Festival Content */}
+                <div
+                    ref={parallaxRef}
+                    className="container mx-auto px-6 z-10 parallax text-center space-y-6 mt-16"
+                >
+                    <motion.ul animate={{ rotate: 360 }} />
+                    {children}
+                </div>
             </div>
         </section>
     );
