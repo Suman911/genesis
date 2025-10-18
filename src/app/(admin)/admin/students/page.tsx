@@ -56,8 +56,10 @@ export default function StudentPage() {
     const fetchStudents = async (query: Query) => {
         setLoading(true);
         try {
-            const queryString = qs.stringify(query, { addQueryPrefix: true });
-            const res: studentResponse = await Axios.get(`/students${queryString}`);
+            const res: studentResponse = await Axios.get('/students', {
+                params: query,
+                paramsSerializer: (params) => qs.stringify(params)
+            });
             setStudents(res.students);
             setTotal(res.total);
         } catch (error) {

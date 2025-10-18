@@ -241,6 +241,20 @@
         ),
       ),
     ),
+    'quotes' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\QuoteController',
+          1 => 'index',
+        ),
+        'middlewares' => 
+        array (
+        ),
+      ),
+    ),
   ),
   'POST' => 
   array (
@@ -352,6 +366,21 @@
               0 => 'Api\\Middleware\\AuthMiddleware',
             ),
           ),
+        ),
+      ),
+    ),
+    'quotes' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\QuoteController',
+          1 => 'create',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\AuthMiddleware',
         ),
       ),
     ),
@@ -471,6 +500,25 @@
           'handler' => 
           array (
             0 => 'Api\\Controller\\StudentController',
+            1 => 'update',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
+    'quotes' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\QuoteController',
             1 => 'update',
           ),
           'middlewares' => 
@@ -611,6 +659,25 @@
           'handler' => 
           array (
             0 => 'Api\\Controller\\StudentController',
+            1 => 'delete',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
+    'quotes' => 
+    array (
+      '{param}' => 
+      array (
+        '_name' => 'id',
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\QuoteController',
             1 => 'delete',
           ),
           'middlewares' => 

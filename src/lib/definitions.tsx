@@ -116,3 +116,11 @@ export type StudentInfo = {
     ph_number: string;
     batches: StudentBatch[];
 };
+
+export type Quote = {
+    id: number;
+    author: string;
+    quote: string;
+    category?: string | null;
+    created_at?: string;
+};

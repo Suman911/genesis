@@ -41,7 +41,7 @@ export default function AddStudent({ courses, open, onClose, onSave }: AddStuden
         else {
             setError('No active course available');
         }
-    }, [activeCourses]);
+    }, [courses]);
 
     useEffect(() => {
         const esc = (e: KeyboardEvent) => e.key === 'Escape' && onClose();

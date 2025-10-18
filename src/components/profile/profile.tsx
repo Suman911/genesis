@@ -9,13 +9,15 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 
 interface User {
-    name?: string;
-    image?: string;
+    name: string;
+    image: string;
+    role: string;
 }
 
 const defaultUser: User = {
     name: "Guest",
     image: "",
+    role: 'user',
 };
 
 function useUserFromCookie(pathname: string): User | null {
@@ -148,11 +150,11 @@ const ProfileWidget = () => {
                             <div className="flex flex-col items-center gap-2">
                                 <span className="text-gray-800 font-extrabold">{user.name}</span>
                                 <Link
-                                    href="/user/profile/"
+                                    href={user.role == 'admin' ? '/admin/' : '/user/profile/'}
                                     onClick={handleLinkClick}
                                 >
                                     <Button className="opacity-90" size="sm" color="success">
-                                        Go to Profile
+                                        {user.role == 'admin' ? 'Dashboard' : 'Go to Profile'}
                                     </Button>
                                 </Link>
                             </div>

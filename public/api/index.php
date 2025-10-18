@@ -16,6 +16,7 @@ use Api\Controller\CourseController;
 use Api\Controller\StudentController;
 use Api\Middleware\AuthMiddleware;
 use Api\Utils\ErrorHandler;
+use Api\Controller\QuoteController;
 
 // Load the main .env file
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -82,5 +83,11 @@ $router->add('PUT', '/students/{id}', [StudentController::class, 'update'], [Aut
 $router->add('POST', '/students/assign/{id}', [StudentController::class, 'assignToBatch'], [AuthMiddleware::class]);
 $router->add('DELETE', '/students/unassign/{sid}/{bid}', [StudentController::class, 'unassignStudent'], [AuthMiddleware::class]);
 $router->add('DELETE', '/students/{id}', [StudentController::class, 'delete'], [AuthMiddleware::class]);
+
+// quote routes
+$router->add('GET', '/quotes', [QuoteController::class, 'index']);
+$router->add('POST', '/quotes', [QuoteController::class, 'create'], [AuthMiddleware::class]);
+$router->add('PUT', '/quotes/{id}', [QuoteController::class, 'update'], [AuthMiddleware::class]);
+$router->add('DELETE', '/quotes/{id}', [QuoteController::class, 'delete'], [AuthMiddleware::class]);
 
 $router->dispatch();

@@ -6,6 +6,7 @@ import { RiDashboardHorizontalFill } from "react-icons/ri";
 import { FaUserGroup, FaCircleUser, FaUserGraduate } from "react-icons/fa6";
 import { IoNewspaperSharp } from "react-icons/io5";
 import { SiGoogleforms } from "react-icons/si";
+import { BiSolidQuoteRight } from "react-icons/bi";
 
 const navItems = [
     { href: "", label: "Dashboard", Icon: RiDashboardHorizontalFill },
@@ -15,6 +16,7 @@ const navItems = [
     { href: "students", label: "Students", Icon: FaCircleUser },
     { href: "alumni", label: "Alumni", Icon: FaUserGraduate },
     { href: "forms", label: "Forms", Icon: SiGoogleforms },
+    { href: "quotes", label: "Quotes", Icon: BiSolidQuoteRight },
 ];
 
 export default function AdminNav() {
