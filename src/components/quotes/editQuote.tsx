@@ -10,10 +10,11 @@ type EditQuoteProps = {
     open: boolean;
     onClose: () => void;
     onSave: () => void;
+    onCreate: () => void;
     quote?: Quote | null;
 };
 
-export default function EditQuote({ open, onClose, onSave, quote }: EditQuoteProps) {
+export default function EditQuote({ open, onClose, onSave, onCreate, quote }: EditQuoteProps) {
     const [form, setForm] = useState<Quote>({ id: 0, author: "", quote: "", category: "" });
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
@@ -39,10 +40,11 @@ export default function EditQuote({ open, onClose, onSave, quote }: EditQuotePro
         try {
             if (form.id) {
                 await Axios.put(`/quotes/${form.id}`, { author: form.author, quote: form.quote, category: form.category });
+                onSave();
             } else {
                 await Axios.post(`/quotes`, { author: form.author, quote: form.quote, category: form.category });
+                onCreate();
             }
-            onSave();
             onClose();
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : "Failed to save");

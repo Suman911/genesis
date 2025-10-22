@@ -81,6 +81,18 @@ final class QuoteRepository extends Repository
         ];
     }
 
+    public function new(): ?array
+    {
+        $date = date('Y-m-d');
+        $stmt = $this->pdo->prepare("
+        SELECT * FROM quotes
+        WHERE DATE(created_at) = :date
+        ORDER BY id DESC LIMIT 1 ");
+        $stmt->execute(['date' => $date]);
+        $quote = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $quote ?: null;
+    }
+
     public function find(int $id): ?array
     {
         $stmt = $this->pdo->prepare("SELECT id, author, quote, category, created_at FROM quotes WHERE id = :id");
@@ -91,26 +103,31 @@ final class QuoteRepository extends Repository
 
     public function create(array $data): int
     {
+        $date = date('Y-m-d H:i:s');
         $sql = "INSERT INTO quotes (author, quote, category, created_at, updated_at)
-                VALUES (:author, :quote, :category, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+            VALUES (:author, :quote, :category, :created_at, :updated_at)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             ':author' => $data['author'],
             ':quote' => $data['quote'],
-            ':category' => $data['category'] ?? null
+            ':category' => $data['category'] ?? null,
+            ':created_at' => $date,
+            ':updated_at' => $date
         ]);
         return (int) $this->pdo->lastInsertId();
     }
 
     public function update(int $id, array $data): bool
     {
-        $sql = "UPDATE quotes SET author = :author, quote = :quote, category = :category, updated_at = CURRENT_TIMESTAMP WHERE id = :id";
+        $date = date('Y-m-d H:i:s');
+        $sql = "UPDATE quotes SET author = :author, quote = :quote, category = :category, updated_at = :updated_at WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([
             ':author' => $data['author'],
             ':quote' => $data['quote'],
             ':category' => $data['category'] ?? null,
-            ':id' => $id
+            ':id' => $id,
+            ':updated_at' => $date
         ]);
     }
 

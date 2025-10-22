@@ -1,5 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { Quote } from '@/lib/definitions';
+import Axios from '@/utils/Axios';
+import QuotePopup from '@/components/quotes/quotePopup';
 
 export const Spinner = ({ children, }: Readonly<{ children: React.ReactNode; }>) => {
     return (
@@ -32,37 +35,46 @@ export const Spinner = ({ children, }: Readonly<{ children: React.ReactNode; }>)
 
 export default function Preloader() {
     const [fadeOut, setFadeOut] = useState(false);
-    const [show, setShow] = useState(false);
-    const [close, setClose] = useState(false);
+    const [hidePreloader, setHidePreloader] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
+    const [quote, setQuote] = useState<Quote | null>(null);
 
     useEffect(() => {
-        const timeout = setTimeout(() => setFadeOut(true), 500);
-        return () => clearTimeout(timeout);
+        const fetchQuote = async () => {
+            try {
+                const res: { quote: Quote } = await Axios.get('/quotes', { params: { new: true } });
+                setQuote(res.quote);
+                setTimeout(() => setFadeOut(true), 500);
+            } catch (error) {
+                console.error('Failed to fetch quote:', error);
+            }
+        };
+        fetchQuote();
     }, []);
 
     useEffect(() => {
         if (fadeOut) {
-            const fadeTimeout = setTimeout(() => setShow(true), 300);
-            return () => clearTimeout(fadeTimeout);
+            const hideTimeout = setTimeout(() => {
+                setHidePreloader(true);
+                setShowPopup(true);
+            }, 300);
+            return () => clearTimeout(hideTimeout);
         }
     }, [fadeOut]);
 
-    useEffect(() => {
-        if (show) {
-            const closeTimeout = setTimeout(() => setClose(true), 300);
-            return () => clearTimeout(closeTimeout);
-        }
-    }, [show]);
-
-    if (close) return null;
-
     return (
-        <div
-            className={`fixed bg-primary-fade/70 z-100 flex justify-center items-center h-screen w-screen transition-opacity duration-500 ${fadeOut ? "opacity-0" : "opacity-100"}`}
-        >
-            <Spinner>
-                <img src="/assets/images/logo_main.png" alt="Logo" className="w-16 h-16" />
-            </Spinner>
-        </div>
+        <>
+            <QuotePopup open={showPopup} quote={quote} onClose={() => setShowPopup(false)} />
+            {!hidePreloader && (
+                <div
+                    className={`fixed bg-primary-fade/70 z-100 flex justify-center items-center h-screen w-screen transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'
+                        }`}
+                >
+                    <Spinner>
+                        <img src="/assets/images/logo_main.png" alt="Logo" className="w-16 h-16" />
+                    </Spinner>
+                </div>
+            )}
+        </>
     );
 }

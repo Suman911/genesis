@@ -10,6 +10,8 @@ final class Conn
 {
     public static function setConnection(): mixed
     {
+        date_default_timezone_set('Asia/Kolkata');
+
         $servername = $_ENV['DB_HOST'];
         $username = $_ENV['DB_USERNAME'];
         $password = $_ENV['DB_PASSWORD'];

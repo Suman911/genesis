@@ -107,7 +107,7 @@ export default function QuotesPage() {
                         </div>
                     )}
                 </div>
-                <EditQuote open={editOpen} onClose={() => setEditOpen(false)} onSave={() => fetchQuotes()} quote={editToQuote} />
+                <EditQuote open={editOpen} onClose={() => setEditOpen(false)} onSave={() => fetchQuotes()} onCreate={() => setPage(1)} quote={editToQuote} />
             </div>
         </>
     );

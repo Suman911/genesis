@@ -14,7 +14,7 @@ final class NoticeRepository extends Repository
     public function getNotices()
     {
         $currentDate = date('Y-m-d H:i:s');
-        $stmt = $this->pdo->prepare("SELECT * FROM notices WHERE expiry_date >= :currentDate ORDER BY id DESC");
+        $stmt = $this->pdo->prepare("SELECT * FROM notices WHERE target_timestamp <= :currentDate AND expiry_date >= :currentDate ORDER BY id DESC");
         $stmt->execute(['currentDate' => $currentDate]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

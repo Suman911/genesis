@@ -25,13 +25,19 @@ final class QuoteController extends Controller
     public function index(Request $request, Response $response): void
     {
         $params = $request->getQueryParams();
-        // only search by author (frontend will pass author param)
-        $result = $this->repository->list($params);
+        if (isset($params['new'])) {
+            $result = $this->repository->new();
+            $response->send([
+                'quote' => $result
+            ]);
+        } else {
+            $result = $this->repository->list($params);
 
-        $response->send([
-            'quotes' => $result['quotes'],
-            'total' => $result['total']
-        ]);
+            $response->send([
+                'quotes' => $result['quotes'],
+                'total' => $result['total']
+            ]);
+        }
     }
 
     public function create(Request $request, Response $response): void
