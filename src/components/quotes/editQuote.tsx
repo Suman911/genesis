@@ -46,8 +46,8 @@ export default function EditQuote({ open, onClose, onSave, onCreate, quote }: Ed
                 onCreate();
             }
             onClose();
-        } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : "Failed to save");
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Failed to save");
         } finally {
             setSaving(false);
         }
@@ -64,7 +64,7 @@ export default function EditQuote({ open, onClose, onSave, onCreate, quote }: Ed
                             label="Quote"
                             name="quote"
                             value={form.quote ?? ""}
-                            onChange={handle as any}
+                            onChange={handle}
                             rows={4}
                             required
                         />

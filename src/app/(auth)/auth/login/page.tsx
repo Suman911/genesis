@@ -24,11 +24,10 @@ const LoginPage = () => {
         setError('');
         try {
             const data: User = await Axios.post("/login", { email, password });
-            const targetRoute = data?.role === "admin" ? "/admin/" : "/";
+            const targetRoute = data?.role === "admin" ? "/admin/" : "/user/profile/";
             router.replace(targetRoute);
-        } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : "Failed to create user";
-            setError(message);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Failed to create user");
         } finally {
             setLoading(false);
         }

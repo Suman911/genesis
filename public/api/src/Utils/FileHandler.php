@@ -70,7 +70,7 @@ final class FileHandler
         return $publicPath;
     }
 
-    public static function remove(?string $oldFile): void
+    public static function remove(?string $oldFile = null): void
     {
         if (!$oldFile)
             return;

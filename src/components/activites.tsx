@@ -13,7 +13,6 @@ export default function Activites() {
     //                 const response = await axios.get("/notices.json");
     //                 setNotices(response.data.notices);
     //             } catch (err) {
-    //                 console.error("Error fetching notices:", err);
     //                 setError("Failed to load notices. Please try again later.");
     //             } finally {
     //                 setLoading(false);

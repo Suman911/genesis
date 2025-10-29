@@ -225,6 +225,21 @@
           ),
         ),
       ),
+      'profile' => 
+      array (
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\StudentController',
+            1 => 'profile',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
       'unassign' => 
       array (
         '_handler' => 

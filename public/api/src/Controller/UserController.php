@@ -14,7 +14,7 @@ final class UserController extends Controller
         $this->repository = new UserRepository();
     }
 
-    private function getCookieOptions(bool $httpOnly, int $expires = null): array
+    private function getCookieOptions(bool $httpOnly, ?int $expires = null): array
     {
         return [
             'expires' => $expires ?? time() + 86400,
@@ -194,6 +194,7 @@ final class UserController extends Controller
         $payload = [
             'id' => $user['id'],
             'name' => $user['name'],
+            'user_name' => $user['user_name'],
             'email' => $user['email'],
             'role' => $user['role'] ?? 'user',
         ];

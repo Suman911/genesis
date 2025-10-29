@@ -81,11 +81,8 @@ export default function AddStudent({ courses, open, onClose, onSave }: AddStuden
                 course_id: 0,
                 batch_id: 0,
             });
-        } catch (err: unknown) {
-            const message = err instanceof Error
-                ? err.message
-                : 'Failed to create user';
-            setError(message);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : 'Failed to create user');
         } finally {
             setSaving(false);
         }

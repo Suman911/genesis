@@ -1,3 +1,4 @@
+"use client";
 import axios, {
     AxiosInstance,
     InternalAxiosRequestConfig,
@@ -74,22 +75,29 @@ Axios.interceptors.response.use(
         (error.config as CustomAxiosRequestConfig)?.cleanup?.();
 
         let message = "An error occurred. Please try again.";
+        const status = error.response?.status;
+
         if (axios.isCancel(error)) {
-            message =
-                error.message === "timeout"
-                    ? "Request timed out. Please try again."
-                    : "Request was cancelled.";
+            message = error.message === "timeout"
+                ? "Request timed out. Please try again."
+                : "Request was cancelled.";
         } else if (error.response) {
-            message =
-                error.response.data?.message || statusMessages[error.response.status];
+            message = error.response.data?.message || statusMessages[status || 0];
         } else if (error.request) {
-            message =
-                "No response from server. Please check your internet connection.";
+            message = "No response from server. Please check your internet connection.";
         } else {
             message = error.message;
         }
 
-        console.error("Axios error:", error.response.data || error.message || error);
+        console.error("Axios error:", error.response?.data || error.message || error);
+
+        // 🔒 Redirect to /auth/unauthorized on Unauthorized (401)
+        if (status === 401 && typeof window !== "undefined") {
+            if (window.location.pathname !== "/auth/unauthorized") {
+                window.location.href = "/auth/unauthorized";
+            }
+        }
+
         return Promise.reject(new Error(message));
     }
 );

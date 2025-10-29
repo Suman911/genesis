@@ -81,10 +81,8 @@ export default function UpdateStudent({
             await Axios.put(`/students/${form.id}`, form);
             onSave();
             onClose();
-        } catch (err: unknown) {
-            const message =
-                err instanceof Error ? err.message : "Failed to update student";
-            setError(message);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Failed to update student");
         } finally {
             setSaving(false);
         }

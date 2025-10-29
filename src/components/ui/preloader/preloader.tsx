@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Quote } from '@/lib/definitions';
 import Axios from '@/utils/Axios';
 import QuotePopup from '@/components/quotes/quotePopup';
+import { usePathname } from 'next/navigation';
 
 export const Spinner = ({ children, }: Readonly<{ children: React.ReactNode; }>) => {
     return (
@@ -35,37 +36,40 @@ export const Spinner = ({ children, }: Readonly<{ children: React.ReactNode; }>)
 
 export default function Preloader() {
     const [fadeOut, setFadeOut] = useState(false);
-    const [hidePreloader, setHidePreloader] = useState(false);
-    const [showPopup, setShowPopup] = useState(false);
+    const [hide, setHide] = useState(false);
     const [quote, setQuote] = useState<Quote | null>(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const isAuth = usePathname().startsWith('/auth');
 
     useEffect(() => {
-        const fetchQuote = async () => {
-            try {
-                const res: { quote: Quote } = await Axios.get('/quotes', { params: { new: true } });
-                setQuote(res.quote);
-                setTimeout(() => setFadeOut(true), 500);
-            } catch (error) {
-                console.error('Failed to fetch quote:', error);
+        const load = async () => {
+            if (!isAuth) {
+                try {
+                    const res: { quote: Quote } = await Axios.get('/quotes', { params: { new: true } });
+                    setQuote(res.quote);
+                } catch (error) {
+                    console.error('Failed to fetch quote:', error);
+                }
             }
+            setTimeout(() => setFadeOut(true), 500);
         };
-        fetchQuote();
-    }, []);
+        load();
+    }, [isAuth]);
 
     useEffect(() => {
         if (fadeOut) {
-            const hideTimeout = setTimeout(() => {
-                setHidePreloader(true);
-                setShowPopup(true);
+            const t = setTimeout(() => {
+                setHide(true);
+                if (!isAuth) setShowPopup(true);
             }, 300);
-            return () => clearTimeout(hideTimeout);
+            return () => clearTimeout(t);
         }
-    }, [fadeOut]);
+    }, [fadeOut, isAuth]);
 
     return (
         <>
-            <QuotePopup open={showPopup} quote={quote} onClose={() => setShowPopup(false)} />
-            {!hidePreloader && (
+            {!isAuth && <QuotePopup open={showPopup} quote={quote} onClose={() => setShowPopup(false)} />}
+            {!hide && (
                 <div
                     className={`fixed bg-primary-fade/70 z-100 flex justify-center items-center h-screen w-screen transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'
                         }`}

@@ -44,11 +44,26 @@ final class StudentController extends Controller
 
     public function show(Request $request, Response $response): void
     {
-        $id = (int) $request->getParams()['id'];
+        $id = $request->getParams()['id'];
         $this->validateId($response, $id);
         $student = $this->repository->find($id);
         if (!$student) {
             $response->error(404, 'Student not found');
+            return;
+        }
+        $response->send($student);
+    }
+
+    public function profile(Request $request, Response $response): void
+    {
+        $payload = $request->getJwtPayload();
+        $user_name = $request->getQueryParams()['user_name'] ?? $payload['user_name'] ?? null;
+        $full = $user_name === $payload['user_name'] || $this->isAdmin($payload);
+
+        $student = $this->repository->fetch($user_name, $full);
+
+        if (!$student) {
+            $response->error(404, 'User not found');
             return;
         }
         $response->send($student);

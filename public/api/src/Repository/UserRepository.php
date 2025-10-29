@@ -46,14 +46,11 @@ final class UserRepository extends Repository
             ':ph_number' => $data['ph_number'],
             ':password' => $data['password'],
         ]);
-        // $id = $this->pdo->lastInsertId();
-        // return $this->getUserById($id);
         return $this->pdo->lastInsertId();
     }
 
     public function createStudent(array $data)
     {
-        // echo "\nstudent creation data: \n", json_encode($data) , "\n";
         $stmt = $this->pdo->prepare(
             "INSERT INTO students (user_id, college, date_of_admission, subject) VALUES (:user_id, :college, :date_of_admission, :subject)"
         );

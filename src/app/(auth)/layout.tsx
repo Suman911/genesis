@@ -7,7 +7,6 @@ import ToTopButton from '@/components/ui/util/toTop/ToTopButton';
 import { ScreenSize } from '@/components/ui/util/screen';
 import { MetaData } from '@/components/meta/metadata';
 import Preloader from '@/components/ui/preloader/preloader';
-import AnimatedBg from "@/components/ui/backgroud/AnimatedBg";
 
 const env = process.env;
 const isDev = env.NEXT_PUBLIC_ENV === 'dev';
@@ -29,9 +28,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
                         <NavbarPc />
                         <NavbarMobile />
                     </div>
-                    <AnimatedBg>
                         {children}
-                    </AnimatedBg>
                     <div className="select-none">
                         <Footer />
                         <ToTopButton />

@@ -102,11 +102,11 @@ export type StudentInfo = {
     college: string;
     subject: string;
     photo: string | null;
-    address: string | null;
-    date_of_birth: string | null;
+    address?: string | null;
+    date_of_birth?: string | null;
     facebook_profile: string | null;
-    guardian_name: string | null;
-    guardian_number: string | null;
+    guardian_name?: string | null;
+    guardian_number?: string | null;
     date_of_admission: string | null;
     isAlumni: number;
     date_of_passout: string | null;

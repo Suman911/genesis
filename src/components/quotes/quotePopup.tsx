@@ -36,7 +36,7 @@ export default function QuotePopup({ open, quote, onClose }: QuotePopupProps) {
                     <div className="relative p-10 border border-white/20 rounded-[50%_50%_45%_55%_/_55%_45%_55%_45%] animate-[morph-border_4.1s_ease-in-out_infinite] bg-white/20">
                         <div className="absolute inset-2 rounded-[50%_50%_45%_55%_/_55%_45%_55%_45%] animate-[morph-border_6.9s_ease-in-out_infinite] bg-white/30 backdrop-blur-2xl pointer-events-none" />
                         <div className="relative z-10">
-                            <Renderer quote={quote} onClose={onClose} />
+                            <Renderer quote={quote} />
                         </div>
                     </div>
                 </div>
