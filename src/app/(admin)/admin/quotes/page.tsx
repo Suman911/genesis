@@ -75,6 +75,12 @@ export default function QuotesPage() {
         }
     };
 
+    const onCreatedQuote = () => {
+        if (page !== 1)
+            setPage(1);
+        fetchQuotes();
+    }
+
     return (
         <>
             <ErrorAlert message={error} onClose={() => setError("")} />
@@ -107,7 +113,7 @@ export default function QuotesPage() {
                         </div>
                     )}
                 </div>
-                <EditQuote open={editOpen} onClose={() => setEditOpen(false)} onSave={() => fetchQuotes()} onCreate={() => setPage(1)} quote={editToQuote} />
+                <EditQuote open={editOpen} onClose={() => setEditOpen(false)} onSave={() => fetchQuotes()} onCreate={onCreatedQuote} quote={editToQuote} />
             </div>
         </>
     );

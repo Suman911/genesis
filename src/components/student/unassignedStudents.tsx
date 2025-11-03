@@ -17,11 +17,12 @@ type Student = {
 
 type Props = {
     open: boolean;
+    onAssign: () => void;
     onClose: () => void;
     setError: (m: string) => void;
 };
 
-const UnassignedStudents = ({ open, onClose, setError }: Props) => {
+const UnassignedStudents = ({ open, onAssign, onClose, setError }: Props) => {
     const [students, setStudents] = useState<Student[]>([]);
     const [courses, setCourses] = useState<Course[]>([]);
     const [reload, setReload] = useState(false);
@@ -42,7 +43,7 @@ const UnassignedStudents = ({ open, onClose, setError }: Props) => {
                 setStudents(res);
             } catch (error) {
                 setStudents([]);
-                setError(error instanceof Error? error.message: 'Failed to load unassigned students.');
+                setError(error instanceof Error ? error.message : 'Failed to load unassigned students.');
             } finally {
                 setLoading(false);
             }
@@ -116,7 +117,7 @@ const UnassignedStudents = ({ open, onClose, setError }: Props) => {
                         </div>
                     )}
                     <StudentDetails id={id} onClose={() => setId(null)} onDelete={() => setReload(r => !r)} />
-                    <AssignBatch open={assignId} onClose={() => setAssignId(null)} onSave={() => setReload(r => !r)} courses={courses} setError={setError} />
+                    <AssignBatch open={assignId} onClose={() => setAssignId(null)} onSave={() => { onAssign(); setReload(r => !r); }} courses={courses} setError={setError} />
                 </div>
             </div>
         </Portal>

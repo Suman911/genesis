@@ -205,7 +205,7 @@ export default function BatchesPage() {
     return (
         <>
             <ErrorAlert message={error} onClose={() => setError("")} />
-            <UnassignedStudents open={showUnassigned} onClose={() => setShowUnassigned(false)} setError={setError} />
+            <UnassignedStudents open={showUnassigned} onAssign={() => fetchCourses()} onClose={() => setShowUnassigned(false)} setError={setError} />
             <StudentsInBatch open={openBatch} onClose={() => setOpenBatch(null)} onDelete={fetchCourses} setError={setError} />
             <div className="flex flex-col gap-6 p-6">
                 <div className="flex justify-between">
