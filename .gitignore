@@ -52,3 +52,5 @@ laragon.lnk
 
 public/api/logs/*.log
 public/uploads/
+public/api/rate_cache/*.txt
+.secret.env

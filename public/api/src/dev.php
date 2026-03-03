@@ -5,6 +5,8 @@ use Dotenv\Dotenv;
 // Load the .env.local file
 $localDotenv = Dotenv::createImmutable(__DIR__, '/../.env.local');
 $localDotenv->load();
+$localDotenv = Dotenv::createImmutable(__DIR__, '/../.secret.env');
+$localDotenv->load();
 
 $frontend_url = $_ENV['FRONTEND_URL'];
 
