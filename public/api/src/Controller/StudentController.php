@@ -54,21 +54,6 @@ final class StudentController extends Controller
         $response->send($student);
     }
 
-    public function profile(Request $request, Response $response): void
-    {
-        $payload = $request->getJwtPayload();
-        $user_name = $request->getQueryParams()['user_name'] ?? $payload['user_name'] ?? null;
-        $full = $user_name === $payload['user_name'] || $this->isAdmin($payload);
-
-        $student = $this->repository->fetch($user_name, $full);
-
-        if (!$student) {
-            $response->error(404, 'User not found');
-            return;
-        }
-        $response->send($student);
-    }
-
     public function unassigned(Request $request, Response $response): void
     {
         $data = $this->repository->listUnassigned();

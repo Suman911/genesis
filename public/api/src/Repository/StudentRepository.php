@@ -175,45 +175,6 @@ final class StudentRepository extends Repository
         return $student ?: null;
     }
 
-    public function fetch(string $user_name, ?bool $full = false): ?array
-    {
-        if (!$user_name)
-            return null;
-
-        $fields = $this->implode('s', $this->studentDetailFields);
-        $sql1 = $full
-            ? "SELECT $fields,
-                u.name, u.email, u.user_name, u.ph_number
-                FROM students s
-                JOIN users u ON u.id = s.user_id
-                WHERE u.user_name = :user_name"
-            : "SELECT s.id, s.college, s.subject, s.photo, s.facebook_profile,
-                    s.date_of_admission, s.isAlumni, s.date_of_passout,
-                    u.name, u.email, u.user_name, u.ph_number
-                FROM students s
-                JOIN users u ON u.id = s.user_id
-                WHERE u.user_name = :user_name";
-
-        $stmt1 = $this->pdo->prepare($sql1);
-        $stmt1->execute(['user_name' => $user_name]);
-        $student = $stmt1->fetch(PDO::FETCH_ASSOC);
-
-        if (!$student) {
-            return null;
-        }
-
-        $sql2 = "SELECT sb.batch_id, b.course_id, b.name AS batch_name, sb.status
-                FROM student_batches sb
-                JOIN batches b ON b.id = sb.batch_id
-                WHERE sb.student_id = :id";
-
-        $stmt2 = $this->pdo->prepare($sql2);
-        $stmt2->execute(['id' => $student['id']]);
-        $student['batches'] = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-
-        return $student;
-    }
-
     public function addToBatches(int $studentId, array $batchIds): bool
     {
         if (empty($batchIds)) {

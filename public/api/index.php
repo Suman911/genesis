@@ -14,9 +14,11 @@ use Api\Controller\NoticeController;
 use Api\Controller\TestimonialController;
 use Api\Controller\CourseController;
 use Api\Controller\StudentController;
+use Api\Controller\ProfileController;
+use Api\Controller\QuoteController;
+
 use Api\Middleware\AuthMiddleware;
 use Api\Utils\ErrorHandler;
-use Api\Controller\QuoteController;
 
 // Load the main .env file
 $dotenv = Dotenv::createImmutable(__DIR__);
@@ -77,7 +79,6 @@ $router->add('DELETE', '/courses/batch/{id}', [CourseController::class, 'deleteB
 // student routes
 $router->add('GET', '/students', [StudentController::class, 'index'], [AuthMiddleware::class]);
 $router->add('GET', '/students/{id}', [StudentController::class, 'show'], [AuthMiddleware::class]);
-$router->add('GET', '/students/profile', [StudentController::class, 'profile'], [AuthMiddleware::class]);
 $router->add('GET', '/students/unassign', [StudentController::class, 'unassigned'], [AuthMiddleware::class]);
 $router->add('PUT', '/students/status', [StudentController::class, 'updateStatus'], [AuthMiddleware::class]);
 $router->add('PUT', '/students/{id}', [StudentController::class, 'update'], [AuthMiddleware::class]);
@@ -90,5 +91,9 @@ $router->add('GET', '/quotes', [QuoteController::class, 'index']);
 $router->add('POST', '/quotes', [QuoteController::class, 'create'], [AuthMiddleware::class]);
 $router->add('PUT', '/quotes/{id}', [QuoteController::class, 'update'], [AuthMiddleware::class]);
 $router->add('DELETE', '/quotes/{id}', [QuoteController::class, 'delete'], [AuthMiddleware::class]);
+
+// profile routes
+$router->add('GET', '/profiles/', [ProfileController::class, 'index'], [AuthMiddleware::class]);
+$router->add('POST', '/profiles/update', [ProfileController::class, 'update'], [AuthMiddleware::class]);
 
 $router->dispatch();
