@@ -11,6 +11,7 @@ interface ProfileHeaderProps {
     ph_number: string;
     photo?: string | null;
     date_of_admission?: string | null;
+    visitor: boolean;
 }
 
 const ProfileHeader = ({
@@ -20,6 +21,7 @@ const ProfileHeader = ({
     ph_number,
     photo,
     date_of_admission,
+    visitor,
 }: ProfileHeaderProps) => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
@@ -56,7 +58,7 @@ const ProfileHeader = ({
             >
                 <div className="absolute inset-0 flex items-center justify-center">
                     <motion.div
-                        className="rounded-full w-[500px] h-[500px] bg-gradient-to-r from-indigo-500/30 via-purple-500/20 to-amber-400/30 blur-[100px]"
+                        className="rounded-full w-125 h-125 bg-linear-to-r from-indigo-500/30 via-purple-500/20 to-amber-400/30 blur-[100px]"
                         animate={{
                             scale: [1, 1.15, 1],
                             opacity: [0.5, 1, 0.6],
@@ -71,7 +73,7 @@ const ProfileHeader = ({
                 </div>
             </motion.div>
 
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl blur-xl" />
+            <div className="absolute inset-0 bg-linear-to-r from-primary/20 to-primary/10 rounded-2xl blur-xl" />
             <div className="relative backdrop-blur-md bg-slate-800/40 border border-primary-dark/50 rounded-2xl p-8 shadow-xl">
                 <div className="flex flex-col md:flex-row items-center gap-6">
                     <div className="relative">
@@ -83,7 +85,7 @@ const ProfileHeader = ({
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <div className="w-full h-full bg-gradient-to-br from-primary to-primary/20 flex items-center justify-center">
+                                <div className="w-full h-full bg-linear-to-br from-primary to-primary/20 flex items-center justify-center">
                                     <LuUser className="w-16 h-16 text-foreground" />
                                 </div>
                             )}
@@ -120,15 +122,15 @@ const ProfileHeader = ({
                             </div>)}
                     </div>
                 </div>
-                <div className="absolute top-5 right-5 flex justify-center">
+                {!visitor && <div className="absolute top-5 right-5 flex justify-center">
                     <button
                         onClick={handleLogout}
                         disabled={loading}
-                        className="px-5 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white font-medium rounded-lg shadow hover:from-red-600 hover:to-pink-600 transition-all duration-300 disabled:opacity-50"
+                        className="px-5 py-2 bg-linear-to-r from-red-500 to-pink-500 text-white font-medium rounded-lg shadow hover:from-red-600 hover:to-pink-600 transition-all duration-300 disabled:opacity-50"
                     >
                         {loading ? "Logging out..." : "Logout"}
                     </button>
-                </div>
+                </div>}
             </div>
         </div>
     );

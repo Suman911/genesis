@@ -6,6 +6,7 @@ use Api\Http\Request;
 use Api\Http\Response;
 use Api\Repository\UserRepository;
 use Auth\JWT\JWT;
+use Services\Turnstile\Turnstile;
 
 final class UserController extends Controller
 {
@@ -182,6 +183,14 @@ final class UserController extends Controller
     public function login(Request $request, Response $response)
     {
         $data = $request->getBody();
+
+        // Accept token under 'token' or 'turnstileToken'
+        $token = $data['token'] ?? $data['turnstileToken'] ?? null;
+        $result = Turnstile::verify($token);
+
+        if(isset($result['error'])){
+            $response->error($result['code'], $result['error']);
+        }
         if (empty($data['email']) || empty($data['password'])) {
             return $response->error(400, 'Email and password are required');
         }

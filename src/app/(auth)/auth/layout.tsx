@@ -14,7 +14,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
             >
                 <div className="absolute inset-0 flex items-center justify-center">
                     <motion.div
-                        className="rounded-full w-[500px] h-[500px] bg-gradient-to-r from-indigo-500/30 via-purple-500/20 to-amber-400/30 blur-[100px]"
+                        className="rounded-full w-125500px] bg-linear-to-r from-indigo-500/30 via-purple-500/20 to-amber-400/30 blur-[100px]"
                         animate={{
                             scale: [1, 1.15, 1],
                             opacity: [0.5, 1, 0.6],

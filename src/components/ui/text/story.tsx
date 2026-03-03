@@ -28,7 +28,7 @@ export function StoryImage({ children, className = "", ...props }: StoryProps) {
     return (
         <div 
             {...props} 
-            className={`xl:col-span-4 lg:col-span-5 p-5 m-auto max-w-[500px] ${className}`}
+            className={`xl:col-span-4 lg:col-span-5 p-5 m-auto max-w-125 ${className}`}
         >
             {children}
         </div>

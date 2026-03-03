@@ -27,7 +27,7 @@ const BatchCard = ({ batches }: BatchCardProps) => {
 
     return (
         <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/10 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300" />
+            <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-primary/10 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300" />
             <div className="relative backdrop-blur-sm bg-slate-800/30 border border-primary-dark/50 rounded-xl p-6 hover:border-primary/50 transition-all duration-300">
                 <div className="flex items-center gap-3 mb-6">
                     <div className="p-2 rounded-lg bg-primary/20">

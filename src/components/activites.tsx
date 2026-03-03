@@ -42,7 +42,7 @@ export default function Activites() {
     return (
         <div className="p-2 py-10 xl:px-8 text-ash">
             <Heading>
-                <TopHeading>Activities</TopHeading>
+                <TopHeading pageTitle="Activities"/>
                 <MainHeading>Current Workshop</MainHeading>
             </Heading>
 
@@ -85,7 +85,7 @@ export function WorkshopCard({ workshop, className = "", ...props }: WorkshopCar
     return (
         <div
             {...props}
-            className={`relative h-[400px] rounded-3xl overflow-hidden group text-xl text-white ${className}`}
+            className={`relative h-100 rounded-3xl overflow-hidden group text-xl text-white ${className}`}
         >
             <Link href={workshop.link}>
                 <img
@@ -95,7 +95,7 @@ export function WorkshopCard({ workshop, className = "", ...props }: WorkshopCar
                     className="h-full w-auto transform transition duration-500 group-hover:scale-110"
                 />
                 <div
-                    className="absolute h-full w-full inset-0 p-10 bg-gradient-to-t from-indigo-800/90 to-indigo-500/10 flex flex-col justify-end transform translate-y-full transition-all duration-500 group-hover:translate-y-0"
+                    className="absolute h-full w-full inset-0 p-10 bg-linear-to-t from-indigo-800/90 to-indigo-500/10 flex flex-col justify-end transform translate-y-full transition-all duration-500 group-hover:translate-y-0"
                 >
                     <h3 className="font-extrabold">{workshop.desc}</h3>
                     <br />

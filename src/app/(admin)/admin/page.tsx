@@ -42,7 +42,7 @@ export default function AdminPage() {
                     <button
                         onClick={handleLogout}
                         disabled={loading}
-                        className="px-5 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white font-medium rounded-lg shadow hover:from-red-600 hover:to-pink-600 transition-all duration-300 disabled:opacity-50"
+                        className="px-5 py-2 bg-linear-to-r from-red-500 to-pink-500 text-white font-medium rounded-lg shadow hover:from-red-600 hover:to-pink-600 transition-all duration-300 disabled:opacity-50"
                     >
                         {loading ? "Logging out..." : "Logout"}
                     </button>

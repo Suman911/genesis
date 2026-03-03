@@ -36,7 +36,7 @@ const TestimonialSlide = ({ testimonial }: { testimonial: TestimonialType }) => 
 
 const TestimonialSlideSkeleton = () => {
     return (
-        <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg text-center max-w-[300px]">
+        <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg text-center max-w-75">
             <div className="p-4 lg:pb-12 pb-20 w-full rounded-2xl rounded-b-4xl bg-gray-200">
                 <div className="h-4 w-3/4 bg-gray-300 rounded mb-2 mx-auto animate-pulse"></div>
                 <div className="h-4 w-2/3 bg-gray-300 rounded mb-2 mx-auto animate-pulse"></div>

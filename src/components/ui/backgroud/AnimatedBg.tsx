@@ -254,7 +254,7 @@ const AnimatedBg = ({ children }: Readonly<{ children: React.ReactNode }>) => {
             id="hero"
             className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary-dark"
         >
-            <div className="w-full h-full flex items-center justify-center overflow-hidden bg-gradient-to-b from-background/50 to-black/70">
+            <div className="w-full h-full flex items-center justify-center overflow-hidden bg-linear-to-b from-background/50 to-black/70">
                 {/* Particles Background */}
                 <BgParticles />
                 {/* Random Shapes */}
@@ -270,7 +270,7 @@ const AnimatedBg = ({ children }: Readonly<{ children: React.ReactNode }>) => {
                 {/* Festival Content */}
                 <div
                     ref={parallaxRef}
-                    className="container mx-auto px-6 z-10 parallax text-center space-y-6 mt-16"
+                    className="container mx-auto px-6 z-10 parallax text-center"
                 >
                     <motion.ul animate={{ rotate: 360 }} />
                     {children}

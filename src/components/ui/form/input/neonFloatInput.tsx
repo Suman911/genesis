@@ -1,30 +1,32 @@
 "use client";
+import React from "react";
 import "@/styles/neonFloatInput.css";
 
-interface NeonFloatInputProps {
-    id: string
-    label: string
-    type?: string
-    value: string
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-    autoFocus?: boolean
-    autoComplete?: string
+interface NeonFloatInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    id: string;
+    label: string;
 }
 
-const NeonFloatInput = ({ id, label, type = "text", value, onChange, autoFocus = false, autoComplete }: NeonFloatInputProps) => {
+const NeonFloatInput: React.FC<NeonFloatInputProps> = ({
+    id,
+    label,
+    className,
+    required = true,
+    ...inputProps
+}) => {
+    const baseClass =
+        "peer w-full border px-4 py-4 rounded outline-none focus:border-cyan-400 focus:border-2 transition-all duration-200 bg-transparent text-white placeholder-transparent";
+    const inputClass = [baseClass, className].filter(Boolean).join(" ");
+
     return (
-        <div className="mb-6 py-2 relative">
+        <div className="mb-3 py-2 relative">
             <div className="relative">
                 <input
                     id={id}
-                    type={type}
-                    className="peer w-full border px-4 py-4 rounded outline-none focus:border-cyan-400 focus:border-2 transition-all duration-200 bg-transparent text-white placeholder-transparent"
+                    className={inputClass}
+                    required={required}
                     placeholder=" "
-                    value={value}
-                    onChange={onChange}
-                    required
-                    autoFocus={autoFocus}
-                    autoComplete={autoComplete}
+                    {...inputProps}
                 />
                 <label
                     htmlFor={id}

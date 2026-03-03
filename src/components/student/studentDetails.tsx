@@ -69,7 +69,7 @@ function StudentDetails({ id, onClose, onDelete }: StudentDetailsProps) {
                     onClick={(e) => e.stopPropagation()}
                 >
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-blue-600 to-blue-800 p-4 relative">
+                    <div className="bg-linear-to-r from-blue-600 to-blue-800 p-4 relative">
                         <div className="absolute top-1.5 right-3 flex gap-3">
                             <button
                                 onClick={() => setShowUpdate(true)}

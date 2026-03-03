@@ -13,7 +13,7 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
     return (
         <>
             <section className="relative min-h-screen overflow-hidden bg-background py-10">
-                <div className="w-full min-h-screen flex flex-col bg-gradient-to-b from-background via-purple-950/20 to-background">
+                <div className="w-full min-h-screen flex flex-col bg-linear-to-b from-background via-purple-950/20 to-background">
                     {/* Random Floating Shapes */}
                     {shapes.map((shape, i) => (
                         <div

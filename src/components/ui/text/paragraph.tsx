@@ -13,10 +13,10 @@ export function Paragraph({ children, className = "", ...props }: ParagraphProps
 export function ParagraphScope({ children, className = "", ...props }: ParagraphProps) {
     return (
         <div {...props} className={`relative w-fit ${className}`}>
-            <div className="text-primary text-xl font-semibold px-6 peer flex items-center gap-4 after:block after:w-16 after:h-[3px] after:bg-primary">
+            <div className="text-primary text-xl font-semibold px-6 peer flex items-center gap-4 after:block after:w-16 after:h-0.75 after:bg-primary">
                 {children}
             </div>
-            <div className="absolute left-0 right-0 mx-6 h-1 w-20 rounded-full bg-gradient-to-r from-primary to-orange-400 duration-500 peer-hover:w-full"></div>
+            <div className="absolute left-0 right-0 mx-6 h-1 w-20 rounded-full bg-linear-to-r from-primary to-orange-400 duration-500 peer-hover:w-full"></div>
         </div>
     );
 }

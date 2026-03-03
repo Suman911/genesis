@@ -17,6 +17,10 @@ export default function Alumni() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
+    const MAX_SLIDES = 3; // highest slidesPerView from breakpoints
+    const totalSlides = loading ? 4 : testimonials.length; // skeleton shows 4 slides while loading
+    const loopEnabled = totalSlides >= MAX_SLIDES;
+
     useEffect(() => {
         const fetchTestimonials = async () => {
             try {
@@ -35,7 +39,7 @@ export default function Alumni() {
     return (
         <div className="p-2 py-10 xl:px-8 text-ash">
             <Heading>
-                <TopHeading>Alumni</TopHeading>
+                <TopHeading pageTitle="Alumni"/>
                 <MainHeading>Whats Student&apos;s Say About us</MainHeading>
             </Heading>
 
@@ -43,13 +47,17 @@ export default function Alumni() {
 
             <Swiper
                 modules={[Navigation, Pagination, Autoplay]}
-                loop={true}
+                loop={loopEnabled}
                 slideToClickedSlide={true}
-                autoplay={{
-                    delay: 3000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                }}
+                autoplay={
+                    totalSlides > 1
+                        ? {
+                            delay: 3000,
+                            disableOnInteraction: false,
+                            pauseOnMouseEnter: true,
+                        }
+                        : false
+                }
                 navigation={{ nextEl: "#alumni-next", prevEl: "#alumni-prev" }}
                 pagination={{
                     clickable: true,
@@ -63,7 +71,7 @@ export default function Alumni() {
                     820: { slidesPerView: 2.2 },
                     1200: { slidesPerView: 3 },
                 }}
-                className="!p-10 !max-w-[1000px] !mx-auto"
+                className="p-10! max-w-250! mx-auto!"
             >
                 {loading
                     ? Array.from({ length: 4 }).map((_, i) => (
@@ -80,7 +88,7 @@ export default function Alumni() {
 
             <div className="flex justify-center text-primary select-none">
                 <div id="alumni-prev" className="sm:block hidden cursor-pointer">◀</div>
-                <div id="alumni-pagination" className="xs:flex hidden justify-center items-center gap-3 !max-w-96 !min-w-80"></div>
+                <div id="alumni-pagination" className="xs:flex hidden justify-center items-center gap-3 max-w-96! min-w-80!"></div>
                 <div id="alumni-next" className="sm:block hidden cursor-pointer">▶</div>
             </div>
         </div>

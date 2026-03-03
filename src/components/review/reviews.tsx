@@ -80,7 +80,7 @@ export default function Reviews() {
                 className="text-center mb-10 max-w-xl z-10"
             >
                 <Heading>
-                    <TopHeading>Reviews</TopHeading>
+                    <TopHeading pageTitle="Reviews"/>
                     <MainHeading>Google Reviews</MainHeading>
                     <p className="text-gray-600 mt-2">Discover experiences from our community</p>
                 </Heading>

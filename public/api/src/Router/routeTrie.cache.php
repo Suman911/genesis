@@ -225,21 +225,6 @@
           ),
         ),
       ),
-      'profile' => 
-      array (
-        '_handler' => 
-        array (
-          'handler' => 
-          array (
-            0 => 'Api\\Controller\\StudentController',
-            1 => 'profile',
-          ),
-          'middlewares' => 
-          array (
-            0 => 'Api\\Middleware\\AuthMiddleware',
-          ),
-        ),
-      ),
       'unassign' => 
       array (
         '_handler' => 
@@ -267,6 +252,21 @@
         ),
         'middlewares' => 
         array (
+        ),
+      ),
+    ),
+    'profiles' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\ProfileController',
+          1 => 'index',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\AuthMiddleware',
         ),
       ),
     ),
@@ -396,6 +396,39 @@
         'middlewares' => 
         array (
           0 => 'Api\\Middleware\\AuthMiddleware',
+        ),
+      ),
+    ),
+    'profiles' => 
+    array (
+      'update' => 
+      array (
+        '_handler' => 
+        array (
+          'handler' => 
+          array (
+            0 => 'Api\\Controller\\ProfileController',
+            1 => 'update',
+          ),
+          'middlewares' => 
+          array (
+            0 => 'Api\\Middleware\\AuthMiddleware',
+          ),
+        ),
+      ),
+    ),
+    'contact' => 
+    array (
+      '_handler' => 
+      array (
+        'handler' => 
+        array (
+          0 => 'Api\\Controller\\ContactController',
+          1 => 'index',
+        ),
+        'middlewares' => 
+        array (
+          0 => 'Api\\Middleware\\RateLimiterMiddleware',
         ),
       ),
     ),

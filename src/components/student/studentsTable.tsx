@@ -29,19 +29,19 @@ const StudentsTable = ({ students, loading, limit = 10, onDelete, modButton }: S
                         {Array.from({ length: limit }).map((_, i) => (
                             <tr key={i} className="bg-neutral-100">
                                 <td className="px-4 py-2">
-                                    <div className="h-[21px] w-28 bg-gray-300 rounded animate-pulse"></div>
+                                    <div className="h-5.25 w-28 bg-gray-300 rounded animate-pulse"></div>
                                 </td>
                                 <td className="px-4 py-2">
-                                    <div className="h-[21px] w-42 bg-gray-300 rounded animate-pulse"></div>
+                                    <div className="h-5.25 w-42 bg-gray-300 rounded animate-pulse"></div>
                                 </td>
                                 <td className="px-4 py-2">
-                                    <div className="h-[21px] w-24 bg-gray-300 rounded animate-pulse"></div>
+                                    <div className="h-5.25 w-24 bg-gray-300 rounded animate-pulse"></div>
                                 </td>
                                 <td className="px-4 py-2">
-                                    <div className="h-[21px] w-28 bg-gray-300 rounded animate-pulse"></div>
+                                    <div className="h-5.25 w-28 bg-gray-300 rounded animate-pulse"></div>
                                 </td>
                                 <td className="px-4 py-2">
-                                    <div className="h-[21px] w-16 bg-gray-300 rounded animate-pulse"></div>
+                                    <div className="h-5.25 w-16 bg-gray-300 rounded animate-pulse"></div>
                                 </td>
                             </tr>
                         ))}

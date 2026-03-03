@@ -161,7 +161,7 @@ function NavDropdown({
                 {nav.group}
             </button>
             {openDropdowns[nav.group] && (
-                <ul className="absolute left-0 mt-3 w-64 rounded-xl transition-all duration-200 shadow-2xl bg-gradient-to-br from-primary/90 via-slate-800/90 to-primary/80">
+                <ul className="absolute left-0 mt-3 w-64 rounded-xl transition-all duration-200 shadow-2xl bg-linear-to-br from-primary/90 via-slate-800/90 to-primary/80">
                     {nav.locations.map((item) => (
                         <li key={item.path}>
                             <Link

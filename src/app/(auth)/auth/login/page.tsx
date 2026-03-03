@@ -5,6 +5,7 @@ import Axios from "@/utils/Axios";
 import { User } from "@/lib/definitions";
 import { motion, AnimatePresence } from "motion/react";
 import ErrorAlert from "@/components/ui/util/errorAlert";
+import Turnstile from "@/components/ui/form/turnstile";
 import NeonFloatInput from "@/components/ui/form/input/neonFloatInput";
 
 const LoginPage = () => {
@@ -12,18 +13,25 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [turnstileToken, setTurnstileToken] = useState("");
+    const [turnstileError, setTurnstileError] = useState<string | null>(null);
     const router = useRouter();
 
     const [pos, setPos] = useState({ x: 0, y: 0 });
     const [isInside, setIsInside] = useState(false);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
         setLoading(true);
         setError('');
+        if (!turnstileToken) {
+            setTurnstileError('Please complete the captcha');
+            setLoading(false);
+            return;
+        }
         try {
-            const data: User = await Axios.post("/login", { email, password });
+            const data: User = await Axios.post("/login", { email, password, token: turnstileToken });
             const targetRoute = data?.role === "admin" ? "/admin/" : "/user/profile/";
             router.replace(targetRoute);
         } catch (error) {
@@ -52,7 +60,7 @@ const LoginPage = () => {
             <ErrorAlert message={error} onClose={() => setError("")} />
             <form
                 onSubmit={handleSubmit}
-                className="bg-primary-dark/20 relative border border-white/50 rounded-2xl max-w-md backdrop-blur-sm p-10 z-10 shadow-md w-full overflow-hidden"
+                className="bg-primary-dark/20 relative border border-white/50 rounded-2xl max-w-sm backdrop-blur-sm p-5 z-10 shadow-md w-full overflow-hidden"
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onMouseMove={handleMouseMove}
@@ -100,9 +108,19 @@ const LoginPage = () => {
                         autoComplete="current-password"
                     />
 
+                    <div className="mt-4 opacity-50">
+                        <Turnstile
+                            siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITEKEY ?? ""}
+                            onVerify={(t: string) => { setTurnstileToken(t); setTurnstileError(null); }}
+                            onExpire={() => { setTurnstileToken(""); setTurnstileError('Turnstile expired, please retry'); }}
+                            theme="dark"
+                        />
+                        {turnstileError && <div className="text-sm text-red-600 mt-2">{turnstileError}</div>}
+                    </div>
+
                     <button
                         type="submit"
-                        className="w-full bg-primary text-white mt-2 p-4 rounded font-semibold text-xl
+                        className="w-full bg-primary text-white mt-2 p-2 rounded font-semibold text-xl
                         transition ease-in duration-300 hover:cursor-pointer relative
                         hover:shadow-[0_0_14px_5px_rgb(103,232,249)]"
                         disabled={loading}

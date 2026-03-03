@@ -1,18 +1,18 @@
 export type Shape = {
-  id: number;
-  x: number;
-  y: number;
-  size: number;
-  opacity: number;
-  type: string;
-  rotation: number;
-  rotationSpeed: number;
-  moveX: number;
-  moveY: number;
-  moveSpeed: number;
-  pulseSpeed: number;
-  isStatic: boolean;
-  fadeOut?: boolean;
+    id: number;
+    x: number;
+    y: number;
+    size: number;
+    opacity: number;
+    type: string;
+    rotation: number;
+    rotationSpeed: number;
+    moveX: number;
+    moveY: number;
+    moveSpeed: number;
+    pulseSpeed: number;
+    isStatic: boolean;
+    fadeOut?: boolean;
 };
 // SVG shapes for UFOs, rockets, and static tech elements
 const renderShape = (shape: Shape) => {

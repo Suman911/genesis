@@ -1,9 +1,12 @@
 import React from "react";
-interface heading extends React.HTMLAttributes<HTMLDivElement> {
+interface headingSection extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode
 }
+interface heading extends React.HTMLAttributes<HTMLDivElement> {
+    pageTitle: string 
+}
 
-export function Heading({ children, className = "", ...props }: heading) {
+export function Heading({ children, className = "", ...props }: headingSection) {
     return (
         <div {...props} className={`grid gap-y-6 place-items-center w-full select-none ${className}`}>
             {children}
@@ -11,13 +14,13 @@ export function Heading({ children, className = "", ...props }: heading) {
     );
 }
 
-export function TopHeading({ children, className = "", ...props }: heading) {
+export function TopHeading({ pageTitle, className = "", ...props } : heading) {
     return (
         <div {...props} className={`flex gap-2 md:gap-4 lg:gap-6 items-center ${className}`}>
             <Line />
-            <div className="md:text-xl text-2xl text-ash">
-                {children}
-            </div>
+            <h2 className="md:text-xl text-2xl text-ash">
+                {pageTitle}
+            </h2>
             <Line />
         </div>
     );
@@ -30,7 +33,7 @@ export function Line() {
     );
 }
 
-export function MainHeading({ children, className = "", ...props }: heading) {
+export function MainHeading({ children, className = "", ...props }: headingSection) {
     return (
         <div {...props} className={`text-3xl text-center md:text-4xl font-semibold ${className}`}>
             {children}

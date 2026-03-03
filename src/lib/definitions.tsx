@@ -109,6 +109,7 @@ export type StudentInfo = {
     guardian_number?: string | null;
     date_of_admission: string | null;
     isAlumni: number;
+    isUpdated: number;
     date_of_passout: string | null;
     name: string;
     email: string;

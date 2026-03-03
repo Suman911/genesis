@@ -1,0 +1,25 @@
+meta {
+  name: updateProfile
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://localhost/genesis/public/api/profiles/update
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  address: bnbvnvnvn
+  date_of_birth: 2025-11-03
+  facebook_profile: facebook
+  guardian_name: vfhjfjg
+  guardian_number: 08098080
+  photo: @file(C:\Users\smond\Downloads\unnamed.jpg)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

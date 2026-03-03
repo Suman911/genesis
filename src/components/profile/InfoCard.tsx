@@ -10,7 +10,7 @@ interface InfoCardProps {
 const InfoCard = ({ title, icon: Icon, children, className = "" }: InfoCardProps) => {
     return (
         <div className={`group relative ${className}`}>
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/10 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300" />
+            <div className="absolute inset-0 bg-linear-to-br from-primary/10 to-primary/10 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300" />
             <div className="relative backdrop-blur-sm bg-slate-800/30 border border-primary-dark/50 rounded-xl p-6 hover:border-primary/50 transition-all duration-300 h-full">
                 <div className="flex items-center gap-3 mb-4">
                     <div className="p-2 rounded-lg bg-primary/20 flex items-center justify-center w-10 h-10">

@@ -75,7 +75,7 @@ function NoticeForm({
     return (
         <form
             className="grid grid-cols-2 gap-4"
-            onSubmit={e => {
+            onSubmit={(e: React.SubmitEvent<HTMLFormElement>) => {
                 e.preventDefault();
                 onSave();
             }}

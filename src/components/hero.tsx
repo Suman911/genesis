@@ -22,7 +22,7 @@ export default function Hero() {
 
     if (isHome)
         return (
-            <div className="md:h-[680px] h-[500px] relative w-full flex items-center justify-center overflow-hidden">
+            <div className="md:h-170 h-125 relative w-full flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 -top-15">
                     <HeroVideo />
                 </div>
@@ -33,7 +33,7 @@ export default function Hero() {
         );
 
     return (
-        <div className="md:h-[500px] h-[350px] relative w-full flex items-center justify-center overflow-hidden">
+        <div className="md:h-125 h-87.5 relative w-full flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 w-full h-full">
                 <img
                     src="/assets/images/hero.png"

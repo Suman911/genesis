@@ -9,12 +9,14 @@ import { StudentInfo } from "@/lib/definitions";
 import qs from "qs";
 import Axios from "@/utils/Axios";
 import ErrorAlert from "@/components/ui/util/errorAlert";
+import ProfileForm from "@/components/profile/ProfileForm";
 
 type Q = { user_name?: string; }
 
 const Profile = () => {
     const [profile, setProfile] = useState<StudentInfo | null>(null);
     const [loading, setLoading] = useState(true);
+    const [visitor, setvisitor] = useState(true);
     const [error, setError] = useState("");
 
     const user_name = typeof window !== "undefined"
@@ -27,11 +29,12 @@ const Profile = () => {
             setError("");
             try {
                 const q: Q = user_name ? { 'user_name': user_name } : {};
-                const res: StudentInfo = await Axios.get("/students/profile", {
+                const res: StudentInfo = await Axios.get("/profiles/", {
                     params: q,
                     paramsSerializer: (params) => qs.stringify(params),
                 });
                 setProfile(res);
+                setvisitor(res?.isUpdated == null ? true : false)
             } catch (error) {
                 setError(error instanceof Error ? error.message : "Failed to load profile");
             } finally {
@@ -48,6 +51,18 @@ const Profile = () => {
         }
     }, [user_name, profile?.user_name]);
 
+    const handleUpdateProfile = async (formData: FormData) => {
+        setError("");
+        try {
+            const res: StudentInfo = await Axios.post("/profiles/update", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            setProfile(res);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Failed to update profile");
+        }
+    };
+
     // Skeleton / loading UI
     if (loading) {
         return (
@@ -56,7 +71,7 @@ const Profile = () => {
                     <div className="max-w-6xl mx-auto space-y-8">
                         {/* Header skeleton */}
                         <div className="relative">
-                            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 rounded-2xl blur-xl" />
+                            <div className="absolute inset-0 bg-linear-to-r from-primary/20 to-primary/10 rounded-2xl blur-xl" />
                             <div className="relative backdrop-blur-md bg-slate-800/40 border border-primary-dark/50 rounded-2xl p-8 shadow-xl animate-pulse">
                                 <div className="flex flex-col md:flex-row items-center gap-6">
                                     <div className="w-32 h-32 rounded-full bg-slate-700/30 border-4 border-primary/50 shadow-lg" />
@@ -102,27 +117,28 @@ const Profile = () => {
                         ph_number={profile?.ph_number ?? ""}
                         photo={profile?.photo}
                         date_of_admission={profile?.date_of_admission}
+                        visitor={visitor}
                     />
                     {/* Info Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Personal Information */}
-                        <InfoCard title="Personal Information" icon={LuUser}>
+                        {!visitor && <InfoCard title="Personal Information" icon={LuUser}>
                             <InfoItem
                                 label="Date of Birth"
                                 value={profile?.date_of_birth ?? null}
                             />
                             <InfoItem label="Address" value={profile?.address ?? null} />
-                        </InfoCard>
+                        </InfoCard>}
                         {/* Academic Information */}
                         <InfoCard title="Academic Information" icon={LuBookOpen}>
                             <InfoItem label="College" value={profile?.college ?? null} />
                             <InfoItem label="Subject" value={profile?.subject ?? null} />
                         </InfoCard>
                         {/* Guardian Information */}
-                        <InfoCard title="Guardian Information" icon={LuUsers}>
+                        {!visitor && <InfoCard title="Guardian Information" icon={LuUsers}>
                             <InfoItem label="Guardian Name" value={profile?.guardian_name ?? null} />
                             <InfoItem label="Guardian Contact" value={profile?.guardian_number ?? null} />
-                        </InfoCard>
+                        </InfoCard>}
                         {/* Social & Contact */}
                         <InfoCard title="Social & Contact" icon={LuPhone}>
                             <InfoItem label="Phone Number" value={profile?.ph_number ?? null} />
@@ -146,6 +162,16 @@ const Profile = () => {
                     </div>
                     {/* Batch Enrollments */}
                     <BatchCard batches={profile?.batches} />
+
+                    {/* Edit Profile Form */}
+                    {profile && (
+                        <ProfileForm
+                            profile={profile}
+                            onSubmit={handleUpdateProfile}
+                            setError={setError}
+                            visitor={visitor}
+                        />
+                    )}
                 </div>
             </div>
 

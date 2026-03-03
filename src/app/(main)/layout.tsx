@@ -21,10 +21,31 @@ const poppins = Poppins({
 });
 
 export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
+    // const prodCSP = `default-src 'self';
+    //                 script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://*.cloudflare.com;
+    //                 style-src 'self' 'unsafe-inline';
+    //                 font-src 'self' https://challenges.cloudflare.com https://*.cloudflare.com;
+    //                 img-src 'self' data: https://lh3.googleusercontent.com https:;
+    //                 connect-src 'self' https://challenges.cloudflare.com https://*.cloudflare.com https://localhost http://localhost;
+    //                 frame-src 'self' https://challenges.cloudflare.com https://www.google.com;`;
+
+    // const devCSP = `default-src 'self' http: https: 'unsafe-inline';
+    //                 script-src 'self' 'unsafe-eval' 'unsafe-inline' http://localhost:3000 ws://localhost:3000 https://challenges.cloudflare.com https://*.cloudflare.com;
+    //                 connect-src 'self' ws://localhost:3000 http://localhost:3000 https://localhost http://localhost https://challenges.cloudflare.com https://*.cloudflare.com;
+    //                 font-src 'self' https://challenges.cloudflare.com data:;
+    //                 img-src 'self' data: https://lh3.googleusercontent.com https:;
+    //                 frame-src 'self' https://challenges.cloudflare.com https://www.google.com;
+    //                 style-src 'self' 'unsafe-inline';`;
+    // const csp = isDev ? devCSP : prodCSP;
+
     return (
         <html lang="en">
+            {/* <head>
+                <meta httpEquiv="Content-Security-Policy" content={csp} />
+                <link rel="preconnect" href="https://challenges.cloudflare.com"></link>
+            </head> */}
             <body className={`${poppins.className}`}>
-                <Preloader/>
+                <Preloader />
                 <main>
                     <div className="select-none">
                         <NavbarPc />
