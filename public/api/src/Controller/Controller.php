@@ -4,6 +4,7 @@ namespace Api\Controller;
 
 use Api\Http\Request;
 use Api\Http\Response;
+use Api\Utils\VisitorIP;
 
 class Controller
 {
@@ -34,7 +35,7 @@ class Controller
     public function index(Request $request, Response $response)
     {
         $clientInfo = [
-            'ip' => $_SERVER['REMOTE_ADDR'] ?? null,
+            'ip' => VisitorIP::get(),
             'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? null,
         ];
 

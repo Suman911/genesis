@@ -1,31 +1,32 @@
 import { regexs } from "@/lib/regexs";
-import { RefObject } from "react";
-export type ValidatorFunction = (
-    inputRef: RefObject<HTMLInputElement | HTMLTextAreaElement>,
-    messageRef: RefObject<HTMLParagraphElement | HTMLDivElement | null>
-) => void;
 
-export const validate = (txtbox: RefObject<HTMLInputElement | HTMLTextAreaElement | null>, msgbox: RefObject<HTMLParagraphElement | HTMLDivElement | null>) => {
-    const curr = txtbox.current
-    const isEmpty = curr?.value === '';
-    curr?.classList.toggle('!border-red-600', isEmpty);
-    if (msgbox?.current) {
-        msgbox.current.textContent = 'Please enter something';
-        msgbox.current.classList.toggle('hidden', !isEmpty);
-    }
-    const id = curr?.id || '';
-    if (Object.keys(regexs).includes(id)) {
-        // check regex
-        const regex = regexs[id];
-        const isValid = curr?.value.match(regex) !== null;
-        // Toggle the border color based on validation
-        curr?.classList.toggle('!border-red-600', !isValid);
-        curr?.classList.toggle('!border-green-400', isValid);
+export type ValidationResult = { valid: boolean; message?: string };
 
-        // Toggle the visibility of the error message
-        if (msgbox?.current) {
-            msgbox.current.textContent = `Please enter your correct ${curr?.id}`;
-            msgbox.current.classList.toggle('hidden', isValid);
-        }
+export function validateValue(value: string, field?: string): ValidationResult {
+    const v = (value ?? "").toString().trim();
+    if (v === "") return { valid: false, message: "Please enter something" };
+
+    const key = (field || "").toString();
+    if (key && Object.prototype.hasOwnProperty.call(regexs, key)) {
+        const ok = regexs[key].test(v);
+        return { valid: ok, message: ok ? undefined : `Please enter a valid ${key}` };
     }
+
+    return { valid: true };
+}
+
+export default validateValue;
+
+export function validateMessage(value: string, min = 50, max = 500): ValidationResult {
+    const v = (value ?? "").toString().trim();
+    if (v === "") return { valid: false, message: "Please enter a message" };
+
+    if (v.length < min) return { valid: false, message: `Message must be at least ${min} characters` };
+    if (v.length > max) return { valid: false, message: `Message must be at most ${max} characters` };
+
+    // Allow letters, numbers, common punctuation and whitespace/newlines.
+    // Uses Unicode property escapes to allow letters from any language.
+    const messageRegex = /^[\p{L}\p{N}\s.,!?;:'"()\-–—\/\\@#%&*+=<>\[\]{}:\n\r]+$/u;
+    const ok = messageRegex.test(v);
+    return { valid: ok, message: ok ? undefined : "Message contains invalid characters" };
 }

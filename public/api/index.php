@@ -3,11 +3,13 @@
 require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/debug.php';
 require_once __DIR__ . '/src/dev.php';
+require_once __DIR__ . '/src/test_turnstile.php';
 require_once __DIR__ . '/src/agent.php';
 require_once __DIR__ . '/src/log.php';
 
 use Dotenv\Dotenv;
 use Api\Router\Router;
+
 use Api\Controller\Controller;
 use Api\Controller\UserController;
 use Api\Controller\NoticeController;
@@ -16,8 +18,10 @@ use Api\Controller\CourseController;
 use Api\Controller\StudentController;
 use Api\Controller\ProfileController;
 use Api\Controller\QuoteController;
+use Api\Controller\ContactController;
 
 use Api\Middleware\AuthMiddleware;
+use Api\Middleware\RateLimiterMiddleware;
 use Api\Utils\ErrorHandler;
 
 // Load the main .env file
@@ -95,5 +99,8 @@ $router->add('DELETE', '/quotes/{id}', [QuoteController::class, 'delete'], [Auth
 // profile routes
 $router->add('GET', '/profiles/', [ProfileController::class, 'index'], [AuthMiddleware::class]);
 $router->add('POST', '/profiles/update', [ProfileController::class, 'update'], [AuthMiddleware::class]);
+
+// contct routes
+$router->add('POST', '/contact', [ContactController::class, 'index'], [RateLimiterMiddleware::class]);
 
 $router->dispatch();
