@@ -6,26 +6,11 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'upload.wikimedia.org',
-      },
-      {
-        protocol: 'https',
-        hostname: 'developer.apple.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'www.phonepe.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'example.com',
-      },
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      { protocol: "https", hostname: "upload.wikimedia.org" },
+      { protocol: "https", hostname: "developer.apple.com" },
+      { protocol: "https", hostname: "www.phonepe.com" },
+      { protocol: "https", hostname: "example.com" },
     ],
   },
 };

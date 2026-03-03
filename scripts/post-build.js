@@ -21,11 +21,13 @@ const itemsToDelete = [
     'api/composer.lock',
     'api/notes.md',
     'api/.env.local',
+    !test && 'api/.test.env',
+    'api/.secret.env',
     'api/.gitignore',
     'api/src/dev.php',
     'uploads',
     // 'test'
-].map((item) => path.join(source, item));
+].filter(Boolean).map((item) => path.join(source, item));
 
 // Styled log helper
 const log = {
@@ -52,6 +54,7 @@ try {
 
         const linesToComment = [
             "require_once __DIR__ . '/src/dev.php';",
+            !test && "require_once __DIR__ . '/src/test_turnstile.php';",
             !test && "require_once __DIR__ . '/src/agent.php';",
             !test && "require_once __DIR__ . '/src/log.php';",
         ].filter(Boolean);
